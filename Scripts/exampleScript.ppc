@@ -1,30 +1,117 @@
-// Runs a test on 2 file with just 5 points
+// Exemplo de Script para CLI - Point Processor CLI
 
-cd Tests
+print -------------------------------------
+print         EXAMPLE SCRIPT
+print -------------------------------------
+wfu
 
-l sTestA.co sTestB.co
-
+print Bem-vindo ao CLI! Este script irá guiá-lo pelos comandos principais disponíveis.
+wfu
 clr
 
-print -------------------------------
-print Union
-print -------------------------------
+print -------------------------------------
+print                HELP
+print -------------------------------------
+print Quando não souber como fazer algo, utilize o comando 'help'. Este comando mostra todos os comandos disponíveis.
+print Também pode obter ajuda sobre um comando específico passando o nome como argumento: por exemplo, 'help ls'.
+print << help
+wfu
+help
+wfu
+clr
 
-time u result.co
-prtf result.co
-wfu Continue?
+print -------------------------------------
+print               VERSION
+print -------------------------------------
+print Para verificar a versão atual da aplicação, utilize o comando 'version'.
+print << version
+wfu
+version
+wfu
+clr
 
-print -------------------------------
-print Intersection
-print -------------------------------
+print -------------------------------------
+print                PRINT
+print -------------------------------------
+print Pode imprimir mensagens no ecrã com o comando 'print', como esta que está a ver agora.
+print << print Esta funcionalidade é útil para criar scripts mais interativos.
+wfu
+print Esta funcionalidade é útil para criar scripts mais interativos.
+wfu
+clr
 
-time i result.co
-prtf result.co
-wfu Continue?
+print -------------------------------------
+print                  CD
+print -------------------------------------
+print Vamos agora mudar de diretório. Isto é feito com o comando 'cd', seguido do nome do diretório.
+print << cd Scripts
+wfu
+cd Scripts
+wfu
+clr
 
-print -------------------------------
-print Difference
-print -------------------------------
+print -------------------------------------
+print                  LS
+print -------------------------------------
+print Para ver os ficheiros e pastas dentro do diretório atual, use o comando 'ls'.
+print << ls
+wfu
+ls
+wfu
+clr
 
-time d result.co
-prtf result.co
+print -------------------------------------
+print            LOADSCRIPT
+print -------------------------------------
+print Pode carregar automaticamente outros scripts com o comando 'loadscript'.
+print Neste exemplo, vamos carregar o script 'exampleScript.ppc'.
+print << loadscript testExample.ppc
+wfu
+loadscript testExample.ppc
+wfu
+clr
+
+print -------------------------------------
+print              MEASURE
+print -------------------------------------
+print Se quiser medir quanto tempo demora a executar um comando, pode usar 'measure'.
+print Vamos medir o tempo que demora a listar os ficheiros com 'ls'.
+print << measure ls
+wfu
+measure ls
+wfu
+clr
+
+print -------------------------------------
+print                WAIT
+print -------------------------------------
+print É possível introduzir pausas no script com o comando 'wait',
+print seguido do número de milésimos de segundo.
+print << wait 2000
+wfu
+wait 2000
+wfu
+clr
+
+print -------------------------------------
+print             WaitForUser
+print -------------------------------------
+print Se o script precisar de esperar até que o utilizador responda pode utilizar o waitfor ou wfu.
+print << wfu Espero por si para continuar.
+wfu Espero por si para continuar.
+clr
+
+print -------------------------------------
+print                 CLR
+print -------------------------------------
+print Para limpar o ecrã a qualquer momento, use o comando 'clr'.
+wfu
+clr
+wfu
+
+print -------------------------------------
+print                EXIT
+print -------------------------------------
+print Finalmente, para sair da aplicação CLI, use o comando 'exit'.
+wfu
+exit

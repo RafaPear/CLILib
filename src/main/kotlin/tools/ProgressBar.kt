@@ -1,4 +1,4 @@
-package serie2.problema
+package tools
 
 import java.util.concurrent.atomic.AtomicInteger
 

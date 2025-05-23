@@ -1,8 +1,31 @@
-package serie2.problema
+package tools
 
+import cmdRegister.Command
+import cmdRegister.CmdRegister
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.random.Random
+
+fun validateArgs(args: List<String>, command: Command): Boolean {
+    val minArgs = command.minArgs
+    val maxArgs = command.maxArgs
+    val requiresFile = command.requiresFile
+    val fileExtension = command.fileExtension
+
+    if (args.size < minArgs || (args.size > maxArgs && maxArgs != -1)) {
+        if (minArgs == maxArgs) {
+            println("${RED}App Error: Invalid number of arguments. Expected $minArgs, got ${args.size}$RESET")
+        } else {
+            println("${RED}App Error: Invalid number of arguments. Expected between $minArgs and $maxArgs, got ${args.size}$RESET")
+        }
+        return false
+    }
+    if (requiresFile && !args.all { it.endsWith(fileExtension) }) {
+        println("${RED}App Error: Invalid file name. File names must end with $fileExtension$RESET")
+        return false
+    }
+    return true
+}
 
 /**
  * Função que processa os comandos introduzidos pelo utilizador. Retorna true caso a execução tenha sido bem sucedida.
@@ -12,32 +35,27 @@ import kotlin.random.Random
  * @return true se a execução foi bem sucedida, false caso contrário.
  * */
 fun cmdParser(input: String?): Boolean {
-    if (input == null || input.isBlank()) return true
+    if (input.isNullOrBlank()) return true
 
     val tokens = input.trim().split('|').map { it.trim().split(Regex("\\s+")) }
 
     var good = true
 
-    for (token in tokens){
+    for (token in tokens) {
         if (!good) {
             println("${RED}App Error: Previous command failed. Aborting.$RESET")
             return false
         }
-        var command: Command? = null
-        Commands.entries.forEach { it ->
-            if (it.aliases.contains(token[0].lowercase())) {
-                command = it
-            }
-        }
+        val command = CmdRegister.find(token[0])
         if (command == null) {
-
             println("${RED}App Error: Unknown command ${token[0]}$RESET")
             return false
         }
-        good = command.run(token.drop(1)) // Pass the arguments to the command
+        good = command.run(token.drop(1))
     }
     return good
 }
+
 
 /**
  * Função que imprime uma árvore de diretórios plana a partir de um diretório especificado.
@@ -68,7 +86,7 @@ fun drawPrompt() {
 
 /**
  * Função que limpa o ecrã e redesenha o prompt.
- * A função imprime 50 linhas em branco para limpar o ecrã e, em seguida, chama a função drawPrompt() para exibir o prompt novamente.
+ * A função imprime 50 linhas em branco para limpar o ecrã e, em seguida, chama a função tools.drawPrompt() para exibir o prompt novamente.
  */
 fun clearAndRedrawPrompt() {
     repeat(50) { println() }

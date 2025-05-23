@@ -1,4 +1,4 @@
-package serie2.problema
+package cmdRegister
 
 /**
  * Representa um comando que pode ser executado na ‘interface’ de linha de comandos (CLI).
@@ -11,6 +11,33 @@ package serie2.problema
  *
  * A função [run] é chamada sempre que o comando é executado no CLI, recebendo os argumentos como uma lista de strings
  * e devolvendo um valor booleano que indica o sucesso ou falha da execução.
+ *
+ * !! OBRIGATÓRIOS !!
+ * Os campos `description`, `usage`, `aliases` e a função `run` são de implementação obrigatória.
+ * Todos os outros campos são opcionais.
+ *
+ * !! EXPLICAÇÃO DAS PROPRIEDADES !!
+ *
+ * - aliases: contém os diferentes nomes que podem ser usados para invocar o comando principal.
+ *
+ * - Args (min e max): definem o número mínimo e máximo de argumentos que o comando aceita.
+ *   Nota: se `maxArgs` for definido como −1, o comando aceita um número ilimitado de argumentos.
+ *   O mínimo tem obrigatoriamente de ser menor ou igual ao máximo. Se forem diferentes, isso
+ *   indica que o comando tem argumentos opcionais.
+ *   Exemplo: se `minArgs = 1` e `maxArgs = 2`, o primeiro argumento é obrigatório e o segundo é opcional.
+ *
+ *   Se `minArgs` e `maxArgs` não forem definidos, assume-se que o comando não recebe argumentos
+ *   (`minArgs = 0`, `maxArgs = 0`).
+ *
+ * - requiresFile e fileExtension: indicam se o comando espera caminhos de ficheiros como argumentos.
+ *   Se `requiresFile = true`, será feita a validação da extensão dos ficheiros através de `fileExtension`.
+ *   Por defeito, considera-se `requiresFile = false` e `fileExtension = ""`.
+ *
+ * - run: função principal do comando. Deve ser sobreposta para definir o comportamento.
+ *   Por convenção (definida por nós), recomenda-se:
+ *     1. Validar os argumentos com `tools.validateArgs` no início da função;
+ *     2. Usar `println` apenas para mensagens relevantes (como erros), e não para texto aleatório.
+ *        A ideia é que o `core` trate da lógica principal.
  */
 
 interface Command {
