@@ -1,4 +1,4 @@
-package commands
+package commands.functions
 
 import tools.*
 import cmdRegister.Command

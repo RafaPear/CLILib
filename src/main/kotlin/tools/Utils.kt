@@ -5,6 +5,22 @@ import cmdRegister.CmdRegister
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.random.Random
+import org.json.JSONObject
+
+fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
+    val file = File(root + filePath)
+    if (!file.exists()) {
+        println("${RED}App Error: Ficheiro não encontrado: $filePath$RESET")
+        return false
+    }
+    return try {
+        val json = JSONObject(file.readText())
+        onJson(json)
+    } catch (e: Exception) {
+        println("${RED}App Error: Erro ao ler ficheiro JSON: ${e.message}$RESET")
+        false
+    }
+}
 
 fun validateArgs(args: List<String>, command: Command): Boolean {
     val minArgs = command.minArgs
@@ -34,10 +50,21 @@ fun validateArgs(args: List<String>, command: Command): Boolean {
  * @param input A string de entrada que contém os comandos a serem processados.
  * @return true se a execução foi bem sucedida, false caso contrário.
  * */
-fun cmdParser(input: String?): Boolean {
-    if (input.isNullOrBlank()) return true
+fun cmdParser(input: String?, args: List<String> = emptyList()): Boolean {
+    var nInput = input
 
-    val tokens = input.trim().split('|').map { it.trim().split(Regex("\\s+")) }
+    if (nInput.isNullOrBlank()) return true
+
+    if (!args.isEmpty()) {
+        var count = 0
+        for (arg in args) {
+            nInput = nInput?.replace("arg[$count]", arg)
+            count++
+        }
+    }
+    if (nInput.isNullOrBlank()) return false
+
+    val tokens = nInput.trim().split('|').map { it.trim().split(Regex("\\s+")) }
 
     var good = true
 

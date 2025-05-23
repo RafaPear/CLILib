@@ -1,4 +1,4 @@
-package commands
+package commands.directory
 
 import cmdRegister.Command
 import tools.*

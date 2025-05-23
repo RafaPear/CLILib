@@ -1,8 +1,7 @@
-package commands
+package commands.cli
 
 import cmdRegister.Command
 import tools.*
-import java.io.File
 
 /**
 * Limpa o ecrã do terminal imprimindo várias linhas vazias.

@@ -1,7 +1,11 @@
-package commands
+package commands.cli
 
 import cmdRegister.Command
-import tools.*
+import tools.CYAN
+import tools.RESET
+import tools.YELLOW
+import tools.validateArgs
+import tools.version
 
 /**
  * Mostra a versão da aplicação e os créditos dos autores.
@@ -17,7 +21,7 @@ object VersionCmd : Command {
 
         drawBox(
             """
-                    {Course Letters} - Version $version
+                    {Course Letters} - Version ${version}
                     Developed by: {Developers}
                     For the ambit of: {Course}
                 """.trimIndent())

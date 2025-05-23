@@ -1,4 +1,4 @@
-package commands
+package commands.cli
 
 import cmdRegister.CmdRegister
 import cmdRegister.Command

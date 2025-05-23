@@ -1,4 +1,4 @@
-package commands
+package commands.cli
 import tools.*
 import cmdRegister.Command
 import kotlin.system.exitProcess

@@ -1,0 +1,11 @@
+{
+  "description": "Comando de teste",
+  "longDescription": "Este comando serve para testar o sistema de comandos.",
+  "usage": "test",
+  "aliases": ["test", "t"],
+  "minArgs": 1,
+  "maxArgs": 1,
+  "requiresFile": false,
+  "fileExtension": "",
+  "run": "print arg[0] é um comando de teste criado a partir de JSON."
+}

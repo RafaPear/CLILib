@@ -1,14 +1,20 @@
 import cmdRegister.CmdRegister
-import commands.*
-import tools.GRAY
-import tools.RESET
-import tools.clearAndRedrawPrompt
-import tools.cmdParser
-import tools.commentCode
-import tools.root
+import commands.cli.*
+import commands.file.*
+import commands.directory.*
+import commands.functions.*
+import tools.*
 import java.io.File
 
 class App {
+
+    var defaultCommands = mutableListOf(
+        CdCmd, ClrCmd, ExitCmd, HelpCmd,
+        LoadScriptCmd, LsCmd, MeasureCmd,
+        PrintCmd, VersionCmd, WaitCmd,
+        WaitForCmd, MkCmd, MkTemplateCmd,
+        MkDirCmd, MkFileCmd, EditCmd
+    )
 
     /**
      * Metodo que inicia o ciclo principal da interface de linha de comandos (CLI).
@@ -43,7 +49,24 @@ class App {
      * @param file O caminho do ficheiro a ser lido.
      */
     fun runFromFile(file: String) {
-        val lines = File(file).readLines()
+        val file = File(file)
+        if (!file.exists()) {
+            println("${RED}App Error: File not found: $file$RESET")
+            return
+        }
+        if (!file.canRead()) {
+            println("${RED}App Error: File not readable: $file$RESET")
+            return
+        }
+        if (!file.isFile) {
+            println("${RED}App Error: Not a file: $file$RESET")
+            return
+        }
+        if (!file.isAbsolute) {
+            println("${RED}App Error: File path is not absolute: $file$RESET")
+            return
+        }
+        val lines = file.readLines()
         for (line in lines) {
             if (!line.trim().startsWith(commentCode)) {
                 cmdParser(line)
@@ -52,12 +75,7 @@ class App {
     }
 
     fun registerDefaultCommands() {
-        val default = listOf(
-            CdCmd, ClrCmd, ExitCmd, HelpCmd,
-            LoadScriptCmd, LsCmd, MeasureCmd,
-            PrintCmd, VersionCmd, WaitCmd,
-            WaitForCmd
-        )
-        CmdRegister.registerAll(default)
+        // Register all default commands from commands package
+        CmdRegister.registerAll(defaultCommands)
     }
 }

@@ -1,0 +1,11 @@
+{
+  "description": "Descrição do comando",
+  "longDescription": "Descrição longa do comando.",
+  "usage": "nome_do_comando",
+  "aliases": ["nome_do_comando", "alias"],
+  "minArgs": 1,
+  "maxArgs": 1,
+  "requiresFile": false,
+  "fileExtension": "",
+  "run": "print arg[0] exemplo de comando criado a partir de JSON."
+}
