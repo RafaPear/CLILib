@@ -108,6 +108,114 @@ print Para limpar o ecrã a qualquer momento, use o comando 'clr'.
 wfu
 clr
 wfu
+clr
+
+print -------------------------------------
+print                VAR
+print -------------------------------------
+print O comando 'var' permite criar ou modificar variáveis.
+print Exemplo: var a 10
+print << var a 10
+wfu
+var a 10
+wfu
+clr
+
+print Pode listar todas as variáveis com 'var -l'
+print << var -l
+wfu
+var -l
+wfu
+clr
+
+print Para apagar uma variável use 'var -d <nome>'
+print << var -d a
+wfu
+var -d a
+wfu
+clr
+
+print Para modificar uma variável, basta usar o mesmo nome: var a 20
+print << var a 20
+wfu
+var a 20
+wfu
+clr
+
+print -------------------------------------
+print           OPERAÇÕES VARIÁVEIS
+print -------------------------------------
+print Pode realizar operações matemáticas entre variáveis:
+print 'add' soma, 'sub' subtrai, 'mult' multiplica, 'div' divide.
+print Exemplo: var x 5 ; var y 3 ; add x y z
+print << var x 5 ; var y 3 ; add x y z
+wfu
+var x 5 | var y 3 | add x y z
+print O resultado fica na variável 'z'. Veja: var -l
+print << var -l
+wfu
+var -l
+print Também pode subtrair: sub x y r
+print << sub x y r
+wfu
+sub x y r
+print Multiplicar: mult x y m
+print << mult x y m
+wfu
+mult x y m
+print Dividir: div x y d
+print << div x y d
+wfu
+div x y d
+clr
+
+print -------------------------------------
+print                EXPR
+print -------------------------------------
+print O comando 'expr' avalia expressões matemáticas.
+print Exemplo: expr (2+3)*4-1
+print << expr (2+3)*4-1
+wfu
+expr (2+3)*4-1
+print Pode usar variáveis: expr x+y*2
+print << expr x+y*2
+wfu
+expr x+y*2
+clr
+
+print -------------------------------------
+print                EDIT
+print -------------------------------------
+print O comando 'edit' abre um ficheiro no editor padrão do sistema.
+print Exemplo: edit ficheiro.txt
+print << edit ficheiro.txt
+wfu
+edit ficheiro.txt
+clr
+
+print -------------------------------------
+print               MKCMD
+print -------------------------------------
+print O comando 'mkcmd' permite criar comandos personalizados a partir de um ficheiro JSON.
+print Exemplo: mkcmd Commands/testCmd.json
+print << mkcmd Commands/testCmd.json
+wfu
+mkcmd Commands/testCmd.json
+print Depois pode usar o comando criado: test argumento
+print << test argumento
+wfu
+test argumento
+clr
+
+print -------------------------------------
+print           MKCMDTEMPLATE
+print -------------------------------------
+print O comando 'mkcmdtemplate' gera um ficheiro JSON de exemplo para criar comandos customizados.
+print Exemplo: mkcmdtemplate meuComando.json
+print << mkcmdtemplate meuComando.json
+wfu
+mkcmdtemplate meuComando.json
+clr
 
 print -------------------------------------
 print                EXIT

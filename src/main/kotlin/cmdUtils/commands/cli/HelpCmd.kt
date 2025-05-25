@@ -1,7 +1,7 @@
-package commands.cli
+package cmdUtils.commands.cli
 
-import cmdRegister.CmdRegister
-import cmdRegister.Command
+import cmdUtils.CmdRegister
+import cmdUtils.Command
 import tools.*
 
 /**
@@ -15,7 +15,7 @@ import tools.*
  */
 object HelpCmd : Command {
     override val description = "Show help information"
-    override val longDescription = "Show all available commands and their usage."
+    override val longDescription = "Show all available cmdUtils.commands and their usage."
     override val usage = "help [command]"
     override val aliases = listOf("h", "help")
     override val minArgs = 0
@@ -38,7 +38,7 @@ object HelpCmd : Command {
         }
         else {
             println("${YELLOW}Arguments with [] are optional and arguments with <> are required.$RESET")
-            println("${CYAN}Available commands:$RESET")
+            println("${CYAN}Available cmdUtils.commands:$RESET")
             entries.forEach { cmd ->
                 println("${CYAN}${cmd.usage}$RESET - ${YELLOW}Alias: ${cmd.aliases.joinToString(", ")}$RESET - ${cmd.description}")
             }

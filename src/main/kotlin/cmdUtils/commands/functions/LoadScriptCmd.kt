@@ -1,7 +1,7 @@
-package commands.functions
+package cmdUtils.commands.functions
 
 import tools.*
-import cmdRegister.Command
+import cmdUtils.Command
 import java.io.File
 
 /**
@@ -17,7 +17,7 @@ import java.io.File
 object LoadScriptCmd : Command {
 
         override val description = "Load a script file"
-        override val longDescription = "Load and execute a script file containing a series of commands."
+        override val longDescription = "Load and execute a script file containing a series of cmdUtils.commands."
         override val usage = "loadscript <script_file>"
         override val aliases = listOf("loadscript", "lscript")
         override val minArgs = 1

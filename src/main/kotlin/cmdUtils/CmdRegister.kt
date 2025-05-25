@@ -1,4 +1,4 @@
-package cmdRegister
+package cmdUtils
 
 object CmdRegister {
     private val commands = mutableListOf<Command>()
@@ -13,7 +13,14 @@ object CmdRegister {
 
     fun registerAll(commands: List<Command>) {
         commands.forEach {
-            println("Registering command: ${it.aliases}, ${it.description}")
+            // Print all commands being registered and contents
+            println("Registering command: ${it.aliases.joinToString(", ")} - ${it.description}")
+            println("Long Description: ${it.longDescription}")
+            println("Usage: ${it.usage}")
+            println("Min Args: ${it.minArgs}, Max Args: ${it.maxArgs}")
+            println("Requires File: ${it.requiresFile}, File Extension: ${it.fileExtension}")
+            println("Commands: ${it.commands.joinToString(", ")}")
+            println("--------------------------------------------------")
             register(it)
         }
     }

@@ -1,7 +1,7 @@
-package commands.cli
+package cmdUtils.commands.cli
 
-import cmdRegister.CmdRegister
-import cmdRegister.Command
+import cmdUtils.CmdRegister
+import cmdUtils.Command
 import tools.CYAN
 import tools.RED
 import tools.RESET

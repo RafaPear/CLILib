@@ -1,6 +1,6 @@
-package commands.directory
+package cmdUtils.commands.directory
 
-import cmdRegister.Command
+import cmdUtils.Command
 import tools.*
 import java.io.File
 

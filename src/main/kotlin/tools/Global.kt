@@ -10,3 +10,5 @@ const val commentCode = "//"
 /**Guarda globalmente o caminho base que está a ser utilizado*/
 var root = System.getProperty("user.dir") + '\\'
     get() = field.dropLastWhile { it == '\\' || it == '/' } + '\\'
+
+var lastCmdDump: Any? = null

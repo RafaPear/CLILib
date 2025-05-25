@@ -1,6 +1,6 @@
-package commands.functions
+package cmdUtils.commands.functions
 
-import cmdRegister.Command
+import cmdUtils.Command
 import tools.*
 import kotlin.time.measureTime
 
@@ -28,6 +28,7 @@ object MeasureCmd : Command {
         println("${YELLOW}Measuring time for command: ${newArgs}${RESET}")
 
         val time = measureTime { cmdParser(newArgs) }
+        lastCmdDump = time
 
         println("${GREEN}Time taken: ${time.inWholeMilliseconds} ms${RESET} \n")
         return true

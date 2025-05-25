@@ -1,7 +1,7 @@
 package tools
 
-import cmdRegister.Command
-import cmdRegister.CmdRegister
+import cmdUtils.Command
+import cmdUtils.CmdRegister
 import java.io.File
 import kotlin.concurrent.thread
 import kotlin.random.Random
@@ -50,32 +50,31 @@ fun validateArgs(args: List<String>, command: Command): Boolean {
  * @param input A string de entrada que contém os comandos a serem processados.
  * @return true se a execução foi bem sucedida, false caso contrário.
  * */
-fun cmdParser(input: String?, args: List<String> = emptyList()): Boolean {
-    var nInput = input
+fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolean = false): Boolean {
+    if (input.isNullOrBlank()) return true
 
-    if (nInput.isNullOrBlank()) return true
-
-    if (!args.isEmpty()) {
-        var count = 0
-        for (arg in args) {
-            nInput = nInput?.replace("arg[$count]", arg)
-            count++
+    val tokens = input
+        .trim().split('|')
+        .map { it
+            .trim()
+            .split(Regex("\\s+"))
+            .toMutableList()
         }
-    }
-    if (nInput.isNullOrBlank()) return false
-
-    val tokens = nInput.trim().split('|').map { it.trim().split(Regex("\\s+")) }
+        .toMutableList()
 
     var good = true
 
     for (token in tokens) {
+        // Coloca o valor de uma variavel no lugar da referência. Exemplo "$a" -> 24
+        token.replaceAll { it.replaceVars().replaceArgs(args) }
         if (!good) {
             println("${RED}App Error: Previous command failed. Aborting.$RESET")
             return false
         }
         val command = CmdRegister.find(token[0])
         if (command == null) {
-            println("${RED}App Error: Unknown command ${token[0]}$RESET")
+            if (!supress)
+                println("${RED}App Error: Unknown command ${token[0]}$RESET")
             return false
         }
         good = command.run(token.drop(1))
@@ -83,6 +82,27 @@ fun cmdParser(input: String?, args: List<String> = emptyList()): Boolean {
     return good
 }
 
+fun String.replaceArgs(args: List<String>): String {
+    var nInput = this
+    var count = 0
+    for (arg in args) {
+        nInput = nInput.replace("arg[$count]", arg)
+        count++
+    }
+    return nInput
+}
+
+fun String.replaceVars(auto : Boolean = false): String {
+    var nInput = this
+    val vars = VarRegister.all()
+    for ((name, value) in vars) {
+        if (auto)
+            nInput = nInput.replace("$name", value.toString())
+        else
+            nInput = nInput.replace("$$name", value.toString())
+    }
+    return nInput
+}
 
 /**
  * Função que imprime uma árvore de diretórios plana a partir de um diretório especificado.
@@ -107,8 +127,8 @@ fun printFlatDirectoryTree(dir: File) {
  * A função exibe uma mensagem de boas-vindas e sugere que o utilizador digite 'help' para obter uma lista de comandos disponíveis.
  */
 fun drawPrompt() {
-    println("${CYAN}App: Welcome to the Point Processor CLI!$RESET")
-    println("${CYAN}App: Type 'help' for a list of commands.$RESET")
+    println("${CYAN}App: Welcome to the CLI!$RESET")
+    println("${CYAN}App: Type 'help' for a list of commands$RESET")
 }
 
 /**

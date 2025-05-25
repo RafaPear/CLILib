@@ -1,6 +1,6 @@
-package commands.cli
+package cmdUtils.commands.cli
 import tools.*
-import cmdRegister.Command
+import cmdUtils.Command
 import kotlin.system.exitProcess
 
 /**

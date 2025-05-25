@@ -1,8 +1,9 @@
-import cmdRegister.CmdRegister
-import commands.cli.*
-import commands.file.*
-import commands.directory.*
-import commands.functions.*
+import cmdUtils.CmdRegister
+import cmdUtils.commands.cli.*
+import cmdUtils.commands.file.*
+import cmdUtils.commands.directory.*
+import cmdUtils.commands.functions.*
+import cmdUtils.commands.varOp.*
 import tools.*
 import java.io.File
 
@@ -13,7 +14,9 @@ class App {
         LoadScriptCmd, LsCmd, MeasureCmd,
         PrintCmd, VersionCmd, WaitCmd,
         WaitForCmd, MkCmd, MkTemplateCmd,
-        MkDirCmd, MkFileCmd, EditCmd
+        MkDirCmd, MkFileCmd, EditCmd, VarCmd,
+        AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd,
+        ExprVarCmd
     )
 
     /**
@@ -62,10 +65,6 @@ class App {
             println("${RED}App Error: Not a file: $file$RESET")
             return
         }
-        if (!file.isAbsolute) {
-            println("${RED}App Error: File path is not absolute: $file$RESET")
-            return
-        }
         val lines = file.readLines()
         for (line in lines) {
             if (!line.trim().startsWith(commentCode)) {
@@ -75,7 +74,7 @@ class App {
     }
 
     fun registerDefaultCommands() {
-        // Register all default commands from commands package
+        // Register all default cmdUtils.commands from cmdUtils.commands package
         CmdRegister.registerAll(defaultCommands)
     }
 }

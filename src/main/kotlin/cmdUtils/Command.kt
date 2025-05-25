@@ -1,4 +1,4 @@
-package cmdRegister
+package cmdUtils
 
 /**
  * Representa um comando que pode ser executado na ‘interface’ de linha de comandos (CLI).
@@ -69,6 +69,9 @@ interface Command {
     DEFAULT = 0*/
     val maxArgs: Int
         get() = 0
+
+    val commands: List<String>
+        get() = emptyList()
 
     /**Define se o comando espera receber ficheiros.
 

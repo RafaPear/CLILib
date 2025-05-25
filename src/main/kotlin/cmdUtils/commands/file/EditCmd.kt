@@ -1,6 +1,6 @@
-package commands.file
+package cmdUtils.commands.file
 
-import cmdRegister.Command
+import cmdUtils.Command
 import tools.CYAN
 import tools.RED
 import tools.RESET
