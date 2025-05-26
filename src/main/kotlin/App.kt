@@ -16,14 +16,14 @@ class App {
         WaitForCmd, MkCmd, MkTemplateCmd,
         MkDirCmd, MkFileCmd, EditCmd, VarCmd,
         AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd,
-        ExprVarCmd
+        ExprVarCmd, DelFileCmd, DelDirCmd
     )
 
     /**
      * Metodo que inicia o ciclo principal da interface de linha de comandos (CLI).
      * Limpa o ecrã e redesenha o prompt, depois entra num ciclo infinito
      * onde imprime o prompt, lê a linha de comando do utilizador e a envia para
-     * o parser de comandos que, por sua vez, resolve o comando ou comandos para as suas ações.
+     * o parser de comandos que,s por sua vez, resolve o comando ou comandos para as suas ações.
      */
     fun runtimeCLI() {
         clearAndRedrawPrompt()
