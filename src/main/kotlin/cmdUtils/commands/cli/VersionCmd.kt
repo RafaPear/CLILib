@@ -21,7 +21,7 @@ object VersionCmd : Command {
 
         drawBox(
             """
-                    {Course Letters} - Version ${version}
+                    {Course Letters} - Version $version
                     Developed by: {Developers}
                     For the ambit of: {Course}
                 """.trimIndent())

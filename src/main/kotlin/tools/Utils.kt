@@ -109,10 +109,10 @@ fun String.replaceVars(auto : Boolean = false): String {
     var nInput = this
     val vars = VarRegister.all()
     for ((name, value) in vars) {
-        if (auto)
-            nInput = nInput.replace("$name", value.toString())
+        nInput = if (auto)
+            nInput.replace(name, value.toString())
         else
-            nInput = nInput.replace("$$name", value.toString())
+            nInput.replace("$$name", value.toString())
     }
     return nInput
 }
@@ -127,10 +127,12 @@ fun printFlatDirectoryTree(dir: File) {
     if (!dir.exists()) return
     val children = dir.listFiles()?.sortedBy { it.name.lowercase() } ?: return
     for (file in children) {
+        // Usa escapes Unicode para evitar problemas de encoding
+        val branch = "\u2514\u2500\u2500 "  // └──
         if (file.isDirectory) {
-            println("└── ${BLUE}${file.name}/$RESET")
+            println("$branch${BLUE}${file.name}/$RESET")
         } else {
-            println("└── ${GREEN}${file.name}$RESET")
+            println("$branch${GREEN}${file.name}$RESET")
         }
     }
 }

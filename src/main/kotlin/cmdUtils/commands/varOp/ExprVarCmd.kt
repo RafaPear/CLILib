@@ -2,8 +2,6 @@ package cmdUtils.commands.varOp
 
 import cmdUtils.Command
 import tools.*
-import java.util.Locale
-import java.util.Locale.getDefault
 
 object ExprVarCmd : Command {
     override val description = "Evaluate an expression"
