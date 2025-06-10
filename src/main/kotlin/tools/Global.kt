@@ -1,5 +1,7 @@
 package tools
 
+import java.io.File
+
 const val version = "1.0"
 
 /**
@@ -8,7 +10,7 @@ const val version = "1.0"
 const val commentCode = "//"
 
 /**Guarda globalmente o caminho base que está a ser utilizado*/
-var root = System.getProperty("user.dir") + '\\'
-    get() = field.dropLastWhile { it == '\\' || it == '/' } + '\\'
+var root: String = File(System.getProperty("user.dir")).absolutePath + File.separator
+    get() = field.trimEnd('/', '\\') + File.separator
 
 var lastCmdDump: Any? = null

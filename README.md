@@ -1,74 +1,57 @@
 # 🧩 CLILib
 
-**CLILib** é uma biblioteca Kotlin para criação de interfaces de linha de comandos (CLI) extensíveis e poderosas. Inclui suporte para scripting, variáveis, execução encadeada, criação de comandos personalizados e muito mais — tudo pronto a usar.
+CLILib é uma biblioteca Kotlin para criar interfaces de linha de comandos extensíveis. Permite definir comandos, variáveis e scripts de forma simples e composável.
 
----
+## 🚀 Funcionalidades
+- Registo dinâmico de comandos
+- Suporte a scripts `.ppc`
+- Variáveis globais e operações matemáticas
+- Encadeamento de comandos com `|`
+- Criação de comandos via ficheiros JSON
+- Comandos prontos como `print`, `var`, `cd`, `ls` e `loadscript`
 
-## 🚀 Funcionalidades principais
-
-- CLI modular com registo dinâmico de comandos  
-- Sistema de scripting `.ppc`  
-- Variáveis globais e operações entre variáveis  
-- Execução de comandos com `|` (encadeamento)  
-- Avaliação de expressões matemáticas  
-- Criação de comandos via JSON  
-- Comandos prontos como `print`, `var`, `cd`, `ls`, `loadscript`, etc.
-
----
-
-## 🛠️ Começar
-
+## 🛠️ Início rápido
 ```kotlin
 fun main() {
     val app = App()
     app.registerDefaultCommands()
     app.runtimeCLI()
 }
-
 ```
 
-Podes também executar um ficheiro:
+Também é possível executar comandos a partir de um ficheiro:
 
 ```kotlin
 app.runFromFile("Scripts/setup.ppc")
-
 ```
 
----
-
-## 📎 Exemplo de uso
+### 📥 Instalação
 
 ```bash
-var a 10 | var b 5 | add a b total | print Resultado: $total
-
+git clone https://github.com/RafaPear/CLILib.git
+cd CLILib
+./gradlew build
 ```
 
----
+Após a compilação, execute o exemplo com:
+
+```bash
+./gradlew run
+```
+
+## 📎 Exemplo
+```bash
+var a 10 | var b 5 | add a b total | print Resultado: $total
+```
 
 ## 📚 Documentação
+Consulte a [Wiki do projeto](https://github.com/RafaPear/CLILib/wiki) para mais detalhes sobre a arquitetura, lista de comandos e guias de extensão.
 
-Consulta a [📘 Wiki do projeto](https://github.com/RafaPear/CLILib/wiki) para:
-
-- Introdução e estrutura do projeto  
-- Lista completa de comandos  
-- Guia de scripting e variáveis  
-- Como criar os teus próprios comandos
-
----
-
-## 🤝 Contribuir
-
-Aceitamos contributos! Consulta a secção  
-[🤝 Como Contribuir](https://github.com/RafaPear/CLILib/wiki/🤝-Como-Contribuir)
-
----
+## 🤝 Contribuições
+Contribuições são bem‑vindas! Veja [Como Contribuir](https://github.com/RafaPear/CLILib/wiki/🤝-Como-Contribuir).
 
 ## 📄 Licença
-
-Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
-
----
+Distribuído sob a [MIT License](https://opensource.org/licenses/MIT).
 
 ## ✨ Créditos
-
 Desenvolvido com ❤️ por Rafael Vermelho Pereira

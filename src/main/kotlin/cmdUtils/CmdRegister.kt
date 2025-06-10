@@ -12,17 +12,7 @@ object CmdRegister {
     }
 
     fun registerAll(commands: List<Command>) {
-        commands.forEach {
-            // Print all commands being registered and contents
-            println("Registering command: ${it.aliases.joinToString(", ")} - ${it.description}")
-            println("Long Description: ${it.longDescription}")
-            println("Usage: ${it.usage}")
-            println("Min Args: ${it.minArgs}, Max Args: ${it.maxArgs}")
-            println("Requires File: ${it.requiresFile}, File Extension: ${it.fileExtension}")
-            println("Commands: ${it.commands.joinToString(", ")}")
-            println("--------------------------------------------------")
-            register(it)
-        }
+        commands.forEach { register(it) }
     }
 
     fun unregisterAll(commands: List<Command>) {
@@ -35,3 +25,4 @@ object CmdRegister {
         return commands.find { alias.lowercase() in it.aliases.map(String::lowercase) }
     }
 }
+
