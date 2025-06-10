@@ -14,3 +14,5 @@ const val ORANGE = "\u001B[38;5;214m"
 const val MAGENTA = "\u001B[35m"
 const val WHITE = "\u001B[37m"
 const val BLACK = "\u001B[30m"
+const val BOLD = "\u001B[1m"
+

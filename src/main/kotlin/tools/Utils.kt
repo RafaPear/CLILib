@@ -188,71 +188,25 @@ fun generateRandomGraphFile(
         out.println("c graph contains $numNodes nodes")
         out.println("c")
 
-        // Generate random nodes
-        thread {
-            for (i in 1..numNodes/4) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
-            }
-        }.join()
+        // Generate random nodes in parallel
+        val ranges = listOf(
+            1..numNodes / 4,
+            numNodes / 4 + 1..numNodes / 2,
+            numNodes / 2 + 1..numNodes * 3 / 4,
+            numNodes * 3 / 4 + 1..numNodes
+        )
 
-        thread {
-            for (i in numNodes/4 + 1..numNodes/2) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
+        val threads = ranges.map { range ->
+            thread {
+                for (i in range) {
+                    val x = Random.nextInt(xRange.first, xRange.last + 1)
+                    val y = Random.nextInt(yRange.first, yRange.last + 1)
+                    out.println("v $i $x $y")
+                }
             }
-        }.join()
+        }
 
-        thread {
-            for (i in numNodes/2 + 1..numNodes*3/4) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
-            }
-        }.join()
-
-        thread {
-            for (i in numNodes*3/4 + 1..numNodes) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
-            }
-        }.join()
-
-        // Generate random nodes
-        thread {
-            for (i in 1..numNodes/4) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
-            }
-        }.join( )
-
-        thread {
-            for (i in numNodes/4 + 1..numNodes/2) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
-            }
-        }.join( )
-
-        thread {
-            for (i in numNodes/2 + 1..numNodes*3/4) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
-            }
-        }.join( )
-
-        thread {
-            for (i in numNodes*3/4 + 1..numNodes) {
-                val x = Random.nextInt(xRange.first, xRange.last + 1)
-                val y = Random.nextInt(yRange.first, yRange.last + 1)
-                out.println("v $i $x $y")
-            }
-        }.join( )
+        threads.forEach { it.join() }
 
     }
 }
