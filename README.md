@@ -33,6 +33,12 @@ cd CLILib
 ./gradlew build
 ```
 
+O arquivo JAR resultante fica em `build/libs`. Por exemplo:
+
+```
+build/libs/CLILib-1.0-SNAPSHOT.jar
+```
+
 Após a compilação, execute o exemplo com:
 
 ```bash
