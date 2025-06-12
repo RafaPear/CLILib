@@ -1,4 +1,4 @@
-name: CLILib
+name: Release
 
 on:
   release:
