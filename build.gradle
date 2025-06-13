@@ -76,6 +76,12 @@ tasks.register("runExample", JavaExec) {
     mainClass.set("MainKt")
 }
 
+// Automatically publish the library to Maven Local after building so that
+// projects depending on it can access the documentation and sources JARs.
+tasks.named("build") {
+    finalizedBy(tasks.named("publishToMavenLocal"))
+}
+
 publishing {
     publications {
         create("gpr", MavenPublication) {
