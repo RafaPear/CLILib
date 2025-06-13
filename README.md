@@ -12,6 +12,7 @@ CLILib é uma biblioteca Kotlin para criar interfaces de linha de comandos exten
 
 ## 🛠️ Início rápido
 ```kotlin
+import pt.clilib.App
 fun main() {
     val app = App()
     app.registerDefaultCommands()
