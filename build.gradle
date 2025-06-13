@@ -3,7 +3,7 @@ plugins {
     id 'java-library'
 }
 
-group = 'pt.isel'
+group = 'pt.clilib'
 version = '1.0-SNAPSHOT'
 
 repositories {

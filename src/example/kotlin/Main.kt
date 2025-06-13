@@ -1,3 +1,5 @@
+import pt.clilib.App
+
 fun main() {
     val app = App()
     app.registerDefaultCommands()
