@@ -2,6 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.20'
     id 'java-library'
     id 'maven-publish'
+    id 'org.jetbrains.dokka' version '1.9.20'
 }
 
 group = 'pt.clilib'
@@ -22,6 +23,11 @@ test {
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+tasks.named('javadocJar') {
+    dependsOn tasks.named('dokkaJavadoc')
+    from(tasks.named('dokkaJavadoc').get().outputDirectory)
 }
 
 kotlin {

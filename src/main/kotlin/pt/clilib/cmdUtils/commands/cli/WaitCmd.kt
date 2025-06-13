@@ -13,7 +13,7 @@ import pt.clilib.tools.*
  * Aceita um argumento que é o número de milissegundos a esperar.
  */
 
-internal object WaitCmd : Command {
+object WaitCmd : Command {
     override val description = "Wait for a specified time"
     override val longDescription = "Wait for a specified time in milliseconds."
     override val usage = "wait <milliseconds>"

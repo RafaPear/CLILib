@@ -12,7 +12,7 @@ import kotlin.system.exitProcess
  *
  * Não recebe argumentos.
  */
-internal object ExitCmd : Command {
+object ExitCmd : Command {
     override val description = "Exit the application"
     override val usage = "exit"
     override val aliases = listOf("e", "exit")

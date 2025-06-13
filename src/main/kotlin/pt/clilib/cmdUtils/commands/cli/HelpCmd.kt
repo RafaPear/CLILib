@@ -13,7 +13,7 @@ import pt.clilib.tools.*
  *
  * Não necessita de argumentos.
  */
-internal object HelpCmd : Command {
+object HelpCmd : Command {
     override val description = "Show help information"
     override val longDescription = "Show all available cmdUtils.commands and their usage."
     override val usage = "help [command]"

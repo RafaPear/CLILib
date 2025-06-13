@@ -1,5 +1,6 @@
 package pt.clilib.cmdUtils.commands.functions
 
+import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import kotlin.time.measureTime
@@ -13,7 +14,7 @@ import kotlin.time.measureTime
  *
  * Aceita qualquer comando como argumento. Útil para testes de desempenho.
  */
-internal object MeasureCmd : Command {
+object MeasureCmd : Command {
     override val description = "Measure the time taken by a command"
     override val longDescription = "Measure the time taken to execute a command. Useful for performance testing."
     override val usage = "measure <command>"
@@ -28,7 +29,7 @@ internal object MeasureCmd : Command {
         println("${YELLOW}Measuring time for command: ${newArgs}${RESET}")
 
         val time = measureTime { cmdParser(newArgs) }
-        lastCmdDump = time
+        VarRegister.setLastCmdDump(time)
 
         println("${GREEN}Time taken: ${time.inWholeMilliseconds} ms${RESET} \n")
         return true

@@ -1,10 +1,11 @@
 package pt.clilib.cmdUtils.commands.varOp
 
 import pt.clilib.VarRegister
+import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 
-internal object MultVarCmd : Command {
+object MultVarCmd : Command {
     override val description = "Multiply two variables"
     override val longDescription = "Multiplies the value of one variable by another and creates a new variable with the result."
     override val usage = "mult <var1> <var2> <resultVar>"
@@ -33,12 +34,16 @@ internal object MultVarCmd : Command {
                 return false
             }
         }
-        lastCmdDump = result
+        VarRegister.setLastCmdDump(result)
         if (args.size < 3) {
             println("${GREEN}Result: $result${RESET}")
             return true
         } else {
-            VarRegister.register(args[2], result)
+            if (args[2] == LAST_CMD_KEY) {
+                VarRegister.setLastCmdDump(result)
+            } else {
+                VarRegister.register(args[2], result)
+            }
             println("${GREEN}Multiplied ${args[0]} by ${args[1]} to create ${args[2]} with value $result.${RESET}")
         }
         return true

@@ -118,7 +118,9 @@ internal fun String.replaceVars(auto : Boolean = false): String {
     }
     // Replace buffer variable
     if (nInput.contains(str)) {
-        nInput = nInput.replace(str, lastCmdDump.joinToString())
+        val dump = VarRegister.lastCmdDump()
+        if (dump != null)
+            nInput = nInput.replace(str, dump.joinToString())
     }
     return nInput
 }

@@ -9,7 +9,7 @@ import pt.clilib.tools.cmdParser
 import pt.clilib.tools.readJsonFile
 import pt.clilib.tools.validateArgs
 
-internal object MkCmd : Command {
+object MkCmd : Command {
     override val description = "Cria um comando simples a partir de um ficheiro JSON"
     override val longDescription = "Permite criar comandos simples que apenas imprimem uma mensagem fixa, definida num ficheiro JSON."
     override val usage = "mkcmd <ficheiro.json>"

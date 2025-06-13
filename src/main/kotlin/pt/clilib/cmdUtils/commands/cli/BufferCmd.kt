@@ -1,12 +1,11 @@
 package pt.clilib.cmdUtils.commands.cli
 
-import jdk.internal.org.jline.utils.Colors
+import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.CYAN
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
 import pt.clilib.tools.joinToString
-import pt.clilib.tools.lastCmdDump
 import pt.clilib.tools.validateArgs
 
 // Command that manipulates the lastCmdDump variable buffer, which is used to store the last command's output.
@@ -24,15 +23,16 @@ object BufferCmd : Command {
         // Use Colors
         when (args.getOrNull(0)?.lowercase()) {
             "--clear", "-c" -> {
-                lastCmdDump = null
+                VarRegister.setLastCmdDump(null)
                 println("${CYAN}Buffer cleared.$RESET")
             }
             "--dump", "-d" -> {
-                if (lastCmdDump == null) {
+                val dump = VarRegister.lastCmdDump()
+                if (dump == null) {
                     println("${CYAN}Buffer is empty.$RESET")
                 } else {
                     println("${CYAN}Buffer content:$RESET")
-                    println(lastCmdDump.joinToString())
+                    println(dump.joinToString())
                 }
             }
             "--help", "-h" -> {

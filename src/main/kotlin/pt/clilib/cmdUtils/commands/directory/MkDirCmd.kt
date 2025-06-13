@@ -4,7 +4,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import java.io.File
 
-internal object MkDirCmd : Command {
+object MkDirCmd : Command {
     override val description = "Cria um diretório"
     override val longDescription = "Cria um diretório com o nome especificado."
     override val usage = "mkdir <diretório>"

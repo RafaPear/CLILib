@@ -7,7 +7,7 @@ import java.io.File
 /**
  * Muda o diretório atual para outro especificado ou para o diretório anterior com "..".
  */
-internal object CdCmd : Command {
+object CdCmd : Command {
     override val description = "Change directory"
     override val longDescription = "Change the current directory to a specified relative directory or to the parent directory with '..'."
     override val usage = "cd <directory>"

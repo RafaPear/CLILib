@@ -10,7 +10,7 @@ import pt.clilib.tools.version
 /**
  * Mostra a versão da aplicação e os créditos dos autores.
  */
-internal object VersionCmd : Command {
+object VersionCmd : Command {
 
     override val description = "Show version information and credits"
     override val usage = "version"

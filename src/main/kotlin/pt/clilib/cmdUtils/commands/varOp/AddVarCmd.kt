@@ -1,11 +1,12 @@
 package pt.clilib.cmdUtils.commands.varOp
 
 import pt.clilib.VarRegister
+import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 
 // Adds two variables together, or creates a new variable with the result.
-internal object AddVarCmd : Command{
+object AddVarCmd : Command{
     override val description = "Add two variables together"
     override val longDescription = "Adds the values of two variables and creates a new variable with the result."
     override val usage = "add <var1> <var2> <resultVar>"
@@ -35,13 +36,17 @@ internal object AddVarCmd : Command{
                 return false
             }
         }
-        lastCmdDump = result
+        VarRegister.setLastCmdDump(result)
         if (args.size < 3) {
             println("${GREEN}Result: $result${RESET}")
             return true
         }
         else {
-            VarRegister.register(args[2], result)
+            if (args[2] == LAST_CMD_KEY) {
+                VarRegister.setLastCmdDump(result)
+            } else {
+                VarRegister.register(args[2], result)
+            }
             println("${GREEN}Added ${args[0]} and ${args[1]} to create ${args[2]} with value $result.${RESET}")
         }
         return true

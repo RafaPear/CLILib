@@ -3,7 +3,7 @@ package pt.clilib.cmdUtils.commands.directory
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 
-internal object DelDirCmd : Command {
+object DelDirCmd : Command {
     override val description = "Delete a directory"
     override val longDescription = "Deletes the specified directory from the filesystem."
     override val usage = "deldir <directory_path>"
