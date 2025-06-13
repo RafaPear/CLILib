@@ -49,6 +49,13 @@ tasks.named('javadocJar') {
     from(tasks.named('dokkaJavadoc').get().outputDirectory)
 }
 
+tasks.named('jar') {
+    dependsOn tasks.named('dokkaJavadoc')
+    from(tasks.named('dokkaJavadoc').get().outputDirectory) {
+        into('docs')
+    }
+}
+
 kotlin {
     jvmToolchain(21)
 }
