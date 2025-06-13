@@ -41,7 +41,7 @@ class App() {
     fun runtimeCLI() {
         if (useExternalWindow) {
             val terminal = TerminalWindow(
-                title, bgColor, fgColor, prompt,
+                "$title - $version", bgColor, fgColor, prompt,
                 "${BLUE}App: Welcome to the CLI!${RESET}\n" +
                         "${BLUE}App: Type 'help' for a list of commands${RESET}\n")
             // redireciona saída

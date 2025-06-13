@@ -1,6 +1,6 @@
 package pt.clilib
 
-internal const val LAST_CMD_KEY = "lastCmdDump"
+internal const val LAST_CMD_KEY = "buffer"
 
 internal object VarRegister {
     private val vars = mutableMapOf<String, Any?>(LAST_CMD_KEY to null)

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'pt.clilib'
-version = '1.0-SNAPSHOT'
+version = '1.1-Beta'
 
 repositories {
     mavenCentral()
@@ -24,6 +24,25 @@ java {
     withSourcesJar()
     withJavadocJar()
 }
+
+def generatedVersionDir = "${buildDir}/generated-version"
+
+sourceSets {
+    main {
+        output.dir(generatedVersionDir, builtBy: 'generateVersionProperties')
+    }
+}
+
+task generateVersionProperties {
+    doLast {
+        def propertiesFile = file "$generatedVersionDir/version.properties"
+        propertiesFile.parentFile.mkdirs()
+        def properties = new Properties()
+        properties.setProperty("version", rootProject.version.toString())
+        propertiesFile.withWriter { properties.store(it, null) }
+    }
+}
+processResources.dependsOn generateVersionProperties
 
 tasks.named('javadocJar') {
     dependsOn tasks.named('dokkaJavadoc')

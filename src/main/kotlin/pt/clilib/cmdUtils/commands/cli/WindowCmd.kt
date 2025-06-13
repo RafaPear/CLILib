@@ -20,7 +20,7 @@ object WindowCmd : Command {
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
         val terminal = TerminalWindow(
-            title = "CLI App",
+            title = "CLI App - $version",
             bgColor = Color.BLACK,
             fgColor = Color.WHITE,
             prompt = "${GRAY}${root} >> ${RESET}"

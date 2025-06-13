@@ -1,8 +1,19 @@
 package pt.clilib.tools
 
 import java.io.File
+import java.util.Properties
 
-internal const val version = "1.0"
+private class StatusService {
+    private val versionProperties = Properties()
+
+    init {
+        versionProperties.load(this.javaClass.getResourceAsStream("/version.properties"))
+    }
+
+    fun getVersion() : String = versionProperties.getProperty("version") ?: "no version"
+}
+
+internal val version = StatusService().getVersion()
 
 /**
  * Define o código para os comentários.

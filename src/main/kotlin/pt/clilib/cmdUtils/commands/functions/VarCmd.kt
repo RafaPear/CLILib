@@ -62,11 +62,10 @@ object VarCmd : Command {
                 }
             }
 
-
             if(cmdParser(newArgs.lowercase(), supress = true)) {
                 if (assignLastCmdDump(args[0])) return true
-
             }
+
             // Previous failed because there is no command to run. Assign the value directly. Preserve the type smartly as an Int or its derivatives (depending on the size and structure), String os Char.
             val value = newArgs.trim()
 

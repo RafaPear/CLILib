@@ -332,7 +332,10 @@ internal class TerminalWindow(
         if (input.isNotBlank()) {
             commandHistory.add(input)
             historyIndex = commandHistory.size
-            cmdParser(input, supress = false)
+            if (!input.lowercase().contains("window"))
+                cmdParser(input, supress = false)
+            else
+                println("${RED}Command 'window' cannot be executed from within a window.$RESET")
         }
         // força o flush *agora* (liberta o buffer todo de uma vez)
         System.out.flush()
