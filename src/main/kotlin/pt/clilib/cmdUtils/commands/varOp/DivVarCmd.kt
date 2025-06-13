@@ -1,0 +1,50 @@
+package pt.clilib.cmdUtils.commands.varOp
+
+import pt.clilib.VarRegister
+import pt.clilib.cmdUtils.Command
+import pt.clilib.tools.*
+
+internal object DivVarCmd : Command {
+    override val description = "Divide two variables"
+    override val longDescription = "Divides the value of one variable by another and creates a new variable with the result."
+    override val usage = "div <var1> <var2> <resultVar>"
+    override val aliases = listOf("div", "divide")
+    override val minArgs = 2
+    override val maxArgs = 3
+
+    override fun run(args: List<String>): Boolean {
+        if (!validateArgs(args, this)) return false
+        val var1 = VarRegister.get(args[0])
+        val var2 = VarRegister.get(args[1])
+        if (var1 == null || var2 == null) {
+            println("${RED}Error: One or both variables do not exist.${RESET}")
+            return false
+        } else if (var1::class != var2::class) {
+            println("${RED}Error: Variables must be of the same type to divide them.${RESET}")
+            return false
+        }
+        if (var2 == 0) {
+            println("${RED}Error: Division by zero is not allowed.${RESET}")
+            return false
+        }
+        val result = when (var1) {
+            is Int -> var1 / var2 as Int
+            is Double -> var1 / var2 as Double
+            is Float -> var1 / var2 as Float
+            is Long -> var1 / var2 as Long
+            else -> {
+                println("${RED}Error: Unsupported variable type for division.${RESET}")
+                return false
+            }
+        }
+        lastCmdDump = result
+        if (args.size < 3) {
+            println("${GREEN}Result: $result${RESET}")
+            return true
+        } else {
+            VarRegister.register(args[2], result)
+            println("${GREEN}Divided ${args[0]} by ${args[1]} to create ${args[2]} with value $result.${RESET}")
+        }
+        return true
+    }
+}
