@@ -46,6 +46,14 @@ Após a compilação, execute o exemplo com:
 ./gradlew runExample
 ```
 
+### 📦 Publicar no GitHub Packages
+Defina as variáveis de ambiente `USERNAME` e `TOKEN` (o `TOKEN` pode ser o seu
+`GITHUB_TOKEN`) e execute:
+
+```bash
+./gradlew publish
+```
+
 ## 📎 Exemplo
 ```bash
 var a 10 | var b 5 | add a b total | print Resultado: $total

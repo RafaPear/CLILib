@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.20'
     id 'java-library'
+    id 'maven-publish'
 }
 
 group = 'pt.clilib'
@@ -41,4 +42,22 @@ tasks.register("runExample", JavaExec) {
     description = "Runs the CLI example"
     classpath = sourceSets.example.runtimeClasspath
     mainClass.set("MainKt")
+}
+
+publishing {
+    publications {
+        create("gpr", MavenPublication) {
+            from(components.java)
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/RafaPear/CLILib")
+            credentials {
+                username = System.getenv("USERNAME") ?: findProperty("gpr.user")?.toString() ?: ""
+                password = System.getenv("TOKEN") ?: findProperty("gpr.key")?.toString() ?: ""
+            }
+        }
+    }
 }
