@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.20'
+    id 'java-library'
 }
 
 group = 'pt.isel'
@@ -17,6 +18,27 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 kotlin {
     jvmToolchain(21)
+}
+
+sourceSets {
+    example {
+        kotlin.srcDir("src/example/kotlin")
+        resources.srcDir("src/example/resources")
+        compileClasspath += sourceSets.main.output + configurations.runtimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+tasks.register("runExample", JavaExec) {
+    group = "application"
+    description = "Runs the CLI example"
+    classpath = sourceSets.example.runtimeClasspath
+    mainClass.set("MainKt")
 }

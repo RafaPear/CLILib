@@ -42,7 +42,7 @@ build/libs/CLILib-1.0-SNAPSHOT.jar
 Após a compilação, execute o exemplo com:
 
 ```bash
-./gradlew run
+./gradlew runExample
 ```
 
 ## 📎 Exemplo
