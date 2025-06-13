@@ -14,7 +14,7 @@ import java.io.File
  * Aceita um argumento que é o nome do ficheiro de script a ser carregado.
  */
 
-internal object LoadScriptCmd : Command {
+object LoadScriptCmd : Command {
 
         override val description = "Load a script file"
         override val longDescription = "Load and execute a script file containing a series of cmdUtils.commands."

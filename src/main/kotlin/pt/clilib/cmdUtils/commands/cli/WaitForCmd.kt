@@ -13,7 +13,7 @@ import pt.clilib.tools.*
  * Aceita um argumento opcional que é a mensagem a ser exibida antes de esperar pela entrada do utilizador.
  */
 
-internal object WaitForCmd : Command {
+object WaitForCmd : Command {
         override val description = "Wait for user input"
         override val longDescription = "Wait for user input before proceeding."
         override val usage = "wfu [message]"

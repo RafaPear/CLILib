@@ -6,7 +6,7 @@ import pt.clilib.tools.*
 /**
  * Imprime no terminal todos os argumentos passados ao comando.
  */
-internal object PrintCmd : Command {
+object PrintCmd : Command {
     override val description = "Print argument"
     override val longDescription = "Print the provided arguments to the terminal."
     override val usage = "print <words>"

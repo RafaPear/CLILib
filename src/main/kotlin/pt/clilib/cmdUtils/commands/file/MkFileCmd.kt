@@ -4,7 +4,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import java.io.File
 
-internal object MkFileCmd : Command {
+object MkFileCmd : Command {
     override val description = "Cria um arquivo"
     override val longDescription = "Cria um arquivo com o nome especificado."
     override val usage = "mkfile <arquivo>"

@@ -4,7 +4,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import java.io.File
 
-internal object MkTemplateCmd : Command {
+object MkTemplateCmd : Command {
     override val description = "Cria um ficheiro JSON de template para comandos customizados"
     override val longDescription = "Gera um ficheiro JSON de exemplo para criar comandos simples via mkcmd."
     override val usage = "mkcmdtemplate <nome_do_ficheiro.json>"

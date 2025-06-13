@@ -6,6 +6,7 @@ import pt.clilib.cmdUtils.commands.file.*
 import pt.clilib.cmdUtils.commands.directory.*
 import pt.clilib.cmdUtils.commands.functions.*
 import pt.clilib.cmdUtils.commands.varOp.*
+import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import java.awt.Color
 import java.io.File
@@ -99,8 +100,29 @@ class App() {
         }
     }
 
-    fun registerDefaultCommands() {
-        // Register all default cmdUtils.commands from cmdUtils.commands package
-        CmdRegister.registerAll(defaultCommands)
+    fun registerDefaultCommands(options: String = "") {
+        val tokens = options.split(Regex("\\s+")).filter { it.isNotBlank() }
+        if (tokens.isEmpty()) {
+            CmdRegister.registerAll(defaultCommands)
+            return
+        }
+
+        val load = mutableSetOf<Command>()
+
+        if ("--all" in tokens || "-all" in tokens) {
+            load.addAll(defaultCommands)
+        } else {
+            if ("--cli" in tokens) load.addAll(listOf(CdCmd, ClrCmd, ExitCmd, HelpCmd, PrintCmd, VersionCmd, WaitCmd, WaitForCmd, MkCmd, WindowCmd, BufferCmd))
+            if ("--file" in tokens) load.addAll(listOf(MkFileCmd, MkTemplateCmd, EditCmd, DelFileCmd))
+            if ("--dir" in tokens) load.addAll(listOf(CdCmd, LsCmd, MkDirCmd, DelDirCmd))
+            if ("--var" in tokens) load.addAll(listOf(VarCmd, AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd, ExprVarCmd))
+            if ("--utils" in tokens) load.addAll(listOf(LoadScriptCmd, MeasureCmd))
+        }
+
+        if (load.isEmpty()) load.addAll(defaultCommands)
+
+        CmdRegister.registerAll(load.toList())
     }
+
+    fun registerDefaultCommands() = registerDefaultCommands("")
 }

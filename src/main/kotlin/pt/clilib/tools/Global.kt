@@ -13,4 +13,3 @@ internal const val commentCode = "//"
 var root: String = File(System.getProperty("user.dir")).absolutePath + File.separator
     get() = field.trimEnd('/', '\\') + File.separator
 
-var lastCmdDump: Any? = null

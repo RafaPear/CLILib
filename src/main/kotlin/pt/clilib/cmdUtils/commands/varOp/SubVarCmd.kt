@@ -1,10 +1,11 @@
 package pt.clilib.cmdUtils.commands.varOp
 
 import pt.clilib.VarRegister
+import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 
-internal object SubVarCmd : Command {
+object SubVarCmd : Command {
     override val description = "Subtract two variables"
     override val longDescription = "Subtracts the value of one variable from another and creates a new variable with the result."
     override val usage = "sub <var1> <var2> <resultVar>"
@@ -33,12 +34,16 @@ internal object SubVarCmd : Command {
                 return false
             }
         }
-        lastCmdDump = result
+        VarRegister.setLastCmdDump(result)
         if (args.size < 3) {
             println("${GREEN}Result: $result${RESET}")
             return true
         } else {
-            VarRegister.register(args[2], result)
+            if (args[2] == LAST_CMD_KEY) {
+                VarRegister.setLastCmdDump(result)
+            } else {
+                VarRegister.register(args[2], result)
+            }
             println("${GREEN}Subtracted ${args[1]} from ${args[0]} to create ${args[2]} with value $result.${RESET}")
         }
         return true

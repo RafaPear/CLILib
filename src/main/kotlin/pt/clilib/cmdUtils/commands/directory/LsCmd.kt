@@ -7,7 +7,7 @@ import java.io.File
 /**
  * Lista os ficheiros e pastas do diretório atual ou de um diretório relativo passado como argumento.
  */
-internal object LsCmd : Command {
+object LsCmd : Command {
     override val description = "List files in the current directory"
     override val longDescription = "List files in the current directory or a specified relative directory."
     override val usage = "ls [directory]"

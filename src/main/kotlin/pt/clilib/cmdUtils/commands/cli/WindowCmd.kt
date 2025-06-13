@@ -7,7 +7,7 @@ import pt.clilib.tools.validateArgs
 import pt.clilib.tools.root
 import java.awt.Color
 
-internal object WindowCmd : Command {
+object WindowCmd : Command {
     override val description = "Open a new terminal window"
     override val longDescription = "Open a new terminal window with the same session."
     override val usage = "window"

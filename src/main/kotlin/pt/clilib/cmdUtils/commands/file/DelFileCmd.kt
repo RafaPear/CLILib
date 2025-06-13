@@ -3,7 +3,7 @@ package pt.clilib.cmdUtils.commands.file
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 
-internal object DelFileCmd : Command {
+object DelFileCmd : Command {
     override val description = "Delete a file"
     override val longDescription = "Deletes the specified file from the filesystem."
     override val usage = "delfile <file_path>"

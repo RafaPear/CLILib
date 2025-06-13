@@ -8,7 +8,7 @@ import pt.clilib.tools.root
 import pt.clilib.tools.validateArgs
 import java.io.File
 
-internal object EditCmd : Command {
+object EditCmd : Command {
     override val description = "Edit a file"
     override val longDescription = "Edit a file using the default editor."
     override val usage = "edit <file>"

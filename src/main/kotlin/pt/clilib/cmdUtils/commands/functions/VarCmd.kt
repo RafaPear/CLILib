@@ -2,6 +2,7 @@ package pt.clilib.cmdUtils.commands.functions
 
 import com.sun.tools.javac.tree.TreeInfo.args
 import pt.clilib.VarRegister
+import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
@@ -13,7 +14,7 @@ import kotlin.text.toFloatOrNull
 import kotlin.text.toIntOrNull
 import kotlin.text.toLongOrNull
 
-internal object VarCmd : Command {
+object VarCmd : Command {
     override val description = "Create or modify a variable"
     override val longDescription = "Create or modify a variable with the given name and value. "
     override val usage = "var <name> [args]"
@@ -86,6 +87,10 @@ internal object VarCmd : Command {
                     println("${RED}Error: Invalid number of arguments for delete command.${RESET}")
                     return false
                 }
+                if (args[1] == LAST_CMD_KEY) {
+                    println("${YELLOW}Warning: '$LAST_CMD_KEY' cannot be removed.${RESET}")
+                    return false
+                }
                 VarRegister.unregister(args[1])
             }
             "-l", "--list" -> {
@@ -105,6 +110,10 @@ internal object VarCmd : Command {
     }
 
     private fun assignValue(name: String, value: String): Boolean {
+        if (name == LAST_CMD_KEY) {
+            println("${YELLOW}Warning: '$LAST_CMD_KEY' cannot be modified via CLI${RESET}")
+            return false
+        }
         val newValue = when {
             value.isEmpty() -> null
             value.all { it.isDigit() } -> value.toIntOrNull() ?: value.toLongOrNull() ?: value.toDoubleOrNull() ?: value.toFloatOrNull()
@@ -125,14 +134,19 @@ internal object VarCmd : Command {
     }
 
     private fun assignLastCmdDump(name: String) : Boolean {
-        if (lastCmdDump == null) return false
+        val dump = VarRegister.lastCmdDump() ?: return false
+
+        if (name == LAST_CMD_KEY) {
+            println("${YELLOW}Warning: '$LAST_CMD_KEY' cannot be modified via CLI${RESET}")
+            return false
+        }
 
         if (VarRegister.isRegistered(name)) {
-            VarRegister.modify(name, lastCmdDump!!)
-            println("${GREEN}Variable '${name}' modified with value: $lastCmdDump${RESET}")
+            VarRegister.modify(name, dump)
+            println("${GREEN}Variable '${name}' modified with value: $dump${RESET}")
         } else {
-            VarRegister.register(name, lastCmdDump!!)
-            println("${GREEN}Variable '${name}' registered with value: $lastCmdDump${RESET}")
+            VarRegister.register(name, dump)
+            println("${GREEN}Variable '${name}' registered with value: $dump${RESET}")
         }
         return true
     }

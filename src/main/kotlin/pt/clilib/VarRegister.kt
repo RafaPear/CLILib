@@ -1,6 +1,9 @@
 package pt.clilib
+
+internal const val LAST_CMD_KEY = "lastCmdDump"
+
 internal object VarRegister {
-    private val vars = mutableMapOf<String, Any>()
+    private val vars = mutableMapOf<String, Any?>(LAST_CMD_KEY to null)
     /**
      * Registers a variable with a given name and value.
      *
@@ -10,6 +13,10 @@ internal object VarRegister {
     fun register(name: String, value: Any) {
         if (name.isBlank()) {
             throw IllegalArgumentException("Variable name cannot be blank.")
+        }
+        if (name == LAST_CMD_KEY) {
+            println("Warning: '$LAST_CMD_KEY' is reserved and cannot be registered via CLI")
+            return
         }
         vars[name] = value
     }
@@ -49,6 +56,10 @@ internal object VarRegister {
         if (name.isBlank()) {
             throw IllegalArgumentException("Variable name cannot be blank.")
         }
+        if (name == LAST_CMD_KEY) {
+            println("Warning: '$LAST_CMD_KEY' cannot be removed from the register")
+            return
+        }
         if (vars.remove(name) != null) {
             println("Unregistered variable: $name")
         } else {
@@ -61,7 +72,7 @@ internal object VarRegister {
      *
      * @return A map containing all variable names and their values.
      */
-    fun all(): Map<String, Any> {
+    fun all(): Map<String, Any?> {
         return vars.toMap()
     }
 
@@ -69,10 +80,20 @@ internal object VarRegister {
         if (name.isBlank()) {
             throw IllegalArgumentException("Variable name cannot be blank.")
         }
+        if (name == LAST_CMD_KEY) {
+            println("Warning: '$LAST_CMD_KEY' cannot be modified via CLI")
+            return
+        }
         if (vars.containsKey(name)) {
             vars[name] = value
         } else {
             println("Variable $name not found. Use register to create it first.")
         }
+    }
+
+    fun lastCmdDump(): Any? = vars[LAST_CMD_KEY]
+
+    fun setLastCmdDump(value: Any?) {
+        vars[LAST_CMD_KEY] = value
     }
 }

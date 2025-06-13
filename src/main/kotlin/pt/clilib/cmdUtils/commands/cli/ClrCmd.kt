@@ -6,7 +6,7 @@ import pt.clilib.tools.*
 /**
 * Limpa o ecrã do terminal imprimindo várias linhas vazias.
 */
-internal object ClrCmd : Command {
+object ClrCmd : Command {
     override val description = "Clear the screen"
     override val longDescription = "Clear the screen by printing multiple empty lines."
     override val usage = "clr"

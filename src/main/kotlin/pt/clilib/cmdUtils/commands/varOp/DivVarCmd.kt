@@ -1,10 +1,11 @@
 package pt.clilib.cmdUtils.commands.varOp
 
 import pt.clilib.VarRegister
+import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 
-internal object DivVarCmd : Command {
+object DivVarCmd : Command {
     override val description = "Divide two variables"
     override val longDescription = "Divides the value of one variable by another and creates a new variable with the result."
     override val usage = "div <var1> <var2> <resultVar>"
@@ -37,12 +38,16 @@ internal object DivVarCmd : Command {
                 return false
             }
         }
-        lastCmdDump = result
+        VarRegister.setLastCmdDump(result)
         if (args.size < 3) {
             println("${GREEN}Result: $result${RESET}")
             return true
         } else {
-            VarRegister.register(args[2], result)
+            if (args[2] == LAST_CMD_KEY) {
+                VarRegister.setLastCmdDump(result)
+            } else {
+                VarRegister.register(args[2], result)
+            }
             println("${GREEN}Divided ${args[0]} by ${args[1]} to create ${args[2]} with value $result.${RESET}")
         }
         return true
