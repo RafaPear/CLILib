@@ -4,18 +4,13 @@ import cmdUtils.commands.file.*
 import cmdUtils.commands.directory.*
 import cmdUtils.commands.functions.*
 import cmdUtils.commands.varOp.*
+import jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle
 import tools.*
 import java.awt.Color
 import java.io.File
 import java.io.PrintStream
 
-class App(
-    val title : String = "CLI App",
-    val bgColor : Color = Color.BLACK,
-    val fgColor : Color = Color.WHITE,
-    val borderColor : Color = Color.BLACK,
-    val prompt : String = "${GRAY}${root} >> $RESET",
-) {
+class App() {
 
     var defaultCommands = mutableListOf(
         CdCmd, ClrCmd, ExitCmd, HelpCmd,
@@ -27,17 +22,23 @@ class App(
         ExprVarCmd, DelFileCmd, DelDirCmd, WindowCmd
     )
 
+    var title : String = "CLI App"
+    var bgColor : Color = Color.BLACK
+    var fgColor : Color = Color.WHITE
+    var prompt : String = "${GRAY}${root} >> $RESET"
+
+    var useExternalWindow = false
+
     /**
      * Metodo que inicia o ciclo principal da interface de linha de comandos (CLI).
      * Limpa o ecrã e redesenha o prompt, depois entra num ciclo infinito
      * onde imprime o prompt, lê a linha de comando do utilizador e a envia para
      * o parser de comandos que,s por sua vez, resolve o comando ou comandos para as suas ações.
      */
-    fun runtimeCLI(newTerminal : Boolean = false) {
-        if (newTerminal){
-
-
-            val terminal = TerminalWindow(title, bgColor, fgColor, prompt,
+    fun runtimeCLI() {
+        if (useExternalWindow) {
+            val terminal = TerminalWindow(
+                title, bgColor, fgColor, prompt,
                 "${BLUE}App: Welcome to the CLI!${RESET}\n" +
                         "${BLUE}App: Type 'help' for a list of commands${RESET}\n")
             // redireciona saída
