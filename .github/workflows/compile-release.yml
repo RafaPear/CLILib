@@ -18,8 +18,3 @@ jobs:
       uses: gradle/actions/setup-gradle@v4
     - name: Build
       run: ./gradlew build --no-daemon
-    - name: Publish to GitHub Packages
-      run: ./gradlew publish
-      env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
