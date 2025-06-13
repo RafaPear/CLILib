@@ -51,7 +51,7 @@ internal fun validateArgs(args: List<String>, command: Command): Boolean {
  * @param input A string de entrada que contém os comandos a serem processados.
  * @return true se a execução foi bem sucedida, false caso contrário.
  * */
-internal fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolean = false): Boolean {
+fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolean = false): Boolean {
     if (input.isNullOrBlank()) return true
 
     val tokens = input
@@ -109,40 +109,26 @@ internal fun String.replaceArgs(args: List<String>): String {
 internal fun String.replaceVars(auto : Boolean = false): String {
     var nInput = this
     val vars = VarRegister.all()
+    val str = "$$"+"buffer"
     for ((name, value) in vars) {
         nInput = if (auto)
             nInput.replace(name, value.toString())
         else
             nInput.replace("$$name", value.toString())
     }
+    // Replace buffer variable
+    if (nInput.contains(str)) {
+        nInput = nInput.replace(str, lastCmdDump.joinToString())
+    }
     return nInput
 }
 
-/**
- * Função que imprime uma árvore de diretórios plana a partir de um diretório especificado.
- * A função lista os arquivos e subdiretórios dentro do diretório, ordenando-os por nome.
- *
- * @param dir O diretório a ser listado.
- */
-internal fun printFlatDirectoryTree(dir: File) {
-    if (!dir.exists()) return
-    val children = dir.listFiles()?.sortedBy { it.name.lowercase() } ?: return
-    for (file in children) {
-        // Usa escapes Unicode para evitar problemas de encoding
-        val branch = "\u2514\u2500\u2500 "  // └──
-        if (file.isDirectory) {
-            println("$branch${BLUE}${file.name}/$RESET")
-        } else {
-            println("$branch${GREEN}${file.name}$RESET")
-        }
-    }
-}
 
 /**
  * Função que imprime uma mensagem de boas-vindas e instruções para o utilizador.
  * A função exibe uma mensagem de boas-vindas e sugere que o utilizador digite 'help' para obter uma lista de comandos disponíveis.
  */
-internal fun drawPrompt() {
+fun drawPrompt() {
     println("${CYAN}App: Welcome to the CLI!$RESET")
     println("${CYAN}App: Type 'help' for a list of commands$RESET")
 }
@@ -151,7 +137,7 @@ internal fun drawPrompt() {
  * Função que limpa o ecrã e redesenha o prompt.
  * A função imprime 50 linhas em branco para limpar o ecrã e, em seguida, chama a função tools.drawPrompt() para exibir o prompt novamente.
  */
-internal fun clearAndRedrawPrompt() {
+fun clearAndRedrawPrompt() {
     repeat(50) { println() }
     drawPrompt()
 }
@@ -160,7 +146,7 @@ internal fun clearAndRedrawPrompt() {
  * Função que limpa o ecrã sem redesenhar o prompt.
  * A função imprime 50 linhas em branco para limpar o ecrã.
  */
-internal fun clearPrompt() {
+fun clearPrompt() {
     repeat(50) { println() }
 }
 
@@ -211,5 +197,17 @@ internal fun generateRandomGraphFile(
 
         threads.forEach { it.join() }
 
+    }
+}
+
+
+
+fun Any?.joinToString(): String {
+    return when (this) {
+        is List<*> -> joinToString("\n")
+        is Class<*> -> toGenericString()
+        is Array<*> -> joinToString("\n") { it.joinToString() }
+        is Map<*, *> -> entries.joinToString("\n") { "${it.key}: ${it.value}" }
+        else -> toString()
     }
 }

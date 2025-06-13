@@ -1,8 +1,17 @@
 package pt.clilib.cmdUtils.commands.functions
 
+import com.sun.tools.javac.tree.TreeInfo.args
 import pt.clilib.VarRegister
+import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
+import kotlin.text.all
+import kotlin.text.first
+import kotlin.text.isEmpty
+import kotlin.text.toDoubleOrNull
+import kotlin.text.toFloatOrNull
+import kotlin.text.toIntOrNull
+import kotlin.text.toLongOrNull
 
 internal object VarCmd : Command {
     override val description = "Create or modify a variable"
@@ -14,7 +23,6 @@ internal object VarCmd : Command {
     override val commands = listOf(
         "-d", "--delete",
         "-l", "--list",
-        "-s", "--set",
         "-h", "--help"
     )
 
@@ -30,73 +38,101 @@ internal object VarCmd : Command {
         // Check if args contains any command stated in commands list. Else proceed with the default behavior.
         var isArgCmd = false
         for (arg in args) {
-            if (arg.contains("-")) {
+            if (arg.startsWith("-")) {
                 isArgCmd = true
                 break
             }
         }
 
         if (isArgCmd) {
-            when (args[0]) {
-                "-d", "--delete" -> {
-                    if (args.size != 2) {
-                        println("${RED}Error: Invalid number of arguments for delete command.${RESET}")
-                        return false
-                    }
-                    VarRegister.unregister(args[1])
-                }
-                "-l", "--list" -> {
-                    println("Registered variables: ${VarRegister.all()}")
-                }
-                "-h", "--help" -> {
-                    println("Usage: var <name> [args]")
-                    println("Commands:")
-                    commands.forEach { println("  $it") }
-                }
-                else -> {
-                    println("${RED}Error: Unknown command '${args[0]}'.${RESET}")
-                    return false
-                }
-            }
+            parseCommands(args)
         } else {
             // Default behavior: register the variable with the given name and value.
             val newArgs = args.drop(1).joinToString(" ")
-            // Previous failed because there is no comand to run. Assign the value directly. Preserve the type smartly as an Int or its derivatives (depending on the size and structure), String os Char.
+
+            if (args[0][0].isDigit()){
+                println("${RED}Error: Variable name '${args[0]}' must start with a letter.${RESET}")
+                return false
+            }
+            args[0].map {
+                if(!(it.isLetter() || it.isDigit() || it == '_')) {
+                    println("${RED}Error: Variable name '${args[0]}' must start with a letter and can only contain letters, digits, and underscores.${RESET}")
+                    return false
+                }
+            }
+
+
+            if(cmdParser(newArgs.lowercase(), supress = true)) {
+                if (assignLastCmdDump(args[0])) return true
+
+            }
+            // Previous failed because there is no command to run. Assign the value directly. Preserve the type smartly as an Int or its derivatives (depending on the size and structure), String os Char.
             val value = newArgs.trim()
-            val registeredValue = when {
-                value.isEmpty() -> null
-                value.all { it.isDigit() } -> value.toIntOrNull() ?: value.toLongOrNull() ?: value.toDoubleOrNull() ?: value.toFloatOrNull()
-                value.length == 1 -> value.first() // Char
-                else -> value // String
-            }
-            if (VarRegister.isRegistered(args[0])) {
-                if (registeredValue != null) {
-                    VarRegister.modify(args[0], registeredValue)
-                    println("${GREEN}Variable '${args[0]}' modified with value: $registeredValue${RESET}")
-                } else {
-                    if (lastCmdDump != null) {
-                        VarRegister.modify(args[0], lastCmdDump!!)
-                        println("${GREEN}Variable '${args[0]}' modified with value: $lastCmdDump${RESET}")
-                    } else {
-                        println("${RED}Error: Unable to determine value for variable '${args[0]}'. Please provide a valid value.${RESET}")
-                        return false
-                    }
+
+            if (!assignValue(args[0], value)) {
+                if (!assignLastCmdDump(args[0])) {
+                    println("${RED}Error: Unable to assign value to variable '${args[0]}'. Please provide a valid value.${RESET}")
+                    return false
                 }
             }
-            else {
-                if (registeredValue != null) {
-                    VarRegister.register(args[0], registeredValue)
-                    println("${GREEN}Variable '${args[0]}' registered with value: $registeredValue${RESET}")
-                } else {
-                    if (lastCmdDump != null) {
-                        VarRegister.register(args[0], lastCmdDump!!)
-                        println("${GREEN}Variable '${args[0]}' registered with value: $lastCmdDump${RESET}")
-                    } else {
-                        println("${RED}Error: Unable to determine value for variable '${args[0]}'. Please provide a valid value.${RESET}")
-                        return false
-                    }
+        }
+        return true
+    }
+
+    private fun parseCommands(args: List<String> ): Boolean {
+        when (args[0]) {
+            "-d", "--delete" -> {
+                if (args.size != 2) {
+                    println("${RED}Error: Invalid number of arguments for delete command.${RESET}")
+                    return false
                 }
+                VarRegister.unregister(args[1])
             }
+            "-l", "--list" -> {
+                println("Registered variables: ${VarRegister.all()}")
+            }
+            "-h", "--help" -> {
+                println("Usage: var <name> [args]")
+                println("Commands:")
+                commands.forEach { println("  $it") }
+            }
+            else -> {
+                println("${RED}Error: Unknown command '${args[0]}'.${RESET}")
+                return false
+            }
+        }
+        return true
+    }
+
+    private fun assignValue(name: String, value: String): Boolean {
+        val newValue = when {
+            value.isEmpty() -> null
+            value.all { it.isDigit() } -> value.toIntOrNull() ?: value.toLongOrNull() ?: value.toDoubleOrNull() ?: value.toFloatOrNull()
+            value.length == 1 -> value.first() // Char
+            else -> value // String
+        }
+
+        if (newValue == null) return false
+
+        if (VarRegister.isRegistered(name)) {
+            VarRegister.modify(name, newValue)
+            println("${GREEN}Variable '${name}' modified with value: $newValue${RESET}")
+        } else {
+            VarRegister.register(name, newValue)
+            println("${GREEN}Variable '${name}' registered with value: $newValue${RESET}")
+        }
+        return true
+    }
+
+    private fun assignLastCmdDump(name: String) : Boolean {
+        if (lastCmdDump == null) return false
+
+        if (VarRegister.isRegistered(name)) {
+            VarRegister.modify(name, lastCmdDump!!)
+            println("${GREEN}Variable '${name}' modified with value: $lastCmdDump${RESET}")
+        } else {
+            VarRegister.register(name, lastCmdDump!!)
+            println("${GREEN}Variable '${name}' registered with value: $lastCmdDump${RESET}")
         }
         return true
     }

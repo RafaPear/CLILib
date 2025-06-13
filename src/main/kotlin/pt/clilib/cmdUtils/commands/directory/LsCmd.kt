@@ -27,4 +27,23 @@ internal object LsCmd : Command {
         printFlatDirectoryTree(target)
         return true
     }
+    /**
+     * Função que imprime uma árvore de diretórios plana a partir de um diretório especificado.
+     * A função lista os arquivos e subdiretórios dentro do diretório, ordenando-os por nome.
+     *
+     * @param dir O diretório a ser listado.
+     */
+    private fun printFlatDirectoryTree(dir: File) {
+        if (!dir.exists()) return
+        val children = dir.listFiles()?.sortedBy { it.name.lowercase() } ?: return
+        for (file in children) {
+            // Usa escapes Unicode para evitar problemas de encoding
+            val branch = "\u2514\u2500\u2500 "  // └──
+            if (file.isDirectory) {
+                println("$branch${BLUE}${file.name}/$RESET")
+            } else {
+                println("$branch${GREEN}${file.name}$RESET")
+            }
+        }
+    }
 }

@@ -26,7 +26,7 @@ internal object HelpCmd : Command {
         val entries = CmdRegister.all()
         if (args.isNotEmpty()) {
             entries.forEach { cmd ->
-                if (args[0].lowercase() in cmd.aliases) {
+                if (args[0].lowercase() in cmd.aliases.map { it.lowercase() }) {
                     // Print help but description is long description and formats in a better readable way
                     println("${CYAN}${cmd.usage}$RESET - ${YELLOW}Alias: ${cmd.aliases.joinToString(", ")}$RESET")
                     println("${YELLOW}${cmd.longDescription}$RESET")
