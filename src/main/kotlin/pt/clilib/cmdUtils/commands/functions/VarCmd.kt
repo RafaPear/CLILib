@@ -38,11 +38,8 @@ object VarCmd : Command {
         if (!validateArgs(args, this)) return false
         // Check if args contains any command stated in commands list. Else proceed with the default behavior.
         var isArgCmd = false
-        for (arg in args) {
-            if (arg.startsWith("-")) {
-                isArgCmd = true
-                break
-            }
+        if (args[0].startsWith("-")) {
+            isArgCmd = true
         }
 
         if (isArgCmd) {

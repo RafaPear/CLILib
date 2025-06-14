@@ -1,10 +1,17 @@
 package pt.clilib.cmdUtils
 
+import pt.clilib.tools.RESET
+import pt.clilib.tools.YELLOW
+
 internal object CmdRegister {
     private val commands = mutableListOf<Command>()
 
     fun register(command: Command) {
-        commands.add(command)
+        val cmdAliases = commands.map { it.aliases }.flatten()
+        if(!command.aliases.any { alias -> alias in cmdAliases })
+            commands.add(command)
+        else
+            println("${YELLOW}Warning: Command '${command.aliases.first()}' is already registered. Skipping registration.$RESET")
     }
 
     fun unregister(command: Command) {

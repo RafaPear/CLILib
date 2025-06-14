@@ -55,6 +55,8 @@ fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolea
     if (input.isNullOrBlank()) return true
 
     val tokens = input
+        .replaceVars()
+        .replaceArgs(args)
         .trim().split('|')
         .map { it
             .trim()
@@ -67,7 +69,7 @@ fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolea
 
     for (token in tokens) {
         // Coloca o valor de uma variavel no lugar da referência. Exemplo "$a" -> 24
-        token.replaceAll { it.replaceVars().replaceArgs(args) }
+        //token.replaceAll { it.replaceVars().replaceArgs(args) }
         if (!good) {
             println("${RED}App Error: Previous command failed. Aborting.$RESET")
             return false
