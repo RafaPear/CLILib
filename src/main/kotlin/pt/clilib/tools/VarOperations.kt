@@ -21,79 +21,34 @@ internal fun performVarOperation(
 ): Boolean {
     if (!validateArgs(args, command)) return false
 
-    val var1 = VarRegister.get(args[0])
-    val var2 = VarRegister.get(args[1])
+    val var1 = VarRegister.get(args[0]) as? Number
+    val var2 = VarRegister.get(args[1]) as? Number
+
     if (var1 == null || var2 == null) {
-        println("${RED}Error: One or both variables do not exist.${RESET}")
-        return false
-    }
-    if (var1::class != var2::class || var1 !is Number || var2 !is Number) {
-        println("${RED}Error: Variables must be numbers of the same type.${RESET}")
+        println("${RED}Error: One or both variables do not exist or are not numeric.${RESET}")
         return false
     }
 
-    val result = when (var1) {
-        is Int -> when (operator) {
-            ArithmeticOperator.ADD -> var1 + var2 as Int
-            ArithmeticOperator.SUBTRACT -> var1 - var2 as Int
-            ArithmeticOperator.MULTIPLY -> var1 * var2 as Int
-            ArithmeticOperator.DIVIDE -> {
-                if (var2 == 0) {
-                    println("${RED}Error: Division by zero is not allowed.${RESET}")
-                    return false
-                }
-                var1 / var2 as Int
+    val a = var1.toDouble()
+    val b = var2.toDouble()
+
+    val result = when (operator) {
+        ArithmeticOperator.ADD -> a + b
+        ArithmeticOperator.SUBTRACT -> a - b
+        ArithmeticOperator.MULTIPLY -> a * b
+        ArithmeticOperator.DIVIDE -> {
+            if (b == 0.0) {
+                println("${RED}Error: Division by zero is not allowed.${RESET}")
+                return false
             }
-        }
-        is Double -> when (operator) {
-            ArithmeticOperator.ADD -> var1 + var2 as Double
-            ArithmeticOperator.SUBTRACT -> var1 - var2 as Double
-            ArithmeticOperator.MULTIPLY -> var1 * var2 as Double
-            ArithmeticOperator.DIVIDE -> {
-                if (var2 == 0.0) {
-                    println("${RED}Error: Division by zero is not allowed.${RESET}")
-                    return false
-                }
-                var1 / var2 as Double
-            }
-        }
-        is Float -> when (operator) {
-            ArithmeticOperator.ADD -> var1 + var2 as Float
-            ArithmeticOperator.SUBTRACT -> var1 - var2 as Float
-            ArithmeticOperator.MULTIPLY -> var1 * var2 as Float
-            ArithmeticOperator.DIVIDE -> {
-                if (var2 == 0f) {
-                    println("${RED}Error: Division by zero is not allowed.${RESET}")
-                    return false
-                }
-                var1 / var2 as Float
-            }
-        }
-        is Long -> when (operator) {
-            ArithmeticOperator.ADD -> var1 + var2 as Long
-            ArithmeticOperator.SUBTRACT -> var1 - var2 as Long
-            ArithmeticOperator.MULTIPLY -> var1 * var2 as Long
-            ArithmeticOperator.DIVIDE -> {
-                if (var2 == 0L) {
-                    println("${RED}Error: Division by zero is not allowed.${RESET}")
-                    return false
-                }
-                var1 / var2 as Long
-            }
-        }
-        else -> {
-            println("${RED}Error: Unsupported variable type for operation.${RESET}")
-            return false
+            a / b
         }
     }
 
     VarRegister.setLastCmdDump(result)
-    if (args.size == 3) {
-        if (args[2] == LAST_CMD_KEY) {
-            VarRegister.setLastCmdDump(result)
-        } else {
-            VarRegister.register(args[2], result)
-        }
+    if (args.size == 3 && args[2] != LAST_CMD_KEY) {
+        VarRegister.register(args[2], result)
     }
+
     return true
 }

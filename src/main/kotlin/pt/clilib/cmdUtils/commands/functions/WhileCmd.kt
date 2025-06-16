@@ -8,8 +8,6 @@ import pt.clilib.tools.eval
 import pt.clilib.tools.replaceVars
 import pt.clilib.tools.validateArgs
 
-// This object represents a command that is used to create a while loop in the CLI.
-// It also reads the keyword break to exit the loop.
 object WhileCmd : Command {
     override val description = "Create a while loop"
     override val longDescription = "Create a while loop with the given condition. The loop will continue until the condition is false."
@@ -24,8 +22,6 @@ object WhileCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
-        // Implement the logic for the while loop here.
-        // This is a placeholder implementation.
         try {
             val newCmd = args.drop(1)
                 .joinToString(" ")

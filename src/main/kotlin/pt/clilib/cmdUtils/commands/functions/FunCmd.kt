@@ -10,7 +10,6 @@ import pt.clilib.tools.YELLOW
 import pt.clilib.tools.isValidIdentifier
 import pt.clilib.tools.cmdParser
 import pt.clilib.tools.validateArgs
-import kotlin.text.removeSurrounding
 
 object FunCmd : Command {
     override val description = "Create a function"

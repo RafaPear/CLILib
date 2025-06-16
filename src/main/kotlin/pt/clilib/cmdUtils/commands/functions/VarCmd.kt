@@ -1,10 +1,12 @@
 package pt.clilib.cmdUtils.commands.functions
+
 import pt.clilib.VarRegister
 import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import pt.clilib.tools.isValidIdentifier
+
 
 object VarCmd : Command {
     override val description = "Create or modify a variable"
