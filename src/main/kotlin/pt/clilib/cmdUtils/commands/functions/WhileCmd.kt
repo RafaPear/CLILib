@@ -1,19 +1,12 @@
 package pt.clilib.cmdUtils.commands.functions
 
-import com.sun.org.apache.xpath.internal.XPathAPI.eval
-import com.sun.tools.javac.tree.TreeInfo
-import com.sun.tools.javac.tree.TreeInfo.args
-import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
-import pt.clilib.tools.GREEN
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
 import pt.clilib.tools.cmdParser
 import pt.clilib.tools.eval
-import pt.clilib.tools.joinToString
 import pt.clilib.tools.replaceVars
 import pt.clilib.tools.validateArgs
-import java.util.concurrent.locks.Condition
 
 // This object represents a command that is used to create a while loop in the CLI.
 // It also reads the keyword break to exit the loop.
