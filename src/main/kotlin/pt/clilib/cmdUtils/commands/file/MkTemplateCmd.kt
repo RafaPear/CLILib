@@ -1,30 +1,33 @@
 package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import java.io.File
 
 object MkTemplateCmd : Command {
-    override val description = "Cria um ficheiro JSON de template para comandos customizados"
-    override val longDescription = "Gera um ficheiro JSON de exemplo para criar comandos simples via mkcmd."
-    override val usage = "mkcmdtemplate <nome_do_ficheiro.json>"
-    override val aliases = listOf("mkcmdtemplate", "mkcmdtpl")
-    override val minArgs = 1
-    override val maxArgs = 1
-    override val requiresFile = false
+    override val info = CommandInfo(
+        description = "Create a template JSON file for custom commands",
+        longDescription = "Generate a JSON example used to create simple commands via mkcmd.",
+        usage = "mkcmdtemplate <file.json>",
+        aliases = listOf("mkcmdtemplate", "mkcmdtpl"),
+        minArgs = 1,
+        maxArgs = 1,
+        requiresFile = false
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
         val fileName = if (args[0].endsWith(".json")) args[0] else args[0] + ".json"
         val file = File(root + fileName)
         if (file.exists()) {
-            println("${RED}App Error: O ficheiro $fileName já existe.$RESET")
+            println("${RED}App Error: File $fileName already exists.$RESET")
             return false
         }
         val template = """
         {
-          "description": "Descrição do comando",
-          "longDescription": "Descrição longa do comando.",
+          "description": "Command description",
+          "longDescription": "Long command description.",
           "usage": "nome_do_comando",
           "aliases": ["nome_do_comando", "alias"],
           "minArgs": 1,
@@ -35,7 +38,7 @@ object MkTemplateCmd : Command {
         }
         """.trimIndent()
         file.writeText(template)
-        println("${CYAN}Template criado em: $fileName$RESET")
+        println("${CYAN}Template created at: $fileName$RESET")
         return true
     }
 }

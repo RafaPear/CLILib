@@ -1,6 +1,7 @@
 package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.CYAN
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
@@ -9,14 +10,16 @@ import pt.clilib.tools.validateArgs
 import java.io.File
 
 object EditCmd : Command {
-    override val description = "Edit a file"
-    override val longDescription = "Edit a file using the default editor."
-    override val usage = "edit <file>"
-    override val aliases = listOf("edit")
-    override val minArgs = 1
-    override val maxArgs = 1
-    override val requiresFile = true
-    override val fileExtension = ""
+    override val info = CommandInfo(
+        description = "Edit a file",
+        longDescription = "Edit a file using the default editor.",
+        usage = "edit <file>",
+        aliases = listOf("edit"),
+        minArgs = 1,
+        maxArgs = 1,
+        requiresFile = true,
+        fileExtension = ""
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
@@ -39,7 +42,7 @@ object EditCmd : Command {
             println("${CYAN}File $fileName edited successfully!${RESET}")
             true
         } else {
-            println("${RED}App Error: O arquivo $fileName não existe.${RESET}")
+            println("${RED}App Error: File $fileName does not exist.${RESET}")
             false
         }
     }

@@ -4,21 +4,24 @@ import pt.clilib.VarRegister
 import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import pt.clilib.tools.isValidIdentifier
 
 
 object VarCmd : Command {
-    override val description = "Create or modify a variable"
-    override val longDescription = "Create or modify a variable with the given name and value. "
-    override val usage = "var <name> [args]"
-    override val aliases = listOf("var")
-    override val minArgs = 1
-    override val maxArgs = -1
-    override val commands = listOf(
-        "-d", "--delete",
-        "-l", "--list",
-        "-h", "--help"
+    override val info = CommandInfo(
+        description = "Create or modify a variable",
+        longDescription = "Create or modify a variable with the given name and value.",
+        usage = "var <name> [args]",
+        aliases = listOf("var"),
+        minArgs = 1,
+        maxArgs = -1,
+        commands = listOf(
+            "-d", "--delete",
+            "-l", "--list",
+            "-h", "--help"
+        )
     )
 
 

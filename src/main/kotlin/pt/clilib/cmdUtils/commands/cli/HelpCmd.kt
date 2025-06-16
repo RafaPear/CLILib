@@ -2,6 +2,7 @@ package pt.clilib.cmdUtils.commands.cli
 
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 
 /**
@@ -14,12 +15,14 @@ import pt.clilib.tools.*
  * Não necessita de argumentos.
  */
 object HelpCmd : Command {
-    override val description = "Show help information"
-    override val longDescription = "Show all available cmdUtils.commands and their usage."
-    override val usage = "help [command]"
-    override val aliases = listOf("h", "help")
-    override val minArgs = 0
-    override val maxArgs = 1
+    override val info = CommandInfo(
+        description = "Show help information",
+        longDescription = "Show all available cmdUtils.commands and their usage.",
+        usage = "help [command]",
+        aliases = listOf("h", "help"),
+        minArgs = 0,
+        maxArgs = 1
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false

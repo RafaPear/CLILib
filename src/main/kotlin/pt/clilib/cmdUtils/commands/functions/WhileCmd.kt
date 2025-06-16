@@ -1,6 +1,7 @@
 package pt.clilib.cmdUtils.commands.functions
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
 import pt.clilib.tools.cmdParser
@@ -9,15 +10,17 @@ import pt.clilib.tools.replaceVars
 import pt.clilib.tools.validateArgs
 
 object WhileCmd : Command {
-    override val description = "Create a while loop"
-    override val longDescription = "Create a while loop with the given condition. The loop will continue until the condition is false."
-    override val usage = "while <condition> [commands]"
-    override val aliases = listOf("while")
-    override val minArgs = 1
-    override val maxArgs = -1
-    override val commands = listOf(
-        "-b", "--break",
-        "-h", "--help"
+    override val info = CommandInfo(
+        description = "Create a while loop",
+        longDescription = "Create a while loop with the given condition. The loop will continue until the condition is false.",
+        usage = "while <condition> [commands]",
+        aliases = listOf("while"),
+        minArgs = 1,
+        maxArgs = -1,
+        commands = listOf(
+            "-b", "--break",
+            "-h", "--help"
+        )
     )
 
     override fun run(args: List<String>): Boolean {

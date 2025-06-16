@@ -1,16 +1,19 @@
 package pt.clilib.cmdUtils.commands.directory
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 
 object DelDirCmd : Command {
-    override val description = "Delete a directory"
-    override val longDescription = "Deletes the specified directory from the filesystem."
-    override val usage = "deldir <directory_path>"
-    override val aliases = listOf("deldir", "rmdir")
-    override val minArgs = 1
-    override val maxArgs = 1
-    override val requiresFile = false
+    override val info = CommandInfo(
+        description = "Delete a directory",
+        longDescription = "Deletes the specified directory from the filesystem.",
+        usage = "deldir <directory_path>",
+        aliases = listOf("deldir", "rmdir"),
+        minArgs = 1,
+        maxArgs = 1,
+        requiresFile = false
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false

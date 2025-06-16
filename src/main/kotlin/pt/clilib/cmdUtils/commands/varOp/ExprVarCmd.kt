@@ -2,15 +2,18 @@ package pt.clilib.cmdUtils.commands.varOp
 
 import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 
 object ExprVarCmd : Command {
-    override val description = "Evaluate an expression"
-    override val longDescription = "Evaluates a mathematical expression."
-    override val usage = "expr <expression>"
-    override val aliases = listOf("expr", "evaluate")
-    override val minArgs = 1
-    override val maxArgs = -1
+    override val info = CommandInfo(
+        description = "Evaluate an expression",
+        longDescription = "Evaluates a mathematical expression.",
+        usage = "expr <expression>",
+        aliases = listOf("expr", "evaluate"),
+        minArgs = 1,
+        maxArgs = -1
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false

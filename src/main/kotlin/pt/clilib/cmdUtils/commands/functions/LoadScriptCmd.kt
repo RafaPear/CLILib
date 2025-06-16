@@ -2,6 +2,7 @@ package pt.clilib.cmdUtils.commands.functions
 
 import pt.clilib.tools.*
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import java.io.File
 
 /**
@@ -16,14 +17,16 @@ import java.io.File
 
 object LoadScriptCmd : Command {
 
-        override val description = "Load a script file"
-        override val longDescription = "Load and execute a script file containing a series of cmdUtils.commands."
-        override val usage = "loadscript <script_file>"
-        override val aliases = listOf("loadscript", "lscript")
-        override val minArgs = 1
-        override val maxArgs = 1
-        override val requiresFile = true
-        override val fileExtension = ".ppc"
+        override val info = CommandInfo(
+            description = "Load a script file",
+            longDescription = "Load and execute a script file containing a series of commands.",
+            usage = "loadscript <script_file>",
+            aliases = listOf("loadscript", "lscript"),
+            minArgs = 1,
+            maxArgs = 1,
+            requiresFile = true,
+            fileExtension = ".ppc"
+        )
 
         override fun run(args: List<String>): Boolean {
             if (!validateArgs(args, this)) return false

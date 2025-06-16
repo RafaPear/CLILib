@@ -1,6 +1,7 @@
 package pt.clilib.cmdUtils.commands.directory
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import java.io.File
 
@@ -8,12 +9,14 @@ import java.io.File
  * Lista os ficheiros e pastas do diretório atual ou de um diretório relativo passado como argumento.
  */
 object LsCmd : Command {
-    override val description = "List files in the current directory"
-    override val longDescription = "List files in the current directory or a specified relative directory."
-    override val usage = "ls [directory]"
-    override val aliases = listOf("ls")
-    override val minArgs = 0
-    override val maxArgs = 1
+    override val info = CommandInfo(
+        description = "List files in the current directory",
+        longDescription = "List files in the current directory or a specified relative directory.",
+        usage = "ls [directory]",
+        aliases = listOf("ls"),
+        minArgs = 0,
+        maxArgs = 1
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false

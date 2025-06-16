@@ -1,92 +1,53 @@
 package pt.clilib.cmdUtils
 
 /**
- * Representa um comando que pode ser executado na ‘interface’ de linha de comandos (CLI).
- *
- * Esta ‘interface’ define a estrutura que todos os comandos devem seguir, incluindo:
- * - A descrição textual do comando, visível no menu de ajuda.
- * - A forma de utilização do comando e os seus atalhos (aliases).
- * - O número mínimo e máximo de argumentos aceites.
- * - Se o comando espera ficheiros como entrada e qual a extensão esperada.
- *
- * A função [run] é chamada sempre que o comando é executado no CLI, recebendo os argumentos como uma lista de strings
- * e devolvendo um valor booleano que indica o sucesso ou falha da execução.
- *
- * !! OBRIGATÓRIOS !!
- * Os campos `description`, `usage`, `aliases` e a função `run` são de implementação obrigatória.
- * Todos os outros campos são opcionais.
- *
- * !! EXPLICAÇÃO DAS PROPRIEDADES !!
- *
- * - aliases: contém os diferentes nomes que podem ser usados para invocar o comando principal.
- *
- * - Args (min e max): definem o número mínimo e máximo de argumentos que o comando aceita.
- *   Nota: se `maxArgs` for definido como −1, o comando aceita um número ilimitado de argumentos.
- *   O mínimo tem obrigatoriamente de ser menor ou igual ao máximo. Se forem diferentes, isso
- *   indica que o comando tem argumentos opcionais.
- *   Exemplo: se `minArgs = 1` e `maxArgs = 2`, o primeiro argumento é obrigatório e o segundo é opcional.
- *
- *   Se `minArgs` e `maxArgs` não forem definidos, assume-se que o comando não recebe argumentos
- *   (`minArgs = 0`, `maxArgs = 0`).
- *
- * - requiresFile e fileExtension: indicam se o comando espera caminhos de ficheiros como argumentos.
- *   Se `requiresFile = true`, será feita a validação da extensão dos ficheiros através de `fileExtension`.
- *   Por defeito, considera-se `requiresFile = false` e `fileExtension = ""`.
- *
- * - run: função principal do comando. Deve ser sobreposta para definir o comportamento.
- *   Por convenção (definida por nós), recomenda-se:
- *     1. Validar os argumentos com `tools.validateArgs` no início da função;
- *     2. Usar `println` apenas para mensagens relevantes (como erros), e não para texto aleatório.
- *        A ideia é que o `core` trate da lógica principal.
+ * Represents a command that can be executed by the CLI application.
+ * A command has descriptive metadata and a [run] function that
+ * performs the desired behaviour when invoked.
  */
-
 interface Command {
-    /** Define a descrição do comando que será apresentada na última
-     coluna do menu Help*/
+    /** Command metadata. */
+    val info: CommandInfo
+
+    /** Short command description shown in help. */
     val description: String
+        get() = info.description
 
-    /** Define a descrição longa do comando que será apresentada quando
-     * o comando help é chamado com argumentos*/
+    /** Detailed description for extended help. */
     val longDescription: String
-        get() = description
+        get() = info.longDescription
 
-    /**Define o modo de utilização do comando que será apresentado
-    na primeira coluna do menu Help
-    */val usage: String
+    /** Usage string displayed in help. */
+    val usage: String
+        get() = info.usage
 
-    /**Define as diferentes formas de chamamento do comando que serão
-    apresentadas na segunda coluna do menu Help*/
+    /** Command aliases used to invoke this command. */
     val aliases: List<String>
+        get() = info.aliases
 
-    /**Define o número mínimo de argumentos.
-
-    DEFAULT = 0*/
+    /** Minimum number of arguments accepted. */
     val minArgs: Int
-        get() = 0
+        get() = info.minArgs
 
-    /**Define o número máximo de argumentos.
-
-    DEFAULT = 0*/
+    /** Maximum number of arguments accepted (-1 for unlimited). */
     val maxArgs: Int
-        get() = 0
+        get() = info.maxArgs
 
+    /** Optional argument-based subcommands. */
     val commands: List<String>
-        get() = emptyList()
+        get() = info.commands
 
-    /**Define se o comando espera receber ficheiros.
-
-    DEFAULT = false*/
+    /** Whether file paths are expected as arguments. */
     val requiresFile: Boolean
-        get() = false
+        get() = info.requiresFile
 
-    /**Define se a extensão de ficheiro que o comando espera receber.
-
-    DEFAULT = ""*/
+    /** Expected file extension when [requiresFile] is true. */
     val fileExtension: String
-        get() = ""
+        get() = info.fileExtension
 
-    /**Função run é executada quando o comando é chamado no CLI.
-    Recebe como parâmetros os argumentos [args] do comando e retorna um
-    [Boolean] que indica se a execução do comando foi bem sucedida ou não.*/
+    /**
+     * Executes the command with the provided [args].
+     * Returns true if the execution succeeded, false otherwise.
+     */
     fun run(args: List<String>): Boolean
 }

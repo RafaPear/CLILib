@@ -1,6 +1,7 @@
 package pt.clilib.cmdUtils.commands.cli
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 
 /**
@@ -14,12 +15,14 @@ import pt.clilib.tools.*
  */
 
 object WaitCmd : Command {
-    override val description = "Wait for a specified time"
-    override val longDescription = "Wait for a specified time in milliseconds."
-    override val usage = "wait <milliseconds>"
-    override val aliases = listOf("wait", "w")
-    override val minArgs = 1
-    override val maxArgs = 1
+    override val info = CommandInfo(
+        description = "Wait for a specified time",
+        longDescription = "Wait for a specified time in milliseconds.",
+        usage = "wait <milliseconds>",
+        aliases = listOf("wait", "w"),
+        minArgs = 1,
+        maxArgs = 1
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false

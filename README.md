@@ -1,16 +1,16 @@
 # 🧩 CLILib
 
-CLILib é uma biblioteca Kotlin para criar interfaces de linha de comandos extensíveis. Permite definir comandos, variáveis e scripts de forma simples e composável.
+CLILib is a Kotlin library for building extensible command line interfaces. It allows you to define commands, variables and scripts in a simple and composable way.
 
-## 🚀 Funcionalidades
-- Registo dinâmico de comandos
-- Suporte a scripts `.ppc`
-- Variáveis globais e operações matemáticas
-- Encadeamento de comandos com `|`
-- Criação de comandos via ficheiros JSON
-- Comandos prontos como `print`, `var`, `cd`, `ls` e `loadscript`
+## 🚀 Features
+- Dynamic command registration
+- Support for `.ppc` scripts
+- Global variables and math operations
+- Command chaining with `|`
+- Create commands from JSON files
+- Built-in commands like `print`, `var`, `cd`, `ls` and `loadscript`
 
-## 🛠️ Início rápido
+## 🛠️ Quick start
 ```kotlin
 import pt.clilib.App
 fun main() {
@@ -23,13 +23,13 @@ fun main() {
 }
 ```
 
-Também é possível executar comandos a partir de um ficheiro:
+You can also execute commands from a file:
 
 ```kotlin
 app.runFromFile("Scripts/setup.ppc")
 ```
 
-### 📥 Instalação
+### 📥 Installation
 
 ```bash
 git clone https://github.com/RafaPear/CLILib.git
@@ -37,39 +37,39 @@ cd CLILib
 ./gradlew build
 ```
 
-O arquivo JAR resultante fica em `build/libs`. Por exemplo:
+The resulting JAR file is placed in `build/libs`. For example:
 
 ```
 build/libs/CLILib-1.0-SNAPSHOT.jar
 ```
 
-Após a compilação, execute o exemplo com:
+After the build, run the example with:
 
 ```bash
 ./gradlew runExample
 ```
 
-### 📦 Publicar no GitHub Packages
-Defina as variáveis de ambiente `USERNAME` e `TOKEN` (o `TOKEN` pode ser o seu
-`GITHUB_TOKEN`) e execute:
+### 📦 Publish to GitHub Packages
+Define the environment variables `USERNAME` and `TOKEN` (the `TOKEN` can be your
+`GITHUB_TOKEN`) and run:
 
 ```bash
 ./gradlew publish
 ```
 
-## 📎 Exemplo
+## 📎 Example
 ```bash
-var a 10 | var b 5 | add a b total | print Resultado: $total
+var a 10 | var b 5 | add a b total | print Result: $total
 ```
 
-## 📚 Documentação
-Consulte a [Wiki do projeto](https://github.com/RafaPear/CLILib/wiki) para mais detalhes sobre a arquitetura, lista de comandos e guias de extensão.
+## 📚 Documentation
+Check the [project Wiki](https://github.com/RafaPear/CLILib/wiki) for details about the architecture, list of commands and extension guides.
 
-## 🤝 Contribuições
-Contribuições são bem‑vindas! Veja [Como Contribuir](https://github.com/RafaPear/CLILib/wiki/🤝-Como-Contribuir).
+## 🤝 Contributions
+Contributions are welcome! See [How to Contribute](https://github.com/RafaPear/CLILib/wiki/🤝-Como-Contribuir).
 
-## 📄 Licença
-Distribuído sob a [MIT License](https://opensource.org/licenses/MIT).
+## 📄 License
+Distributed under the [MIT License](https://opensource.org/licenses/MIT).
 
-## ✨ Créditos
-Desenvolvido com ❤️ por Rafael Vermelho Pereira
+## ✨ Credits
+Developed with ❤️ by Rafael Vermelho Pereira

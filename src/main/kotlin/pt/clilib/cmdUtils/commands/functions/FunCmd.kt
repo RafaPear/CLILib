@@ -4,6 +4,7 @@ import pt.clilib.FunRegister
 import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
 import pt.clilib.tools.YELLOW
@@ -12,15 +13,16 @@ import pt.clilib.tools.cmdParser
 import pt.clilib.tools.validateArgs
 
 object FunCmd : Command {
-    override val description = "Create a function"
-    override val longDescription =
-        "Create a function with the given name and commands. The function can be called later."
-    override val usage = "fun <name> {commands}"
-    override val aliases = listOf("fun", "function")
-    override val minArgs = 1
-    override val maxArgs = -1
-    override val commands = listOf(
-        "-h", "--help"
+    override val info = CommandInfo(
+        description = "Create a function",
+        longDescription = "Create a function with the given name and commands. The function can be called later.",
+        usage = "fun <name> {commands}",
+        aliases = listOf("fun", "function"),
+        minArgs = 1,
+        maxArgs = -1,
+        commands = listOf(
+            "-h", "--help"
+        )
     )
 
     // Argument commands:
@@ -52,13 +54,15 @@ object FunCmd : Command {
 
             val functionCommand =
                 object : Command{
-                    override val description = "Function '${args[0]}'"
-                    override val longDescription = "Function '${args[0]}' with commands: $value"
-                    override val usage = "fun ${args[0]} {commands}"
-                    override val aliases = listOf(args[0])
-                    override val minArgs = 0
-                    override val maxArgs = -1
-                    override val commands = emptyList<String>()
+                    override val info = CommandInfo(
+                        description = "Function '${args[0]}'",
+                        longDescription = "Function '${args[0]}' with commands: $value",
+                        usage = "fun ${args[0]} {commands}",
+                        aliases = listOf(args[0]),
+                        minArgs = 0,
+                        maxArgs = -1,
+                        commands = emptyList()
+                    )
 
                     private val body = value.removeSurrounding("{", "}")
 

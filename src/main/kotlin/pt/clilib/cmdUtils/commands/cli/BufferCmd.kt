@@ -2,6 +2,7 @@ package pt.clilib.cmdUtils.commands.cli
 
 import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.CYAN
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
@@ -10,12 +11,14 @@ import pt.clilib.tools.validateArgs
 
 // Command that manipulates the lastCmdDump variable buffer, which is used to store the last command's output.
 object BufferCmd : Command {
-    override val description = "Manipulate the command buffer"
-    override val longDescription = "This command allows you to manipulate the last command's output buffer."
-    override val usage = "buffer [--clear|--dump]"
-    override val aliases = listOf("buffer", "buf")
-    override val minArgs = 0
-    override val maxArgs = 1
+    override val info = CommandInfo(
+        description = "Manipulate the command buffer",
+        longDescription = "This command allows you to manipulate the last command's output buffer.",
+        usage = "buffer [--clear|--dump]",
+        aliases = listOf("buffer", "buf"),
+        minArgs = 0,
+        maxArgs = 1
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false

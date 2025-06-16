@@ -1,6 +1,7 @@
 package pt.clilib.cmdUtils.commands.cli
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.CYAN
 import pt.clilib.tools.RESET
 import pt.clilib.tools.YELLOW
@@ -12,9 +13,11 @@ import pt.clilib.tools.version
  */
 object VersionCmd : Command {
 
-    override val description = "Show version information and credits"
-    override val usage = "version"
-    override val aliases = listOf("version")
+    override val info = CommandInfo(
+        description = "Show version information and credits",
+        usage = "version",
+        aliases = listOf("version")
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
