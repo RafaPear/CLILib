@@ -45,6 +45,16 @@ internal fun validateArgs(args: List<String>, command: Command): Boolean {
 }
 
 /**
+ * Validates whether [name] is a valid identifier for variables or functions.
+ * A valid name starts with a letter and may contain letters, digits or
+ * underscores.
+ */
+internal fun isValidIdentifier(name: String): Boolean {
+    if (name.isEmpty() || !name.first().isLetter()) return false
+    return name.all { it.isLetterOrDigit() || it == '_' }
+}
+
+/**
  * Função que processa os comandos introduzidos pelo utilizador. Retorna true caso a execução tenha sido bem sucedida.
  * False caso contrário.
  *
