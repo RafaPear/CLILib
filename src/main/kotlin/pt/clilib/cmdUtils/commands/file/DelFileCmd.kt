@@ -1,16 +1,19 @@
 package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 
 object DelFileCmd : Command {
-    override val description = "Delete a file"
-    override val longDescription = "Deletes the specified file from the filesystem."
-    override val usage = "delfile <file_path>"
-    override val aliases = listOf("delfile", "rmfile")
-    override val minArgs = 1
-    override val maxArgs = 1
-    override val requiresFile = false
+    override val info = CommandInfo(
+        description = "Delete a file",
+        longDescription = "Deletes the specified file from the filesystem.",
+        usage = "delfile <file_path>",
+        aliases = listOf("delfile", "rmfile"),
+        minArgs = 1,
+        maxArgs = 1,
+        requiresFile = false
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false

@@ -1,18 +1,18 @@
-# Visão Geral
+# Overview
 
-Esta pasta reproduz parte da informação disponível na wiki do projeto.
+This folder mirrors part of the information available in the project wiki.
 
-## Estrutura do Projeto
-- `src/main/kotlin` contém a implementação principal.
-- `Commands` guarda exemplos de comandos em JSON.
-- `Scripts` tem ficheiros `.ppc` para demonstração.
+## Project Structure
+- `src/main/kotlin` contains the main implementation.
+- `Commands` holds example commands in JSON format.
+- `Scripts` includes `.ppc` files for demonstration.
 
-## Comandos principais
-- `help` – lista de comandos e descrição.
-- `var` – cria variáveis que podem ser usadas nos scripts.
-- `loadscript` – executa um ficheiro `.ppc`.
+## Main commands
+- `help` – list commands and description.
+- `var` – create variables used in scripts.
+- `loadscript` – execute a `.ppc` file.
 
-## Execução
-Após compilar o projeto com `./gradlew build`, pode correr o exemplo com `./gradlew run`.
+## Execution
+After building the project with `./gradlew build`, you can run the example using `./gradlew run`.
 
-Para mais detalhes consulte a wiki original no GitHub.
+For more details see the original GitHub wiki.

@@ -2,6 +2,7 @@ package pt.clilib.cmdUtils.commands.cli
 
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.CYAN
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
@@ -10,14 +11,16 @@ import pt.clilib.tools.readJsonFile
 import pt.clilib.tools.validateArgs
 
 object MkCmd : Command {
-    override val description = "Cria um comando simples a partir de um ficheiro JSON"
-    override val longDescription = "Permite criar comandos simples que apenas imprimem uma mensagem fixa, definida num ficheiro JSON."
-    override val usage = "mkcmd <ficheiro.json>"
-    override val aliases = listOf("mkcmd")
-    override val minArgs = 1
-    override val maxArgs = 1
-    override val requiresFile = true
-    override val fileExtension = ".json"
+    override val info = CommandInfo(
+        description = "Create a simple command from a JSON file",
+        longDescription = "Allows creating simple commands that only print a fixed message defined in a JSON file.",
+        usage = "mkcmd <file.json>",
+        aliases = listOf("mkcmd"),
+        minArgs = 1,
+        maxArgs = 1,
+        requiresFile = true,
+        fileExtension = ".json"
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
@@ -39,14 +42,16 @@ object MkCmd : Command {
                 return@readJsonFile false
             }
             val customCmd = object : Command {
-                override val description = description
-                override val longDescription = longDescription
-                override val usage = usage
-                override val aliases = aliases
-                override val minArgs = minArgs
-                override val maxArgs = maxArgs
-                override val requiresFile = requiresFile
-                override val fileExtension = fileExtension
+                override val info = CommandInfo(
+                    description = description,
+                    longDescription = longDescription,
+                    usage = usage,
+                    aliases = aliases,
+                    minArgs = minArgs,
+                    maxArgs = maxArgs,
+                    requiresFile = requiresFile,
+                    fileExtension = fileExtension
+                )
 
                 override fun run(args: List<String>): Boolean {
                     if (!validateArgs(args, this)) return false

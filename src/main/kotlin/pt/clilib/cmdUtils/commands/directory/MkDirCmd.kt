@@ -1,29 +1,32 @@
 package pt.clilib.cmdUtils.commands.directory
 
 import pt.clilib.cmdUtils.Command
+import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import java.io.File
 
 object MkDirCmd : Command {
-    override val description = "Cria um diretório"
-    override val longDescription = "Cria um diretório com o nome especificado."
-    override val usage = "mkdir <diretório>"
-    override val aliases = listOf("mkdir")
-    override val minArgs = 1
-    override val maxArgs = 1
-    override val requiresFile = false
-    override val fileExtension = ""
+    override val info = CommandInfo(
+        description = "Create a directory",
+        longDescription = "Create a directory with the specified name.",
+        usage = "mkdir <directory>",
+        aliases = listOf("mkdir"),
+        minArgs = 1,
+        maxArgs = 1,
+        requiresFile = false,
+        fileExtension = ""
+    )
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
         val dirName = args[0]
         val dir = File(dirName)
         return if (dir.exists()) {
-            println("${RED}App Error: O diretório $dirName já existe.$RESET")
+            println("${RED}App Error: Directory $dirName already exists.$RESET")
             false
         } else {
             dir.mkdirs()
-            println("${CYAN}Diretório $dirName criado com sucesso!$RESET")
+            println("${CYAN}Directory $dirName created successfully!$RESET")
             true
         }
     }
