@@ -5,6 +5,7 @@ import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
+import pt.clilib.tools.isValidIdentifier
 
 
 object VarCmd : Command {
@@ -41,15 +42,9 @@ object VarCmd : Command {
             // Default behavior: register the variable with the given name and value.
             val newArgs = args.drop(1).joinToString(" ")
 
-            if (args[0][0].isDigit()){
-                println("${RED}Error: Variable name '${args[0]}' must start with a letter.${RESET}")
+            if (!isValidIdentifier(args[0])) {
+                println("${RED}Error: Invalid variable name '${args[0]}'.${RESET}")
                 return false
-            }
-            args[0].map {
-                if(!(it.isLetter() || it.isDigit() || it == '_')) {
-                    println("${RED}Error: Variable name '${args[0]}' must start with a letter and can only contain letters, digits, and underscores.${RESET}")
-                    return false
-                }
             }
 
             if(cmdParser(newArgs.lowercase(), supress = true)) {

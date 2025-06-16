@@ -7,6 +7,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
 import pt.clilib.tools.YELLOW
+import pt.clilib.tools.isValidIdentifier
 import pt.clilib.tools.cmdParser
 import pt.clilib.tools.validateArgs
 
@@ -42,15 +43,9 @@ object FunCmd : Command {
             // Default behavior: register the function with the given name and value.
             val newArgs = args.drop(1).joinToString(" ")
 
-            if (args[0][0].isDigit()){
-                println("${RED}Error: Function name '${args[0]}' must start with a letter.${RESET}")
+            if (!isValidIdentifier(args[0])) {
+                println("${RED}Error: Invalid function name '${args[0]}'.${RESET}")
                 return false
-            }
-            args[0].map {
-                if(!(it.isLetter() || it.isDigit() || it == '_')) {
-                    println("${RED}Error: Function name '${args[0]}' must start with a letter and can only contain letters, digits, and underscores.${RESET}")
-                    return false
-                }
             }
 
             val value = newArgs.trim()
