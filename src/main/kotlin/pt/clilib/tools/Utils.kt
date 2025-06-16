@@ -77,21 +77,13 @@ fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolea
             return false
         }
         val command = CmdRegister.find(token[0])
-        var similar : String? = null
-        CmdRegister.all().forEach {
-            it.aliases.forEach { i ->
-                if (i.startsWith(token[0]))
-                    similar = i
-            }
-        }
+        val similar = CmdRegister.findSimilar(token[0])
         if (command == null) {
             if (!supress) {
-                if (similar == null) {
+                if (similar == null)
                     println("${RED}App Error: Unknown command ${token[0]}$RESET")
-                }
-                else {
+                else
                     println("${RED}App Error: Unknown command ${token[0]}. Did you mean '$similar'?$RESET")
-                }
             }
             return false
         }
