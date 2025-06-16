@@ -36,7 +36,6 @@ object SubVarCmd : Command {
         }
         VarRegister.setLastCmdDump(result)
         if (args.size < 3) {
-            println("${GREEN}Result: $result${RESET}")
             return true
         } else {
             if (args[2] == LAST_CMD_KEY) {
@@ -44,7 +43,6 @@ object SubVarCmd : Command {
             } else {
                 VarRegister.register(args[2], result)
             }
-            println("${GREEN}Subtracted ${args[1]} from ${args[0]} to create ${args[2]} with value $result.${RESET}")
         }
         return true
     }

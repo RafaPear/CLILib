@@ -3,7 +3,7 @@ package pt.clilib
 internal const val LAST_CMD_KEY = "buffer"
 
 internal object VarRegister {
-    private val vars = mutableMapOf<String, Any?>(LAST_CMD_KEY to null)
+    private val functions = mutableMapOf<String, Any?>(LAST_CMD_KEY to null)
     /**
      * Registers a variable with a given name and value.
      *
@@ -18,7 +18,7 @@ internal object VarRegister {
             println("Warning: '$LAST_CMD_KEY' is reserved and cannot be registered via CLI")
             return
         }
-        vars[name] = value
+        functions[name] = value
     }
 
     /**
@@ -31,7 +31,7 @@ internal object VarRegister {
         if (name.isBlank()) {
             throw IllegalArgumentException("Variable name cannot be blank.")
         }
-        return vars[name]
+        return functions[name]
     }
 
     /**
@@ -44,7 +44,7 @@ internal object VarRegister {
         if (name.isBlank()) {
             throw IllegalArgumentException("Variable name cannot be blank.")
         }
-        return vars.containsKey(name)
+        return functions.containsKey(name)
     }
 
     /**
@@ -60,7 +60,7 @@ internal object VarRegister {
             println("Warning: '$LAST_CMD_KEY' cannot be removed from the register")
             return
         }
-        if (vars.remove(name) != null) {
+        if (functions.remove(name) != null) {
             println("Unregistered variable: $name")
         } else {
             println("Variable $name not found.")
@@ -73,7 +73,7 @@ internal object VarRegister {
      * @return A map containing all variable names and their values.
      */
     fun all(): Map<String, Any?> {
-        return vars.toMap()
+        return functions.toMap()
     }
 
     fun modify(name: String, value: Any) {
@@ -84,16 +84,16 @@ internal object VarRegister {
             println("Warning: '$LAST_CMD_KEY' cannot be modified via CLI")
             return
         }
-        if (vars.containsKey(name)) {
-            vars[name] = value
+        if (functions.containsKey(name)) {
+            functions[name] = value
         } else {
             println("Variable $name not found. Use register to create it first.")
         }
     }
 
-    fun lastCmdDump(): Any? = vars[LAST_CMD_KEY]
+    fun lastCmdDump(): Any? = functions[LAST_CMD_KEY]
 
     fun setLastCmdDump(value: Any?) {
-        vars[LAST_CMD_KEY] = value
+        functions[LAST_CMD_KEY] = value
     }
 }

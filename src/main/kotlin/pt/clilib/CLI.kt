@@ -12,10 +12,10 @@ import java.awt.Color
 import java.io.File
 import java.io.PrintStream
 
-class App() {
+class CLI() {
 
     var defaultCommands = mutableListOf(
-        CdCmd, ClrCmd, ExitCmd, HelpCmd,
+        CdCmd, ClrCmd, ExitCmd,
         LoadScriptCmd, LsCmd, MeasureCmd,
         PrintCmd, VersionCmd, WaitCmd,
         WaitForCmd, MkCmd, MkTemplateCmd,
@@ -31,6 +31,10 @@ class App() {
     var prompt : String = "${GRAY}${root} >> $RESET"
 
     var useExternalWindow = false
+
+    init {
+        CmdRegister.register(HelpCmd)
+    }
 
     /**
      * Metodo que inicia o ciclo principal da interface de linha de comandos (CLI).
@@ -116,7 +120,7 @@ class App() {
             if ("--file" in tokens) load.addAll(listOf(MkFileCmd, MkTemplateCmd, EditCmd, DelFileCmd))
             if ("--dir" in tokens) load.addAll(listOf(CdCmd, LsCmd, MkDirCmd, DelDirCmd))
             if ("--var" in tokens) load.addAll(listOf(VarCmd, AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd, ExprVarCmd))
-            if ("--utils" in tokens) load.addAll(listOf(LoadScriptCmd, MeasureCmd))
+            if ("--utils" in tokens) load.addAll(listOf(LoadScriptCmd, MeasureCmd, WhileCmd, FunCmd, IfCmd))
         }
 
         if (load.isEmpty()) load.addAll(defaultCommands)

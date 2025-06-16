@@ -40,7 +40,6 @@ object DivVarCmd : Command {
         }
         VarRegister.setLastCmdDump(result)
         if (args.size < 3) {
-            println("${GREEN}Result: $result${RESET}")
             return true
         } else {
             if (args[2] == LAST_CMD_KEY) {
@@ -48,7 +47,6 @@ object DivVarCmd : Command {
             } else {
                 VarRegister.register(args[2], result)
             }
-            println("${GREEN}Divided ${args[0]} by ${args[1]} to create ${args[2]} with value $result.${RESET}")
         }
         return true
     }

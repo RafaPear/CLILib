@@ -121,10 +121,8 @@ object VarCmd : Command {
 
         if (VarRegister.isRegistered(name)) {
             VarRegister.modify(name, newValue)
-            println("${GREEN}Variable '${name}' modified with value: $newValue${RESET}")
         } else {
             VarRegister.register(name, newValue)
-            println("${GREEN}Variable '${name}' registered with value: $newValue${RESET}")
         }
         return true
     }
@@ -139,10 +137,8 @@ object VarCmd : Command {
 
         if (VarRegister.isRegistered(name)) {
             VarRegister.modify(name, dump)
-            println("${GREEN}Variable '${name}' modified with value: $dump${RESET}")
         } else {
             VarRegister.register(name, dump)
-            println("${GREEN}Variable '${name}' registered with value: $dump${RESET}")
         }
         return true
     }

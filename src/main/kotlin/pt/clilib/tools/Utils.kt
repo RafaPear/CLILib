@@ -54,24 +54,26 @@ internal fun validateArgs(args: List<String>, command: Command): Boolean {
 fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolean = false): Boolean {
     if (input.isNullOrBlank()) return true
 
-    val tokens = input
-        .replaceVars()
-        .replaceArgs(args)
-        .trim().split('|')
-        .map { it
+    val tokens = splitOutsideBraces(
+        input
+            .replaceArgs(args)
             .trim()
-            .split(Regex("\\s+"))
-            .toMutableList()
-        }
-        .toMutableList()
+    ).map {
+        it.trim().split(Regex("\\s+")).toMutableList()
+    }.toMutableList()
 
     var good = true
+    var prev = ""
 
     for (token in tokens) {
         // Coloca o valor de uma variavel no lugar da referência. Exemplo "$a" -> 24
-        //token.replaceAll { it.replaceVars().replaceArgs(args) }
+        for (i in token.indices) {
+            if (token[i].contains("|"))
+                break
+            token[i] = token[i].replaceVars()
+        }
         if (!good) {
-            println("${RED}App Error: Previous command failed. Aborting.$RESET")
+            println("${RED}App Error: Previous command ($prev) failed. Aborting.$RESET")
             return false
         }
         val command = CmdRegister.find(token[0])
@@ -94,9 +96,91 @@ fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolea
             return false
         }
         good = command.run(token.drop(1))
+        prev = token.joinToString(" ")
     }
     return good
 }
+
+fun eval(expr: String): Boolean {
+    val regex = Regex("""\s*(\S+)\s*(==|!=|<=|>=|<|>)\s*(\S+)\s*""")
+    val match = regex.matchEntire(expr) ?: return false
+
+    val (aStr, op, bStr) = match.destructured
+
+    val a = aStr.toDoubleOrNull()
+    val b = bStr.toDoubleOrNull()
+
+    if (a != null && b != null) {
+        return when (op) {
+            "==" -> a == b
+            "!=" -> a != b
+            ">"  -> a > b
+            "<"  -> a < b
+            ">=" -> a >= b
+            "<=" -> a <= b
+            else -> false
+        }
+    }
+
+    return false
+}
+
+internal fun splitOutsideBraces(input: String): List<String> {
+    val result = mutableListOf<String>()
+    var current = StringBuilder()
+    var insideBraces = 0
+
+    val chars = input.trim().toMutableList()
+
+    while (chars.isNotEmpty()) {
+        val c = chars.removeAt(0)
+
+        when (c) {
+            '{' -> {
+                insideBraces++
+                current.append(c)
+                if (chars.firstOrNull() == '\n') chars.removeAt(0)
+            }
+
+            '}' -> {
+                if (current.isNotEmpty() && (current.last() == ' ' || current.last() == '|')) {
+                    current.deleteAt(current.lastIndex)
+                    chars.addFirst(c)
+                } else {
+                    insideBraces--
+                    current.append(c)
+                }
+            }
+
+            '|', '\n' -> {
+                if (insideBraces == 0) {
+                    val trimmed = current.toString().trim()
+                    if (trimmed.isNotEmpty()) result.add(trimmed)
+                    current.clear()
+                } else {
+                    if (chars.firstOrNull() == '}') chars.removeAt(0)
+                    current.append(" |")
+                }
+            }
+            ' ' -> {
+                if (current.isNotEmpty() && current.last() != ' ' && current.last() != '{') {
+                    current.append(c)
+                }
+            }
+            else -> current.append(c)
+        }
+    }
+
+    if (current.isNotEmpty()) {
+        val trimmed = current.toString().trim()
+        if (trimmed.isNotEmpty()) result.add(trimmed)
+    }
+
+    return result
+}
+
+
+
 
 internal fun String.replaceArgs(args: List<String>): String {
     var nInput = this
@@ -111,18 +195,11 @@ internal fun String.replaceArgs(args: List<String>): String {
 internal fun String.replaceVars(auto : Boolean = false): String {
     var nInput = this
     val vars = VarRegister.all()
-    val str = "$$"+"buffer"
     for ((name, value) in vars) {
         nInput = if (auto)
             nInput.replace(name, value.toString())
         else
-            nInput.replace("$$name", value.toString())
-    }
-    // Replace buffer variable
-    if (nInput.contains(str)) {
-        val dump = VarRegister.lastCmdDump()
-        if (dump != null)
-            nInput = nInput.replace(str, dump.joinToString())
+            nInput.replace("#$name", value.toString())
     }
     return nInput
 }

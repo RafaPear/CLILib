@@ -38,7 +38,6 @@ object AddVarCmd : Command{
         }
         VarRegister.setLastCmdDump(result)
         if (args.size < 3) {
-            println("${GREEN}Result: $result${RESET}")
             return true
         }
         else {
@@ -47,7 +46,6 @@ object AddVarCmd : Command{
             } else {
                 VarRegister.register(args[2], result)
             }
-            println("${GREEN}Added ${args[0]} and ${args[1]} to create ${args[2]} with value $result.${RESET}")
         }
         return true
     }

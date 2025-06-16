@@ -3,6 +3,9 @@ package pt.clilib.cmdUtils.commands.varOp
 import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
+import kotlin.math.nextDown
+import kotlin.math.nextUp
+import kotlin.math.roundToInt
 
 object ExprVarCmd : Command {
     override val description = "Evaluate an expression"
@@ -17,9 +20,12 @@ object ExprVarCmd : Command {
         val expression = args.joinToString("")
 
         try {
-            val result = ExprParser().parse(expression)
-            VarRegister.setLastCmdDump(result)
-            println("${GREEN}Result: $result${RESET}")
+            val result: Double = ExprParser().parse(expression)
+            if (!result.isNaN()) {
+                VarRegister.setLastCmdDump(result.toInt())
+            } else {
+                VarRegister.setLastCmdDump(result)
+            }
         } catch (e: Exception) {
             println("${RED}Error evaluating expression: ${e.message}${RESET}")
             return false

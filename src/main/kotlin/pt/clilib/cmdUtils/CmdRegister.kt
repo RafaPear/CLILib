@@ -3,7 +3,7 @@ package pt.clilib.cmdUtils
 import pt.clilib.tools.RESET
 import pt.clilib.tools.YELLOW
 
-internal object CmdRegister {
+object CmdRegister {
     private val commands = mutableListOf<Command>()
 
     fun register(command: Command) {
