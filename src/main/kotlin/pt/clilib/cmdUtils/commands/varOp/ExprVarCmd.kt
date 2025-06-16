@@ -3,9 +3,6 @@ package pt.clilib.cmdUtils.commands.varOp
 import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
-import kotlin.math.nextDown
-import kotlin.math.nextUp
-import kotlin.math.roundToInt
 
 object ExprVarCmd : Command {
     override val description = "Evaluate an expression"

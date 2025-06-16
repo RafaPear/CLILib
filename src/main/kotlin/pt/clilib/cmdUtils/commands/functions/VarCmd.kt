@@ -1,18 +1,11 @@
 package pt.clilib.cmdUtils.commands.functions
 
-import com.sun.tools.javac.tree.TreeInfo.args
 import pt.clilib.VarRegister
 import pt.clilib.LAST_CMD_KEY
 import pt.clilib.cmdUtils.CmdRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
-import kotlin.text.all
-import kotlin.text.first
-import kotlin.text.isEmpty
-import kotlin.text.toDoubleOrNull
-import kotlin.text.toFloatOrNull
-import kotlin.text.toIntOrNull
-import kotlin.text.toLongOrNull
+
 
 object VarCmd : Command {
     override val description = "Create or modify a variable"
