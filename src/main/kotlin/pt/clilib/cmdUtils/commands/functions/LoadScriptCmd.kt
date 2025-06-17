@@ -1,6 +1,7 @@
 package pt.clilib.cmdUtils.commands.functions
 
 import pt.clilib.tools.*
+import pt.clilib.tools.Environment
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import java.io.File
@@ -30,12 +31,12 @@ object LoadScriptCmd : Command {
 
         override fun run(args: List<String>): Boolean {
             if (!validateArgs(args, this)) return false
-            val prevRoot = root
+            val prevRoot = Environment.root
             println("${YELLOW}Loading script: ${args[0]}${RESET}")
             try {
-                val file = File(root + args[0])
+                val file = Environment.resolve(args[0]).toFile()
                 val lines = file.readLines()
-                root = System.getProperty("user.dir") + "\\"
+                Environment.changeRoot(System.getProperty("user.dir"))
                 for (line in lines) {
                     if (!line.trim().startsWith(commentCode)) {
                         if (!cmdParser(line)) {
@@ -48,7 +49,7 @@ object LoadScriptCmd : Command {
                 println("${RED}App Error: Failed to load script. ${e.message}${RESET}")
                 return false
             }
-            root = prevRoot
+            Environment.root = prevRoot
             return true
         }
 }

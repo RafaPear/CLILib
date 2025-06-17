@@ -21,7 +21,7 @@ object PrintCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
-        println("${GREEN}${args.joinToString(" ")}${RESET}")
+        println(args.joinToString(" ").colorize(AnsiColor.GREEN))
         return true
     }
 }
