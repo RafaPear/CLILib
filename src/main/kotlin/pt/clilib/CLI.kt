@@ -28,7 +28,8 @@ class CLI() {
     var title : String = "CLI App"
     var bgColor : Color = Color.BLACK
     var fgColor : Color = Color.WHITE
-    var prompt : String = "${GRAY}${root} >> $RESET"
+    val prompt: String
+        get() = "${GRAY}${Environment.prompt} >> $RESET"
 
     var useExternalWindow = false
 
@@ -57,7 +58,7 @@ class CLI() {
         else {
             clearAndRedrawPrompt()
             while (true) {
-                print("${GRAY}${root} >> $RESET")
+                print(prompt)
                 val input = readLine()
                 cmdParser(input)
             }
@@ -83,7 +84,7 @@ class CLI() {
      * @param file O caminho do ficheiro a ser lido.
      */
     fun runFromFile(file: String) {
-        val file = File(file)
+        val file = Environment.resolve(file).toFile()
         if (!file.exists()) {
             println("${RED}App Error: File not found: $file$RESET")
             return

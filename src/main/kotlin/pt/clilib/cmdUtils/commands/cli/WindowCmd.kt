@@ -5,7 +5,7 @@ import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import java.io.PrintStream
 import pt.clilib.tools.validateArgs
-import pt.clilib.tools.root
+import pt.clilib.tools.Environment
 import java.awt.Color
 
 object WindowCmd : Command {
@@ -26,7 +26,7 @@ object WindowCmd : Command {
             title = "CLI App - $version",
             bgColor = Color.BLACK,
             fgColor = Color.WHITE,
-            prompt = "${GRAY}${root} >> ${RESET}"
+            prompt = "${GRAY}${Environment.prompt} >> ${RESET}"
         )
         // redireciona saída
         val stream = ConsoleOutputStream(terminal)

@@ -20,13 +20,14 @@ object LsCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
-        val path = if (args.isNotEmpty()) "$root${args[0]}" else root
-        val target = File(path)
+        val path = if (args.isNotEmpty()) Environment.resolve(args[0]) else Environment.root
+        val target = path.toFile()
+        val displayPath = path.toString()
         if (!target.exists() || !target.isDirectory) {
-            println("${RED}App Error: Directory does not exist or is invalid: $path$RESET")
+            println("${RED}App Error: Directory does not exist or is invalid: $displayPath$RESET")
             return false
         }
-        println("${GREEN}Files in ${path.ifEmpty { "current" }} directory:$RESET")
+        println("${GREEN}Files in ${displayPath.ifEmpty { "current" }} directory:$RESET")
         printFlatDirectoryTree(target)
         return true
     }

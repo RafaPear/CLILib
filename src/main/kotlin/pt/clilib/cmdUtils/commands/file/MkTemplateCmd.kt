@@ -19,7 +19,7 @@ object MkTemplateCmd : Command {
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
         val fileName = if (args[0].endsWith(".json")) args[0] else args[0] + ".json"
-        val file = File(root + fileName)
+        val file = Environment.resolve(fileName).toFile()
         if (file.exists()) {
             println("${RED}App Error: File $fileName already exists.$RESET")
             return false

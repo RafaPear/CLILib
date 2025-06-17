@@ -5,9 +5,8 @@ import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.CYAN
 import pt.clilib.tools.RED
 import pt.clilib.tools.RESET
-import pt.clilib.tools.root
+import pt.clilib.tools.Environment
 import pt.clilib.tools.validateArgs
-import java.io.File
 
 object EditCmd : Command {
     override val info = CommandInfo(
@@ -23,8 +22,8 @@ object EditCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
-        val fileName = root + args[0]
-        val file = File(fileName)
+        val file = Environment.resolve(args[0]).toFile()
+        val fileName = file.absolutePath
         return if (file.exists()) {
             println("${CYAN}Editing $fileName...${RESET}")
             // Open the file in the default editor for windows, mac and linux

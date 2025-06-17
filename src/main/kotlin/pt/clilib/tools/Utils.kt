@@ -9,7 +9,7 @@ import kotlin.random.Random
 import org.json.JSONObject
 
 internal fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
-    val file = File(root + filePath)
+    val file = Environment.resolve(filePath).toFile()
     if (!file.exists()) {
         println("${RED}App Error: Ficheiro não encontrado: $filePath$RESET")
         return false
