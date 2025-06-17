@@ -32,6 +32,7 @@ object WaitForCmd : Command {
                 println("${YELLOW}Press Enter to continue...${RESET}")
             }
             readLine()
+            println()
             return true
         }
 }

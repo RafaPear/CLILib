@@ -6,7 +6,6 @@ import pt.clilib.tools.*
 import java.io.PrintStream
 import pt.clilib.tools.validateArgs
 import pt.clilib.tools.Environment
-import java.awt.Color
 
 object WindowCmd : Command {
     override val info = CommandInfo(
@@ -24,8 +23,6 @@ object WindowCmd : Command {
         if (!validateArgs(args, this)) return false
         val terminal = TerminalWindow(
             title = "CLI App - $version",
-            bgColor = Color.BLACK,
-            fgColor = Color.WHITE,
             prompt = "${GRAY}${Environment.prompt} >> ${RESET}"
         )
         // redireciona saída

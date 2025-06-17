@@ -34,12 +34,7 @@ fun main() {
                 print a: #a, b: #b
                 wait arg[2]
             }
-            wfu
         }
-        print Função de teste conta do primeiro argumento (a) até o segundo (b).
-        print Use: teste <a> <b> <tempo>
-        wfu
-        teste 0 10 1
     """)
     cli.runtimeCLI()
     // app.runFromFile("Scripts/exampleScript.ppc")

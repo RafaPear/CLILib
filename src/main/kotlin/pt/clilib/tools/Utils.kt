@@ -1,5 +1,6 @@
 package pt.clilib.tools
 
+import com.sun.tools.javac.tree.TreeInfo.args
 import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CmdRegister
@@ -7,6 +8,8 @@ import java.io.File
 import kotlin.concurrent.thread
 import kotlin.random.Random
 import org.json.JSONObject
+import java.awt.SystemColor.window
+import javax.swing.SwingUtilities
 
 internal fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
     val file = Environment.resolve(filePath).toFile()

@@ -8,13 +8,15 @@ import java.util.regex.Pattern
 import pt.clilib.cmdUtils.CmdRegister
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
+import kotlin.concurrent.thread
 
-internal class TerminalWindow(
+
+class TerminalWindow(
     title: String = "CLI",
     bgColor: Color = Color.BLACK,
     fgColor: Color = Color.WHITE,
     private val prompt: String = "> ",
-    initText : String = "",
+    initText: String = "",
 ) : JFrame(title) {
 
     private val textPane = JTextPane()
@@ -48,7 +50,8 @@ internal class TerminalWindow(
     }
                // já herda o tipo Sugestao
 
-
+    private var cmdThread = thread {}
+    private var runningCmd: Boolean = false
 
     init {
         textPane.font = Font(fontFamily, Font.PLAIN, fontSize)
@@ -78,7 +81,7 @@ internal class TerminalWindow(
 
         textPane.addKeyListener(object : KeyAdapter() {
             override fun keyTyped(e: KeyEvent) {
-                if (!Character.isISOControl(e.keyChar)) {
+                if (!Character.isISOControl(e.keyChar) && !runningCmd) {
                     val end = maxOf(textPane.selectionStart+1, textPane.selectionEnd)
                     if (inputStartOffset > 0 && end < inputStartOffset) {  // < em vez de <=
                         e.consume()
@@ -87,7 +90,7 @@ internal class TerminalWindow(
             }
 
             override fun keyPressed(e: KeyEvent) {
-                if (e.keyCode == KeyEvent.VK_BACK_SPACE) {
+                if (e.keyCode == KeyEvent.VK_BACK_SPACE && !runningCmd) {
                     val end = maxOf(textPane.selectionStart-1, textPane.selectionEnd-1)
                     if (inputStartOffset > 0 && end < inputStartOffset) {  // < em vez de <=
                         e.consume()
@@ -95,7 +98,7 @@ internal class TerminalWindow(
                     }
                 }
 
-                if (e.keyCode == KeyEvent.VK_TAB) {
+                if (e.keyCode == KeyEvent.VK_TAB && !runningCmd) {
                     e.consume()
                     if (popup.isVisible) {
                         val nxt = (lista.selectedIndex + 1) % modelo.size
@@ -112,16 +115,29 @@ internal class TerminalWindow(
                     if (popup.isVisible) {
                         e.consume(); aceitarPopup(); return
                     }
-                    e.consume(); processCommand(); return
+                    else if (!runningCmd) {
+                        e.consume(); processCommand(); return
+                    } else {
+                        // Se já está a correr um comando, ignora o ENTER
+                        e.consume()
+                        append("\n", "default")
+                        System.out.flush()
+                        SwingUtilities.invokeLater {
+                            drawPrompt()  // desenha o prompt novamente
+                            scrollToBottom()  // garante que o cursor está visível
+                        }
+                        runningCmd = false
+                        return
+                    }
                 }
 
                 // ESC fecha popup
-                if (e.keyCode == KeyEvent.VK_ESCAPE && popup.isVisible) {
+                if (e.keyCode == KeyEvent.VK_ESCAPE && popup.isVisible && !runningCmd) {
                     popup.isVisible = false
                     e.consume(); return
                 }
 
-                if (popup.isVisible && (e.keyCode == KeyEvent.VK_UP || e.keyCode == KeyEvent.VK_DOWN)) {
+                if (popup.isVisible && (e.keyCode == KeyEvent.VK_UP || e.keyCode == KeyEvent.VK_DOWN) && !runningCmd) {
                     e.consume()
                     val delta = if (e.keyCode == KeyEvent.VK_UP) -1 else 1
                     val next = (lista.selectedIndex + delta + modelo.size) % modelo.size
@@ -130,9 +146,10 @@ internal class TerminalWindow(
                     return
                 }
 
-                if (e.keyCode == KeyEvent.VK_UP && !popup.isVisible)    { e.consume(); showPreviousCommand(); return }
-                if (e.keyCode == KeyEvent.VK_DOWN && !popup.isVisible)  { e.consume(); showNextCommand();     return }
+                if (e.keyCode == KeyEvent.VK_UP && !popup.isVisible && !runningCmd)    { e.consume(); showPreviousCommand(); return }
+                if (e.keyCode == KeyEvent.VK_DOWN && !popup.isVisible && !runningCmd)  { e.consume(); showNextCommand();     return }
                 if (e.keyCode == KeyEvent.VK_F11)   { e.consume(); toggleFullScreen();    return }
+                if (e.keyCode == KeyEvent.VK_BACK_SPACE && !runningCmd) { return }
             }
         })
 
@@ -169,6 +186,8 @@ internal class TerminalWindow(
         append(initText, "default")
 
         drawPrompt()
+
+        Environment.window
     }
 
     /** Renderer simples, com bom contraste */
@@ -209,11 +228,6 @@ internal class TerminalWindow(
             }
         }
 
-
-
-
-
-
     /** Mostra popup com todas as hipóteses */
     private fun mostrarPopup(op: List<Sugestao>) {
         modelo.clear(); op.forEach(modelo::addElement)
@@ -223,8 +237,6 @@ internal class TerminalWindow(
         SwingUtilities.invokeLater { lista.requestFocusInWindow() }
     }
 
-
-
     /** Aplica a opção seleccionada e fecha popup */
     private fun aceitarPopup() {
         val sel = lista.selectedValue ?: return
@@ -232,9 +244,6 @@ internal class TerminalWindow(
         popup.isVisible = false
         SwingUtilities.invokeLater { lista.requestFocusInWindow() }
     }
-
-
-
 
     private fun setupStyles() {
         // estilo base com cor, família e tamanho
@@ -265,7 +274,6 @@ internal class TerminalWindow(
             }
         }
     }
-
 
     private fun setupZoomBindings(tp: JTextPane) {
         val im = tp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
@@ -309,8 +317,6 @@ internal class TerminalWindow(
         textPane.repaint()
     }
 
-
-
     private fun scrollToBottom() {
         SwingUtilities.invokeLater { textPane.caretPosition = doc.length }
     }
@@ -325,22 +331,41 @@ internal class TerminalWindow(
         scrollToBottom()
     }
 
-
     private fun processCommand() {
         val input = doc.getText(inputStartOffset, doc.length - inputStartOffset).trim()
         append("\n", "default")
+
         if (input.isNotBlank()) {
+            Environment.window = this  // garante que o ambiente está actualizado
             commandHistory.add(input)
             historyIndex = commandHistory.size
-            if (!input.lowercase().contains("window"))
-                cmdParser(input, supress = false)
-            else
+            if (!input.lowercase().contains("window") && !runningCmd) {
+                runningCmd = true
+                cmdThread = thread {
+                    cmdParser(input)
+                    SwingUtilities.invokeLater {
+                        drawPrompt()  // desenha o prompt novamente
+                        scrollToBottom()  // garante que o cursor está visível
+                    }
+                    runningCmd = false
+                }
+            }
+            else {
                 println("${RED}Command 'window' cannot be executed from within a window.$RESET")
+                System.out.flush()
+                SwingUtilities.invokeLater {
+                    drawPrompt()  // desenha o prompt novamente
+                    scrollToBottom()  // garante que o cursor está visível
+                }
+            }
+        } else{
+            System.out.flush()
+            SwingUtilities.invokeLater {
+                drawPrompt()  // desenha o prompt novamente
+                scrollToBottom()  // garante que o cursor está visível
+            }
         }
-        // força o flush *agora* (liberta o buffer todo de uma vez)
-        System.out.flush()
-        // redesenha o prompt só uma vez, depois de todo o output
-        SwingUtilities.invokeLater { drawPrompt() }
+
     }
 
 

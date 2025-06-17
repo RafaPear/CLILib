@@ -31,5 +31,5 @@ internal val WHITE = AnsiColor.WHITE.code
 internal val BLACK = AnsiColor.BLACK.code
 internal val BOLD = AnsiColor.BOLD.code
 
-internal fun String.colorize(color: AnsiColor): String = "${'$'}{color.code}${'$'}this${'$'}{AnsiColor.RESET.code}"
+internal fun String.colorize(color: AnsiColor): String = "${color.code}$this${AnsiColor.RESET.code}"
 
