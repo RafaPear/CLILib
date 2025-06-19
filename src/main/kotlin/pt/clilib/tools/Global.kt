@@ -40,8 +40,6 @@ object Environment {
     /** Formatted path string for prompt rendering. */
     val prompt: String
         get() = root.toString() + File.separator
-
-    var window: TerminalWindow? = null
 }
 
 
