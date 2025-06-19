@@ -9,7 +9,6 @@ import pt.clilib.cmdUtils.commands.varOp.*
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import java.awt.Color
-import java.io.PrintStream
 
 class CLI() {
 
@@ -44,18 +43,9 @@ class CLI() {
      */
     fun runtimeCLI() {
         if (useExternalWindow) {
-            val terminal = TerminalWindow(
-                "$title - $version", bgColor, fgColor, prompt,
-                "${BLUE}App: Welcome to the CLI!${RESET}\n" +
-                        "${BLUE}App: Type 'help' for a list of commands${RESET}\n"
-            )
-            // redireciona saída
-            val stream = ConsoleOutputStream(terminal)
-            // autoFlush = false
-            System.setOut(PrintStream(stream, false, "UTF-8"))
-            System.setErr(PrintStream(stream, false, "UTF-8"))
-        }
-        else {
+            openExternalTerminal()
+            return
+        } else {
             clearAndRedrawPrompt()
             while (true) {
                 print(prompt)
