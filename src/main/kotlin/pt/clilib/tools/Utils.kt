@@ -267,16 +267,24 @@ internal fun generateRandomGraphFile(
             1..numNodes / 4,
             numNodes / 4 + 1..numNodes / 2,
             numNodes / 2 + 1..numNodes * 3 / 4,
-            numNodes * 3 / 4 + 1..numNodes
+    val commands: List<List<String>> = when {
+        os.contains("win") -> listOf(listOf("cmd", "/c", "start", "cmd", "/k", exec))
+        os.contains("mac") -> listOf(listOf("osascript", "-e", "tell application \"Terminal\" to do script \"$exec\""))
+        else -> listOf(
+            listOf("x-terminal-emulator", "-e", exec),
+            listOf("gnome-terminal", "--", "bash", "-c", exec),
+            listOf("konsole", "-e", exec),
+            listOf("xterm", "-e", exec)
         )
-
-        val threads = ranges.map { range ->
-            thread {
-                for (i in range) {
-                    val x = Random.nextInt(xRange.first, xRange.last + 1)
-                    val y = Random.nextInt(yRange.first, yRange.last + 1)
-                    out.println("v $i $x $y")
-                }
+    for (cmd in commands) {
+        try {
+            ProcessBuilder(cmd).start()
+            return true
+        } catch (_: Exception) {
+            // try next option
+        }
+    println("${RED}App Error: Unable to open terminal.$RESET")
+    return false
             }
         }
 
