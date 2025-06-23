@@ -1,5 +1,6 @@
 import pt.clilib.CLI
 import pt.clilib.cmdUtils.CmdRegister
+import pt.clilib.cmdUtils.commands.file.BetaEditCmd
 import pt.clilib.cmdUtils.commands.functions.FunCmd
 import pt.clilib.cmdUtils.commands.functions.IfCmd
 import pt.clilib.cmdUtils.commands.functions.WhileCmd
@@ -10,14 +11,9 @@ fun main() {
     CmdRegister.register(IfCmd)
     CmdRegister.register(WhileCmd)
     CmdRegister.register(FunCmd)
+    CmdRegister.register(BetaEditCmd)
     cli.registerDefaultCommands("--all")
-    cli.apply {
-        useExternalWindow = false
-    }
-    // Agora da para definir funções e usá-las.
-    // Para isso implementei ifs e whiles.
-    // Agora o parser também suporta newLines (\n) e chavetas para
-    // separar codigo que não deve ser separado por (|).
+
     cli.runSingleCmd("""
         fun teste {
             var a arg[0]
@@ -37,5 +33,5 @@ fun main() {
         }
     """)
     cli.runtimeCLI()
-    // app.runFromFile("Scripts/exampleScript.ppc")
+    // cli.runFromFile("Scripts/exampleScript.ppc")
 }

@@ -22,6 +22,8 @@ internal val version = StatusService().getVersion()
 */
 internal const val commentCode = "//"
 
+internal const val ESC = '\u001B'
+
 /**
  * Application environment settings.
  */
@@ -41,7 +43,6 @@ object Environment {
     val prompt: String
         get() = root.toString() + File.separator
 
-    var window: TerminalWindow? = null
 }
 
 

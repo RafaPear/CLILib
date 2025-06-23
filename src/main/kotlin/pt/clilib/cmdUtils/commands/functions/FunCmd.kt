@@ -57,7 +57,7 @@ object FunCmd : Command {
                     override val info = CommandInfo(
                         description = "Function '${args[0]}'",
                         longDescription = "Function '${args[0]}' with commands: $value",
-                        usage = "fun ${args[0]} {commands}",
+                        usage = "${args[0]} {commands}",
                         aliases = listOf(args[0]),
                         minArgs = 0,
                         maxArgs = -1,
