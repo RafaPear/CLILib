@@ -17,7 +17,7 @@ class CLI() {
         LoadScriptCmd, LsCmd, MeasureCmd,
         PrintCmd, VersionCmd, WaitCmd,
         WaitForCmd, MkCmd, MkTemplateCmd,
-        MkDirCmd, MkFileCmd, EditCmd, VarCmd,
+        MkDirCmd, MkFileCmd, EditCmd, BetaEditCmd, VarCmd,
         AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd,
         ExprVarCmd, DelFileCmd, DelDirCmd, WindowCmd,
         BufferCmd
@@ -98,7 +98,7 @@ class CLI() {
             load.addAll(defaultCommands)
         } else {
             if ("--cli" in tokens) load.addAll(listOf(CdCmd, ClrCmd, ExitCmd, HelpCmd, PrintCmd, VersionCmd, WaitCmd, WaitForCmd, MkCmd, WindowCmd, BufferCmd))
-            if ("--file" in tokens) load.addAll(listOf(MkFileCmd, MkTemplateCmd, EditCmd, DelFileCmd))
+            if ("--file" in tokens) load.addAll(listOf(MkFileCmd, MkTemplateCmd, EditCmd, BetaEditCmd, DelFileCmd))
             if ("--dir" in tokens) load.addAll(listOf(CdCmd, LsCmd, MkDirCmd, DelDirCmd))
             if ("--var" in tokens) load.addAll(listOf(VarCmd, AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd, ExprVarCmd))
             if ("--utils" in tokens) load.addAll(listOf(LoadScriptCmd, MeasureCmd, WhileCmd, FunCmd, IfCmd))
