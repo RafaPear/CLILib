@@ -145,4 +145,12 @@ CLILib ships with several ready to use commands covering CLI utilities, director
 
 ---
 
+### 🔄 Flow control commands
+
+- `while <condition> {commands}` — repeat commands while the condition is true
+- `if <condition> {commands}` — run commands only when the condition is true
+- `fun <name> {commands}` — define a reusable function
+
+---
+
 More commands will be added as the project evolves.

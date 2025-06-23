@@ -24,12 +24,22 @@ object BetaEditCmd : Command {
         if (!validateArgs(args, this)) return false
         val file = Environment.resolve(args[0]).toFile()
         val lines = if (file.exists()) file.readLines().toMutableList() else mutableListOf()
-        println("${CYAN}Entering beta editor. Type ':wq' to save and exit, ':q' to quit without saving.${RESET}")
-        lines.forEachIndexed { i, line -> println("${i + 1}: $line") }
+        println(
+            "${CYAN}Entering beta editor.${RESET}\n" +
+            "Type ':help' for available commands."
+        )
+
+        fun printLines() {
+            lines.forEachIndexed { i, line -> println("${i + 1}: $line") }
+        }
+
+        printLines()
+
         while (true) {
             print("betaedit> ")
             val input = readLine() ?: return false
-            when (input) {
+            val tokens = input.split(" ", limit = 3)
+            when (tokens[0]) {
                 ":wq" -> {
                     file.parentFile?.mkdirs()
                     file.writeText(lines.joinToString("\n"))
@@ -39,6 +49,48 @@ object BetaEditCmd : Command {
                 ":q" -> {
                     println("${YELLOW}Exiting without saving.${RESET}")
                     return true
+                }
+                ":p", ":print" -> printLines()
+                ":d", ":del" -> {
+                    if (tokens.size >= 2) {
+                        val idx = tokens[1].toIntOrNull()?.minus(1)
+                        if (idx != null && idx in lines.indices) {
+                            lines.removeAt(idx)
+                        } else {
+                            println("${RED}Invalid line number${RESET}")
+                        }
+                    }
+                }
+                ":i", ":insert" -> {
+                    if (tokens.size >= 3) {
+                        val idx = tokens[1].toIntOrNull()?.minus(1)
+                        if (idx != null && idx in 0..lines.size) {
+                            lines.add(idx, tokens[2])
+                        } else {
+                            println("${RED}Invalid line number${RESET}")
+                        }
+                    }
+                }
+                ":r", ":replace" -> {
+                    if (tokens.size >= 3) {
+                        val idx = tokens[1].toIntOrNull()?.minus(1)
+                        if (idx != null && idx in lines.indices) {
+                            lines[idx] = tokens[2]
+                        } else {
+                            println("${RED}Invalid line number${RESET}")
+                        }
+                    }
+                }
+                ":help" -> {
+                    println(
+                        "Commands:\n" +
+                        ":p               - print file contents\n" +
+                        ":i <n> <text>    - insert line before n\n" +
+                        ":d <n>           - delete line n\n" +
+                        ":r <n> <text>    - replace line n\n" +
+                        ":wq              - save and quit\n" +
+                        ":q               - quit without saving"
+                    )
                 }
                 else -> lines.add(input)
             }
