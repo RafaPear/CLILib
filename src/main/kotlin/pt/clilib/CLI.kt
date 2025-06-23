@@ -9,11 +9,6 @@ import pt.clilib.cmdUtils.commands.varOp.*
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import java.awt.Color
-import org.jline.reader.EndOfFileException
-import org.jline.reader.LineReader
-import org.jline.reader.LineReaderBuilder
-import org.jline.reader.UserInterruptException
-import org.jline.reader.impl.completer.StringsCompleter
 
 class CLI() {
 
@@ -22,7 +17,7 @@ class CLI() {
         LoadScriptCmd, LsCmd, MeasureCmd,
         PrintCmd, VersionCmd, WaitCmd,
         WaitForCmd, MkCmd, MkTemplateCmd,
-        MkDirCmd, MkFileCmd, EditCmd, VarCmd,
+        MkDirCmd, MkFileCmd, EditCmd, BetaEditCmd, VarCmd,
         AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd,
         ExprVarCmd, DelFileCmd, DelDirCmd, WindowCmd,
         BufferCmd
@@ -42,21 +37,12 @@ class CLI() {
      * o parser de comandos que,s por sua vez, resolve o comando ou comandos para as suas ações.
      */
     fun runtimeCLI() {
-        }
-
         clearAndRedrawPrompt()
-        val reader = LineReaderBuilder.builder()
-            .completer(StringsCompleter(CmdRegister.all().flatMap { it.aliases }))
-            .build()
-
         while (true) {
-            val input = try {
-                reader.readLine(prompt)
-            } catch (_: UserInterruptException) {
-                continue
-            } catch (_: EndOfFileException) {
-                break
+            print(prompt)
+            val input = readLine()
             cmdParser(input)
+        }
     }
 
 
