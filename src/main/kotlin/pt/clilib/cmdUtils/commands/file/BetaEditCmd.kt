@@ -14,7 +14,7 @@ object BetaEditCmd : Command {
         description = "Edit a file in the terminal (beta)",
         longDescription = "Opens a minimal terminal text editor to edit a file.",
         usage = "betaedit <file>",
-        aliases = listOf("betaedit"),
+        aliases = listOf("betaedit", "bed"),
         minArgs = 1,
         maxArgs = 1,
         requiresFile = false
