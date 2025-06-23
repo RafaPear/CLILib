@@ -289,7 +289,7 @@ internal fun openExternalTerminal(): Boolean {
     val javaBin = Paths.get(javaHome, "bin", "java").toString()
     val classPath = System.getProperty("java.class.path")
     val command = System.getProperty("sun.java.command")
-    val exec = "$javaBin -cp \"$classPath\" $command"
+    val exec = "\"$javaBin\" -cp \"$classPath\" $command"
     val os = System.getProperty("os.name").lowercase()
 
     val builder = when {
