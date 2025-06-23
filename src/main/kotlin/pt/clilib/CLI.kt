@@ -23,13 +23,8 @@ class CLI() {
         BufferCmd
     )
 
-    var title : String = "CLI App"
-    var bgColor : Color = Color.BLACK
-    var fgColor : Color = Color.WHITE
     val prompt: String
         get() = "${GRAY}${Environment.prompt} >> $RESET"
-
-    var useExternalWindow = false
 
     init {
         CmdRegister.register(HelpCmd)
@@ -42,16 +37,11 @@ class CLI() {
      * o parser de comandos que,s por sua vez, resolve o comando ou comandos para as suas ações.
      */
     fun runtimeCLI() {
-        if (useExternalWindow) {
-            openExternalTerminal()
-            return
-        } else {
-            clearAndRedrawPrompt()
-            while (true) {
-                print(prompt)
-                val input = readLine()
-                cmdParser(input)
-            }
+        clearAndRedrawPrompt()
+        while (true) {
+            print(prompt)
+            val input = readLine()
+            cmdParser(input)
         }
     }
 

@@ -11,13 +11,7 @@ fun main() {
     CmdRegister.register(WhileCmd)
     CmdRegister.register(FunCmd)
     cli.registerDefaultCommands("--all")
-    cli.apply {
-        useExternalWindow = false
-    }
-    // Agora da para definir funções e usá-las.
-    // Para isso implementei ifs e whiles.
-    // Agora o parser também suporta newLines (\n) e chavetas para
-    // separar codigo que não deve ser separado por (|).
+
     cli.runSingleCmd("""
         fun teste {
             var a arg[0]
@@ -37,5 +31,5 @@ fun main() {
         }
     """)
     cli.runtimeCLI()
-    // app.runFromFile("Scripts/exampleScript.ppc")
+    // cli.runFromFile("Scripts/exampleScript.ppc")
 }

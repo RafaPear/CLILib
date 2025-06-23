@@ -18,6 +18,7 @@ object WindowCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
+        println("${CYAN}Opening a new terminal window...${RESET}")
         return openExternalTerminal()
     }
 }

@@ -231,7 +231,8 @@ fun clearAndRedrawPrompt() {
  * A função imprime 50 linhas em branco para limpar o ecrã.
  */
 fun clearPrompt() {
-    repeat(50) { println() }
+    // Clear escape sequence for terminal
+    print("\u001b[H\u001b[2J")
 }
 
 /**

@@ -21,7 +21,6 @@ object ClrCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
-        println("[[CLEAR]]")
         clearPrompt()
         return true
     }
