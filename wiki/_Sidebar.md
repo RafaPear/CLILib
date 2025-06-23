@@ -1,0 +1,8 @@
+* [📘 Introduction](Home)
+* [📦 Library Structure](Library-Structure)
+* [⚙️ Command System](Command-System)
+* [🔄 Scripting and Variables](Scripting-and-Variables)
+* [🧩 Creating Custom Commands](Creating-Custom-Commands)
+* [🧪 Examples and Use Cases](Examples-and-Use-Cases)
+* [🤝 How to Contribute](How-to-Contribute)
+* [📌 Technical Reference](Technical-Reference)

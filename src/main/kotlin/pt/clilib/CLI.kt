@@ -9,7 +9,6 @@ import pt.clilib.cmdUtils.commands.varOp.*
 import pt.clilib.cmdUtils.Command
 import pt.clilib.tools.*
 import java.awt.Color
-import java.io.PrintStream
 
 class CLI() {
 
@@ -18,19 +17,14 @@ class CLI() {
         LoadScriptCmd, LsCmd, MeasureCmd,
         PrintCmd, VersionCmd, WaitCmd,
         WaitForCmd, MkCmd, MkTemplateCmd,
-        MkDirCmd, MkFileCmd, EditCmd, VarCmd,
+        MkDirCmd, MkFileCmd, EditCmd, BetaEditCmd, VarCmd,
         AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd,
         ExprVarCmd, DelFileCmd, DelDirCmd, WindowCmd,
         BufferCmd
     )
 
-    var title : String = "CLI App"
-    var bgColor : Color = Color.BLACK
-    var fgColor : Color = Color.WHITE
     val prompt: String
         get() = "${GRAY}${Environment.prompt} >> $RESET"
-
-    var useExternalWindow = false
 
     init {
         CmdRegister.register(HelpCmd)
@@ -43,25 +37,11 @@ class CLI() {
      * o parser de comandos que,s por sua vez, resolve o comando ou comandos para as suas ações.
      */
     fun runtimeCLI() {
-        if (useExternalWindow) {
-            val terminal = TerminalWindow(
-                "$title - $version", bgColor, fgColor, prompt,
-                "${BLUE}App: Welcome to the CLI!${RESET}\n" +
-                        "${BLUE}App: Type 'help' for a list of commands${RESET}\n"
-            )
-            // redireciona saída
-            val stream = ConsoleOutputStream(terminal)
-            // autoFlush = false
-            System.setOut(PrintStream(stream, false, "UTF-8"))
-            System.setErr(PrintStream(stream, false, "UTF-8"))
-        }
-        else {
-            clearAndRedrawPrompt()
-            while (true) {
-                print(prompt)
-                val input = readLine()
-                cmdParser(input)
-            }
+        clearAndRedrawPrompt()
+        while (true) {
+            print(prompt)
+            val input = readLine()
+            cmdParser(input)
         }
     }
 
@@ -118,7 +98,7 @@ class CLI() {
             load.addAll(defaultCommands)
         } else {
             if ("--cli" in tokens) load.addAll(listOf(CdCmd, ClrCmd, ExitCmd, HelpCmd, PrintCmd, VersionCmd, WaitCmd, WaitForCmd, MkCmd, WindowCmd, BufferCmd))
-            if ("--file" in tokens) load.addAll(listOf(MkFileCmd, MkTemplateCmd, EditCmd, DelFileCmd))
+            if ("--file" in tokens) load.addAll(listOf(MkFileCmd, MkTemplateCmd, EditCmd, BetaEditCmd, DelFileCmd))
             if ("--dir" in tokens) load.addAll(listOf(CdCmd, LsCmd, MkDirCmd, DelDirCmd))
             if ("--var" in tokens) load.addAll(listOf(VarCmd, AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd, ExprVarCmd))
             if ("--utils" in tokens) load.addAll(listOf(LoadScriptCmd, MeasureCmd, WhileCmd, FunCmd, IfCmd))

@@ -66,7 +66,7 @@ var a 10 | var b 5 | add a b total | print Result: $total
 Check the [project Wiki](https://github.com/RafaPear/CLILib/wiki) for details about the architecture, list of commands and extension guides.
 
 ## 🤝 Contributions
-Contributions are welcome! See [How to Contribute](https://github.com/RafaPear/CLILib/wiki/🤝-Como-Contribuir).
+Contributions are welcome! See [How to Contribute](https://github.com/RafaPear/CLILib/wiki/How-to-Contribute).
 
 ## 📄 License
 Distributed under the [MIT License](https://opensource.org/licenses/MIT).

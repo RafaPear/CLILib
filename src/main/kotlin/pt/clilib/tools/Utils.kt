@@ -1,6 +1,5 @@
 package pt.clilib.tools
 
-import com.sun.tools.javac.tree.TreeInfo.args
 import pt.clilib.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CmdRegister
@@ -8,8 +7,7 @@ import java.io.File
 import kotlin.concurrent.thread
 import kotlin.random.Random
 import org.json.JSONObject
-import java.awt.SystemColor.window
-import javax.swing.SwingUtilities
+import java.nio.file.Paths
 
 internal fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
     val file = Environment.resolve(filePath).toFile()
@@ -233,7 +231,8 @@ fun clearAndRedrawPrompt() {
  * A função imprime 50 linhas em branco para limpar o ecrã.
  */
 fun clearPrompt() {
-    repeat(50) { println() }
+    // Clear escape sequence for terminal
+    print("\u001b[H\u001b[2J")
 }
 
 /**
@@ -283,6 +282,29 @@ internal fun generateRandomGraphFile(
 
         threads.forEach { it.join() }
 
+    }
+}
+/** Opens a new terminal window running the current application. */
+internal fun openExternalTerminal(): Boolean {
+    val javaHome = System.getProperty("java.home")
+    val javaBin = Paths.get(javaHome, "bin", "java").toString()
+    val classPath = System.getProperty("java.class.path")
+    val command = System.getProperty("sun.java.command")
+    val exec = "\"$javaBin\" -cp \"$classPath\" $command"
+    val os = System.getProperty("os.name").lowercase()
+
+    val builder = when {
+        os.contains("win") -> ProcessBuilder("cmd", "/c", "start", "cmd", "/k", exec)
+        os.contains("mac") -> ProcessBuilder("osascript", "-e", "tell application \"Terminal\" to do script \"$exec\"")
+        else -> ProcessBuilder("x-terminal-emulator", "-e", exec)
+    }
+
+    return try {
+        builder.start()
+        true
+    } catch (e: Exception) {
+        println("${RED}App Error: Unable to open terminal: ${e.message}$RESET")
+        false
     }
 }
 
