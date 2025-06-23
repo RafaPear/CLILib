@@ -1,5 +1,6 @@
 import pt.clilib.CLI
 import pt.clilib.cmdUtils.CmdRegister
+import pt.clilib.cmdUtils.commands.file.BetaEditCmd
 import pt.clilib.cmdUtils.commands.functions.FunCmd
 import pt.clilib.cmdUtils.commands.functions.IfCmd
 import pt.clilib.cmdUtils.commands.functions.WhileCmd
@@ -10,6 +11,7 @@ fun main() {
     CmdRegister.register(IfCmd)
     CmdRegister.register(WhileCmd)
     CmdRegister.register(FunCmd)
+    CmdRegister.register(BetaEditCmd)
     cli.registerDefaultCommands("--all")
 
     cli.runSingleCmd("""
