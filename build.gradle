@@ -15,6 +15,7 @@ repositories {
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     implementation("org.json:json:20231013")
+    implementation("org.jline:jline:3.24.1")
 }
 
 test {
