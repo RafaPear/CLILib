@@ -32,6 +32,6 @@ fun main() {
             }
         }
     """)
-    cli.runtimeCLI()
+    cli.runtimeCLI(true)
     // cli.runFromFile("Scripts/exampleScript.ppc")
 }

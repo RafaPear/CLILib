@@ -36,7 +36,10 @@ class CLI() {
      * onde imprime o prompt, lê a linha de comando do utilizador e a envia para
      * o parser de comandos que,s por sua vez, resolve o comando ou comandos para as suas ações.
      */
-    fun runtimeCLI() {
+    fun runtimeCLI(useExt: Boolean = false) {
+        if (useExt) {
+            openExternalTerminal()
+        }
         clearAndRedrawPrompt()
         while (true) {
             print(prompt)

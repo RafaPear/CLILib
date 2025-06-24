@@ -286,6 +286,10 @@ internal fun generateRandomGraphFile(
 }
 /** Opens a new terminal window running the current application. */
 internal fun openExternalTerminal(): Boolean {
+    if (isRunningInTerminal()) {
+        println("${RED}App Error: Cannot open terminal from within a terminal session.$RESET")
+        return false
+    }
     val javaHome = System.getProperty("java.home")
     val javaBin = Paths.get(javaHome, "bin", "java").toString()
     val classPath = System.getProperty("java.class.path")
@@ -307,6 +311,8 @@ internal fun openExternalTerminal(): Boolean {
         false
     }
 }
+
+fun isRunningInTerminal(): Boolean = System.console() != null
 
 
 
