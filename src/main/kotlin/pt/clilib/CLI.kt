@@ -50,7 +50,7 @@ class CLI() {
         }
         clearAndRedrawPrompt()
         if (isRunningInTerminal()){
-            doTerminalInteraction()
+            Terminal.doTerminalInteraction()
         } else {
             print(prompt)
             val input = readln()
