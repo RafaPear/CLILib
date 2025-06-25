@@ -43,6 +43,7 @@ object Environment {
     val prompt: String
         get() = root.toString() + File.separator
 
+    var formatedPrompt = prompt
 }
 
 

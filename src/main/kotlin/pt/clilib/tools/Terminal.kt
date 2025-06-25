@@ -1,19 +1,20 @@
 package pt.clilib.tools
 
-import pt.clilib.datastore.Buffer
 import pt.clilib.datastore.Colors.BLUE
 import pt.clilib.datastore.Colors.GRAY
 import pt.clilib.datastore.Colors.GREEN
 import pt.clilib.datastore.Colors.RED
 import pt.clilib.datastore.Colors.RESET
 import pt.clilib.datastore.InputHistory
-import pt.clilib.datastore.KeyBuffer
 import pt.clilib.datastore.KeyCodes
 import pt.clilib.registers.CmdRegister
-import pt.clilib.tools.Environment.prompt
 import pt.clilib.tools.TUI.buffer
+import pt.clilib.tools.TUI.clearAll
+import pt.clilib.tools.TUI.clearKeyBuffer
 import pt.clilib.tools.TUI.clearLineBelow
 import pt.clilib.tools.TUI.clearUpdatePrompt
+import pt.clilib.tools.TUI.consumeKey
+import pt.clilib.tools.TUI.printPrompt
 import pt.clilib.tools.TUI.updatePrompt
 
 object Terminal {
@@ -24,11 +25,11 @@ object Terminal {
             return
         }
 
-        KeyBuffer.clear() // Clear the key buffer before starting
-        clearUpdatePrompt()
+        clearKeyBuffer() // Clear the key buffer before starting
+        printPrompt() // Print the initial prompt
         while (true) {
             Thread.sleep(1) // Adjust the sleep time as needed
-            val key = KeyBuffer.consume()
+            val key = consumeKey()
 
             when (key) {
                 null -> { continue }
@@ -73,10 +74,11 @@ object Terminal {
             buffer.useTempBuffer()
             buffer.clear()
             buffer.add(next)
+            clearUpdatePrompt()
         } else {
             buffer.useMainBuffer()
+            updatePrompt()
         }
-        clearUpdatePrompt()
     }
 
     private fun doArrowUp() {
@@ -112,9 +114,8 @@ object Terminal {
 
         clearLineBelow()
         cmdParser(buffer.content())
-        print("\r$prompt")
-        buffer.clear()
-        KeyBuffer.clear()
+        updatePrompt()
+        clearAll()
     }
 
     private fun doTab(){
@@ -138,6 +139,6 @@ object Terminal {
         }
 
         print("\u001B[u") // Restore cursor position
-        print("\r$prompt${buffer.content()}")
+        updatePrompt()
     }
 }

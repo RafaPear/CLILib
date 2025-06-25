@@ -17,6 +17,7 @@ import pt.clilib.datastore.Colors.RESET
 import pt.clilib.datastore.InputHistory
 import pt.clilib.datastore.KeyBuffer
 import pt.clilib.datastore.KeyCodes
+import pt.clilib.tools.Terminal.doTerminalInteraction
 
 class CLI() {
 
@@ -36,6 +37,7 @@ class CLI() {
 
     init {
         CmdRegister.register(HelpCmd)
+        Environment.formatedPrompt = prompt
     }
 
     /**
@@ -50,7 +52,7 @@ class CLI() {
         }
         clearAndRedrawPrompt()
         if (isRunningInTerminal()){
-            Terminal.doTerminalInteraction()
+            doTerminalInteraction()
         } else {
             print(prompt)
             val input = readln()
