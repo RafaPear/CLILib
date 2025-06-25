@@ -3,7 +3,7 @@ package pt.clilib.tools
 import pt.clilib.datastore.Colors.GREEN
 import pt.clilib.datastore.Colors.ORANGE
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -74,7 +74,7 @@ internal class ProgressBar(
         val timeElapsedStr = timeFormat(elapsedTime)
         val timeRemainingStr = if (remainingTimeMs == Long.MAX_VALUE) "Calculating..." else timeFormat(remainingTimeMs)
 
-        print("\r$color|$bar| $progress% | Time remaining: $timeRemainingStr | Time elapsed: $timeElapsedStr $RESET")
+        print("\r$color|$bar| $progress% | Time remaining: $timeRemainingStr | Time elapsed: $timeElapsedStr $WHITE")
         System.out.flush()
 
         return progress

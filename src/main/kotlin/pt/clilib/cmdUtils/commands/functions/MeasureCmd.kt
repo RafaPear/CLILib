@@ -5,7 +5,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.GREEN
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 import kotlin.time.measureTime
 
@@ -32,12 +32,12 @@ object MeasureCmd : Command {
         if (!validateArgs(args, this)) return false
         val newArgs = args.joinToString(" ")
 
-        println("${YELLOW}Measuring time for command: ${newArgs}${RESET}")
+        println("${YELLOW}Measuring time for command: ${newArgs}${WHITE}")
 
         val time = measureTime { cmdParser(newArgs) }
         VarRegister.setLastCmdDump(time)
 
-        println("${GREEN}Time taken: ${time.inWholeMilliseconds} ms${RESET} \n")
+        println("${GREEN}Time taken: ${time.inWholeMilliseconds} ms${WHITE} \n")
         return true
     }
 }

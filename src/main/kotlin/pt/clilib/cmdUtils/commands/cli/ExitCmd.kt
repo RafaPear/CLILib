@@ -2,7 +2,7 @@ package pt.clilib.cmdUtils.commands.cli
 import pt.clilib.tools.*
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 import kotlin.system.exitProcess
 
@@ -24,7 +24,7 @@ object ExitCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
-        println("${YELLOW}Exiting...$RESET")
+        println("${YELLOW}Exiting...$WHITE")
         exitProcess(0)
     }
 }

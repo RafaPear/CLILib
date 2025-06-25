@@ -6,7 +6,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.datastore.Colors.BLUE
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 
 /**
@@ -35,7 +35,7 @@ object LoadScriptCmd : Command {
         override fun run(args: List<String>): Boolean {
             if (!validateArgs(args, this)) return false
             val prevRoot = Environment.root
-            println("${YELLOW}Loading script: ${args[0]}${RESET}")
+            println("${YELLOW}Loading script: ${args[0]}${WHITE}")
             try {
                 val file = Environment.resolve(args[0]).toFile()
                 val lines = file.readLines()
@@ -43,13 +43,13 @@ object LoadScriptCmd : Command {
                 for (line in lines) {
                     if (!line.trim().startsWith(commentCode)) {
                         if (!cmdParser(line)) {
-                            println("${RED}Script Error: Failed to execute command in script: ${BLUE}$line${RESET}")
+                            println("${RED}Script Error: Failed to execute command in script: ${BLUE}$line${WHITE}")
                             break
                         }
                     }
                 }
             } catch (e: Exception) {
-                println("${RED}App Error: Failed to load script. ${e.message}${RESET}")
+                println("${RED}App Error: Failed to load script. ${e.message}${WHITE}")
                 return false
             }
             Environment.root = prevRoot

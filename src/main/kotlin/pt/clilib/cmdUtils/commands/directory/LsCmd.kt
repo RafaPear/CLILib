@@ -2,12 +2,11 @@ package pt.clilib.cmdUtils.commands.directory
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.datastore.Colors
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.BLUE
 import pt.clilib.datastore.Colors.GREEN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import java.io.File
 
 /**
@@ -29,10 +28,10 @@ object LsCmd : Command {
         val target = path.toFile()
         val displayPath = path.toString()
         if (!target.exists() || !target.isDirectory) {
-            println("${RED}App Error: Directory does not exist or is invalid: $displayPath$RESET")
+            println("${RED}App Error: Directory does not exist or is invalid: $displayPath$WHITE")
             return false
         }
-        println("${GREEN}Files in ${displayPath.ifEmpty { "current" }} directory:$RESET")
+        println("${GREEN}Files in ${displayPath.ifEmpty { "current" }} directory:$WHITE")
         printFlatDirectoryTree(target)
         return true
     }
@@ -49,9 +48,9 @@ object LsCmd : Command {
             // Usa escapes Unicode para evitar problemas de encoding
             val branch = "\u2514\u2500\u2500 "  // └──
             if (file.isDirectory) {
-                println("$branch${BLUE}${file.name}/$RESET")
+                println("$branch${BLUE}${file.name}/${WHITE}")
             } else {
-                println("$branch${GREEN}${file.name}$RESET")
+                println("$branch${GREEN}${file.name}${WHITE}")
             }
         }
     }

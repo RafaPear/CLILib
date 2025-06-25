@@ -2,11 +2,10 @@ package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.datastore.Colors
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.CYAN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 
 object MkTemplateCmd : Command {
     override val info = CommandInfo(
@@ -24,7 +23,7 @@ object MkTemplateCmd : Command {
         val fileName = if (args[0].endsWith(".json")) args[0] else args[0] + ".json"
         val file = Environment.resolve(fileName).toFile()
         if (file.exists()) {
-            println("${RED}App Error: File $fileName already exists.$RESET")
+            println("${RED}App Error: File $fileName already exists.$WHITE")
             return false
         }
         val template = """
@@ -41,7 +40,7 @@ object MkTemplateCmd : Command {
         }
         """.trimIndent()
         file.writeText(template)
-        println("${CYAN}Template created at: $fileName$RESET")
+        println("${CYAN}Template created at: $fileName$WHITE")
         return true
     }
 }

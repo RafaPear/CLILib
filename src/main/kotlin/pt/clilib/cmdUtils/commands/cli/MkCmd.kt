@@ -5,7 +5,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.datastore.Colors.CYAN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.tools.cmdParser
 import pt.clilib.tools.readJsonFile
 import pt.clilib.tools.validateArgs
@@ -38,7 +38,7 @@ object MkCmd : Command {
             val run = json.optString("run")
 
             if (description.isEmpty() || usage.isEmpty() || aliases.isEmpty() || run.isEmpty()) {
-                println("${RED}App Error: Ficheiro JSON inválido. Verifique os campos obrigatórios.${{RESET}}")
+                println("${RED}App Error: Ficheiro JSON inválido. Verifique os campos obrigatórios.${{WHITE}}")
                 return@readJsonFile false
             }
             val customCmd = object : Command {
@@ -63,7 +63,7 @@ object MkCmd : Command {
                 }
             }
             CmdRegister.register(customCmd)
-            println("${CYAN}Comando '${aliases.first()}' criado com sucesso!${{RESET}}")
+            println("${CYAN}Comando '${aliases.first()}' criado com sucesso!${{WHITE}}")
             true
         }
     }

@@ -2,11 +2,10 @@ package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.datastore.Colors
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.GREEN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 
 object DelFileCmd : Command {
@@ -26,14 +25,14 @@ object DelFileCmd : Command {
         val file = java.io.File(filePath)
         return if (file.exists()) {
             if (file.delete()) {
-                println("${GREEN}File deleted successfully: $filePath$RESET")
+                println("${GREEN}File deleted successfully: $filePath$WHITE")
                 true
             } else {
-                println("${RED}Error deleting file: $filePath$RESET")
+                println("${RED}Error deleting file: $filePath$WHITE")
                 false
             }
         } else {
-            println("${YELLOW}File not found: $filePath$RESET")
+            println("${YELLOW}File not found: $filePath$WHITE")
             false
         }
     }

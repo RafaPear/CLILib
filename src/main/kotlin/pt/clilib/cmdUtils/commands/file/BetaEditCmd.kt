@@ -4,11 +4,10 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.datastore.Colors.CYAN
 import pt.clilib.datastore.Colors.GREEN
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 import pt.clilib.datastore.KeyBuffer
 import pt.clilib.datastore.KeyCodes
-import pt.clilib.ext.RawConsoleInput
 import pt.clilib.tools.Environment
 import pt.clilib.tools.clearPrompt
 import pt.clilib.tools.validateArgs
@@ -32,7 +31,7 @@ object BetaEditCmd : Command {
         if (!validateArgs(args, this)) return false
         val file = Environment.resolve(args[0]).toFile()
         val lines = if (file.exists()) file.readLines().toMutableList() else mutableListOf()
-        println("${CYAN}Entering beta editor. Type ':wq' to save and exit, ':q' to quit without saving.${RESET}")
+        println("${CYAN}Entering beta editor. Type ':wq' to save and exit, ':q' to quit without saving.${WHITE}")
         lines.forEachIndexed { i, line -> println(line) }
         var buffer = ""
         var editBuffer = ""
@@ -54,7 +53,7 @@ object BetaEditCmd : Command {
                     }
                 }
                 KeyCodes.CTRL_C -> {
-                    println("${YELLOW}Exiting without saving.${RESET}")
+                    println("${YELLOW}Exiting without saving.${WHITE}")
                     return true
                 }
                 KeyCodes.ENTER -> {
@@ -89,11 +88,11 @@ object BetaEditCmd : Command {
                                 ":wq" -> {
                                     file.parentFile?.mkdirs()
                                     file.writeText(lines.joinToString("\n"))
-                                    println("${GREEN}File saved to ${file.absolutePath}$RESET")
+                                    println("${GREEN}File saved to ${file.absolutePath}$WHITE")
                                     return true
                                 }
                                 ":q" -> {
-                                    println("${YELLOW}Exiting without saving.${RESET}")
+                                    println("${YELLOW}Exiting without saving.${WHITE}")
                                     return true
                                 }
                                 else -> {

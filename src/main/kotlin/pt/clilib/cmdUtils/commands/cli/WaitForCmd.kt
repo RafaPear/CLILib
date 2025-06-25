@@ -3,7 +3,7 @@ package pt.clilib.cmdUtils.commands.cli
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 
 /**
@@ -29,9 +29,9 @@ object WaitForCmd : Command {
         override fun run(args: List<String>): Boolean {
             if (!validateArgs(args, this)) return false
             if (args.isNotEmpty()) {
-                println("${YELLOW}${args.joinToString(" ")}${RESET}")
+                println("${YELLOW}${args.joinToString(" ")}${WHITE}")
             } else {
-                println("${YELLOW}Press Enter to continue...${RESET}")
+                println("${YELLOW}Press Enter to continue...${WHITE}")
             }
             readLine()
             println()

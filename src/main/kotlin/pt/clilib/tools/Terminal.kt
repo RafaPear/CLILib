@@ -4,26 +4,34 @@ import pt.clilib.datastore.Colors.BLUE
 import pt.clilib.datastore.Colors.GRAY
 import pt.clilib.datastore.Colors.GREEN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.InputHistory
 import pt.clilib.datastore.KeyCodes
 import pt.clilib.registers.CmdRegister
 import pt.clilib.tools.TUI.buffer
 import pt.clilib.tools.TUI.clearAll
 import pt.clilib.tools.TUI.clearKeyBuffer
+import pt.clilib.tools.TUI.clearLine
 import pt.clilib.tools.TUI.clearLineBelow
+import pt.clilib.tools.TUI.clearLineToEnd
 import pt.clilib.tools.TUI.clearUpdatePrompt
 import pt.clilib.tools.TUI.consumeKey
+import pt.clilib.tools.TUI.printBelow
+import pt.clilib.tools.TUI.printDebug
 import pt.clilib.tools.TUI.printPrompt
 import pt.clilib.tools.TUI.updatePrompt
+import pt.clilib.tools.Terminal.tabCycle
 
 object Terminal {
 
+    var tabCycle = -1
+
     fun doTerminalInteraction() {
         if (!isRunningInTerminal()) {
-            println("${RED}App Error: Not running in terminal.${RESET}")
+            println("${RED}App Error: Not running in terminal.${WHITE}")
             return
         }
+        TUI.clearScreen()
 
         clearKeyBuffer() // Clear the key buffer before starting
         printPrompt() // Print the initial prompt
@@ -41,15 +49,15 @@ object Terminal {
                 KeyCodes.ARROW_LEFT -> { doArrowLeft() }
                 KeyCodes.ARROW_RIGHT -> { doArrowRight() }
                 in 0x20..0x7E -> { // Printable ASCII characters
-                    buffer.insert(key.toChar()) ; updatePrompt()
+                    clearLineToEnd() ; buffer.insert(key.toChar()) ; updatePrompt()
                 }
                 KeyCodes.CTRL_C, KeyCodes.ESCAPE -> {
-                    println("${RED}Exiting CLI...${RESET}")
+                    println("${RED}Exiting CLI...${WHITE}")
                     break
                 }
                 else -> {
                     // Handle other keys if needed
-                    println("\n${RED}Unsupported key: ${key}${RESET}")
+                    println("\n${RED}Unsupported key: ${key}${WHITE}")
                     updatePrompt()
                 }
             }
@@ -77,8 +85,9 @@ object Terminal {
             clearUpdatePrompt()
         } else {
             buffer.useMainBuffer()
-            updatePrompt()
+            clearUpdatePrompt()
         }
+        printDebug("Next input: $next, current buffer: '${buffer.content()}', isTemp: ${buffer.isUsingTempBuffer()}")
     }
 
     private fun doArrowUp() {
@@ -88,6 +97,7 @@ object Terminal {
             buffer.clear()
             buffer.add(prev)
         }
+        printDebug("Previous input: $prev, current buffer: '${buffer.content()}', isTemp: ${buffer.isUsingTempBuffer()}")
         clearUpdatePrompt()
     }
 
@@ -98,7 +108,7 @@ object Terminal {
 
         if (!buffer.isEmpty()) {
             buffer.remove(1)
-            updatePrompt()
+            clearUpdatePrompt()
             print("\u001B[P") // Move cursor back one position
         } else {
             updatePrompt()
@@ -106,39 +116,82 @@ object Terminal {
     }
 
     private fun doEnter() {
+        clearLineToEnd()
+        if (tabCycle != -1) {
+            doTab(true) // Cycle through tab suggestions
+            return
+        }
         if (buffer.isUsingTempBuffer()){
-            buffer.clear()
             buffer.switchToMainBuffer()
             InputHistory.resetIndex()
-        } else InputHistory.add(buffer.content())
+        } else {
+            InputHistory.add(buffer.content())
+        }
 
-        clearLineBelow()
+        println()
         cmdParser(buffer.content())
-        updatePrompt()
         clearAll()
+        clearUpdatePrompt()
     }
 
-    private fun doTab(){
-        print("\u001B[s") // Save cursor position
-        print("\n\u001B[0K")
+    private fun doTab(get: Boolean = false) {
 
-        val similar = CmdRegister.findAllSimilar(buffer.content())
-        if (similar.isNotEmpty()) {
-            print("${GRAY}${similar.joinToString(", ")}$RESET")
+        val similar = CmdRegister.findAllSimilar(buffer.content()).toMutableList()
+        similar += ""
+        if (similar.dropLast(1).isNotEmpty()) {
+            printTab(similar, get)
         } else if (buffer.content().isNotBlank()) {
-            // Find folders and files in the current directory. Colorize them differently
-            val currentDir = Environment.root.toFile()
-            val files = currentDir.listFiles()?.filter { it.isFile }?.map { it.name.colorize(BLUE) } ?: emptyList()
-            val dirs = currentDir.listFiles()?.filter { it.isDirectory }?.map { "${it.name}/".colorize(GREEN) } ?: emptyList()
-            if (files.isNotEmpty() || dirs.isNotEmpty()) {
-                val items = (files + dirs).sorted()
-                print("${GRAY}${items.joinToString(", ")}$RESET")
+
+            /* isola só o token depois do último espaço (ex.: "ls S" → "S") */
+            val fullBuf = buffer.content()
+            val lastSpace = fullBuf.lastIndexOf(' ')
+            val token    = if (lastSpace >= 0) fullBuf.substring(lastSpace + 1) else fullBuf
+
+            val all = findSimilarFiles(token) // Lista de ficheiros e pastas
+
+            printDebug("Tab completion: found ${all.size} matches")
+
+            if (all.isNotEmpty()) {
+                printTab(all, get, token.length, buffer.content()) // Print the first item or cycle through them
             } else {
-                print("${RED}No files or directories found.${RESET}")
+                printBelow("${RED}No files or directories found.${WHITE}")
             }
         }
 
-        print("\u001B[u") // Restore cursor position
         updatePrompt()
+    }
+
+    private fun printTab(lst: List<String>, get: Boolean = false, size : Int = buffer.size(), extra: String = "") {
+        if (get) {
+            buffer.clear()
+            buffer.add(extra.dropLast(size) + lst[tabCycle]) // Drop the leading space
+            tabCycle = -1
+        } else {
+            tabCycle++
+            if (tabCycle >= lst.size) {
+                tabCycle = 0 // Reset the cycle
+            }
+            clearUpdatePrompt()
+            print("${GRAY}${lst[tabCycle].drop(size)}$WHITE")
+        }
+    }
+
+    private fun findSimilarFiles(searchTerm: String): List<String> {
+        val currentDir = Environment.root.toFile()
+        if (!currentDir.exists() || !currentDir.isDirectory) {
+            printBelow("${RED}Current directory does not exist or is not a directory.$WHITE")
+            return emptyList()
+        }
+
+        printDebug("Tab completion: searching '${searchTerm}' inside '${currentDir.path}'")
+
+        /* listas “cruas” (sem cor) para podermos completar o buffer sem códigos ANSI */
+        val rawFiles = currentDir.listFiles()?.filter { it.isFile      && it.name.startsWith(searchTerm, true) } ?: emptyList()
+        val rawDirs  = currentDir.listFiles()?.filter { it.isDirectory && it.name.startsWith(searchTerm, true) } ?: emptyList()
+
+        val files = rawFiles.map { it.name }.sortedBy { it.lowercase() }
+        val dirs  = rawDirs .map { "${it.name}/" }.sortedBy { it.lowercase() }
+        val all   = files + dirs                                                     // display-list para printTab
+        return all
     }
 }

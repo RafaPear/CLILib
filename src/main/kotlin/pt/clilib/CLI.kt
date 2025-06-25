@@ -7,16 +7,11 @@ import pt.clilib.cmdUtils.commands.directory.*
 import pt.clilib.cmdUtils.commands.functions.*
 import pt.clilib.cmdUtils.commands.varOp.*
 import pt.clilib.cmdUtils.Command
-import pt.clilib.datastore.Buffer
-import pt.clilib.datastore.Colors.BLUE
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.GRAY
-import pt.clilib.datastore.Colors.GREEN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
-import pt.clilib.datastore.InputHistory
-import pt.clilib.datastore.KeyBuffer
-import pt.clilib.datastore.KeyCodes
+import pt.clilib.datastore.Colors.WHITE
+import pt.clilib.tools.Environment.prompt
 import pt.clilib.tools.Terminal.doTerminalInteraction
 
 class CLI() {
@@ -29,15 +24,11 @@ class CLI() {
         MkDirCmd, MkFileCmd, EditCmd, BetaEditCmd, VarCmd,
         AddVarCmd, SubVarCmd, DivVarCmd, MultVarCmd,
         ExprVarCmd, DelFileCmd, DelDirCmd, WindowCmd,
-        BufferCmd
+        BufferCmd, DebugCmd
     )
-
-    val prompt: String
-        get() = "${GRAY}${Environment.prompt} >> $RESET"
 
     init {
         CmdRegister.register(HelpCmd)
-        Environment.formatedPrompt = prompt
     }
 
     /**
@@ -50,13 +41,16 @@ class CLI() {
         if (useExt) {
             openExternalTerminal()
         }
-        clearAndRedrawPrompt()
         if (isRunningInTerminal()){
+            clearAndRedrawPrompt()
             doTerminalInteraction()
-        } else {
-            print(prompt)
-            val input = readln()
-            cmdParser(input)
+        } else if (!useExt) {
+            clearAndRedrawPrompt()
+            while (true) {
+                print(prompt)
+                val input = readln()
+                cmdParser(input)
+            }
         }
     }
 
@@ -67,7 +61,6 @@ class CLI() {
      * @param cmd O comando a ser executado.
      */
     fun runSingleCmd(cmd: String) {
-        clearAndRedrawPrompt()
         cmdParser(cmd)
     }
 
@@ -80,15 +73,15 @@ class CLI() {
     fun runFromFile(file: String) {
         val file = Environment.resolve(file).toFile()
         if (!file.exists()) {
-            println("${RED}App Error: File not found: $file$RESET")
+            println("${RED}App Error: File not found: $file$WHITE")
             return
         }
         if (!file.canRead()) {
-            println("${RED}App Error: File not readable: $file$RESET")
+            println("${RED}App Error: File not readable: $file$WHITE")
             return
         }
         if (!file.isFile) {
-            println("${RED}App Error: Not a file: $file$RESET")
+            println("${RED}App Error: Not a file: $file$WHITE")
             return
         }
         val lines = file.readLines()

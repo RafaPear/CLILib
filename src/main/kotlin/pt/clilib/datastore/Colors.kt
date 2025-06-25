@@ -1,7 +1,6 @@
 package pt.clilib.datastore
 
 object Colors {
-    const val RESET = "\u001B[0m"
     const val BLUE = "\u001B[34m"
     const val GREEN = "\u001B[32m"
     const val RED = "\u001B[31m"

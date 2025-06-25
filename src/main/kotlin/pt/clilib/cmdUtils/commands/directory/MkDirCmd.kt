@@ -5,7 +5,7 @@ import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.CYAN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import java.io.File
 
 object MkDirCmd : Command {
@@ -25,11 +25,11 @@ object MkDirCmd : Command {
         val dirName = args[0]
         val dir = File(dirName)
         return if (dir.exists()) {
-            println("${RED}App Error: Directory $dirName already exists.$RESET")
+            println("${RED}App Error: Directory $dirName already exists.$WHITE")
             false
         } else {
             dir.mkdirs()
-            println("${CYAN}Directory $dirName created successfully!$RESET")
+            println("${CYAN}Directory $dirName created successfully!$WHITE")
             true
         }
     }

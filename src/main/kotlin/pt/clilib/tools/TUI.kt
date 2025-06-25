@@ -1,8 +1,9 @@
 package pt.clilib.tools
 
-import pt.clilib.datastore.Buffer
+import pt.clilib.datatypes.Buffer
 import pt.clilib.datastore.KeyBuffer
 import pt.clilib.tools.Environment.formatedPrompt
+import java.awt.SystemColor.text
 
 object TUI {
 
@@ -11,7 +12,6 @@ object TUI {
     fun clearAll() {
         buffer.clear()
         clearKeyBuffer()
-        clearUpdatePrompt()
     }
 
     /* Key buffer helper methods */
@@ -40,8 +40,8 @@ object TUI {
     }
 
     fun clearUpdatePrompt() {
+        clearLine()
         updatePrompt()
-        print("\u001B[0K") // Clear the line
     }
 
     fun updatePrompt() {
@@ -54,12 +54,38 @@ object TUI {
         }
     }
 
-    fun clearLine() {
+    fun printBelow(text: String) {
+        val ESC = "\u001B["      // sequência CSI
+        print("${ESC}s")                // guarda posição
+        clearLineToEnd()
+        print("${ESC}999C")             // move muito para a direita (CSI 999 C)
+        print("${ESC}${text.length}D")   // recua exactamente o tamanho da mensagem
+        print(text)
+        print("${ESC}u")                // restaura
+    }
+
+
+    fun printDebug(text: String) {
+        if (Environment.debug)
+            printBelow(text)
+    }
+
+    fun clearLineToEnd() {
         print("\u001B[0K") // Clear the current line
     }
 
+    fun clearLineToStart() {
+        print("\u001B[1K") // Clear the line from the start to the cursor
+    }
+
+    fun clearLine() {
+        print("\u001B[2K") // Clear the entire line
+    }
+
     fun clearLineBelow() {
-        print("\n\u001B[0K") // Clear the line below the cursor
+        print("\u001B[s") // Save cursor position
+        print("\u001B[E\u001B[2K") // Clear the line below the cursor
+        print("\u001B[u") // Restore cursor position
     }
     /*private fun clearAndRedrawPrompt() {
             print("\u001B[2J") // Clear the screen

@@ -5,7 +5,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 
 object ExprVarCmd : Command {
     override val info = CommandInfo(
@@ -29,7 +29,7 @@ object ExprVarCmd : Command {
                 VarRegister.setLastCmdDump(result)
             }
         } catch (e: Exception) {
-            println("${RED}Error evaluating expression: ${e.message}${RESET}")
+            println("${RED}Error evaluating expression: ${e.message}${WHITE}")
             return false
         }
         return true

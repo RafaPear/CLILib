@@ -4,7 +4,7 @@ import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 
 /**
  * Comando `WAIT`
@@ -31,7 +31,7 @@ object WaitCmd : Command {
         try {
             Thread.sleep(args[0].toLong())
         } catch (e: Exception) {
-            println("${RED}App Error: Failed to wait. ${e.message}${RESET}")
+            println("${RED}App Error: Failed to wait. ${e.message}${WHITE}")
             return false
         }
         return true

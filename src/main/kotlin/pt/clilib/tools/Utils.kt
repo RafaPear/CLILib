@@ -4,11 +4,10 @@ import org.json.JSONObject
 import pt.clilib.registers.VarRegister
 import pt.clilib.registers.CmdRegister
 import pt.clilib.cmdUtils.Command
-import pt.clilib.datastore.Colors
 import pt.clilib.ext.RawConsoleInput
 import pt.clilib.datastore.Colors.CYAN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import java.io.File
 import java.nio.file.Paths
 import kotlin.concurrent.thread
@@ -17,14 +16,14 @@ import kotlin.random.Random
 internal fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
     val file = Environment.resolve(filePath).toFile()
     if (!file.exists()) {
-        println("${RED}App Error: Ficheiro não encontrado: $filePath$RESET")
+        println("${RED}App Error: Ficheiro não encontrado: $filePath$WHITE")
         return false
     }
     return try {
         val json = JSONObject(file.readText())
         onJson(json)
     } catch (e: Exception) {
-        println("${RED}App Error: Erro ao ler ficheiro JSON: ${e.message}$RESET")
+        println("${RED}App Error: Erro ao ler ficheiro JSON: ${e.message}$WHITE")
         false
     }
 }
@@ -37,14 +36,14 @@ internal fun validateArgs(args: List<String>, command: Command): Boolean {
 
     if (args.size < minArgs || (args.size > maxArgs && maxArgs != -1)) {
         if (minArgs == maxArgs) {
-            println("${RED}App Error: Invalid number of arguments. Expected $minArgs, got ${args.size}$RESET")
+            println("${RED}App Error: Invalid number of arguments. Expected $minArgs, got ${args.size}$WHITE")
         } else {
-            println("${RED}App Error: Invalid number of arguments. Expected between $minArgs and $maxArgs, got ${args.size}$RESET")
+            println("${RED}App Error: Invalid number of arguments. Expected between $minArgs and $maxArgs, got ${args.size}$WHITE")
         }
         return false
     }
     if (requiresFile && !args.all { it.endsWith(fileExtension) }) {
-        println("${RED}App Error: Invalid file name. File names must end with $fileExtension$RESET")
+        println("${RED}App Error: Invalid file name. File names must end with $fileExtension$WHITE")
         return false
     }
     return true
@@ -89,7 +88,7 @@ fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolea
             token[i] = token[i].replaceVars()
         }
         if (!good) {
-            println("${RED}App Error: Previous command ($prev) failed. Aborting.$RESET")
+            println("${RED}App Error: Previous command ($prev) failed. Aborting.$WHITE")
             return false
         }
         val command = CmdRegister.find(token[0])
@@ -97,9 +96,9 @@ fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolea
         if (command == null) {
             if (!supress) {
                 if (similar == null)
-                    println("${RED}App Error: Unknown command ${token[0]}$RESET")
+                    println("${RED}App Error: Unknown command ${token[0]}$WHITE")
                 else
-                    println("${RED}App Error: Unknown command ${token[0]}. Did you mean '$similar'?$RESET")
+                    println("${RED}App Error: Unknown command ${token[0]}. Did you mean '$similar'?$WHITE")
             }
             return false
         }
@@ -218,8 +217,8 @@ internal fun String.replaceVars(auto : Boolean = false): String {
  * A função exibe uma mensagem de boas-vindas e sugere que o utilizador digite 'help' para obter uma lista de comandos disponíveis.
  */
 fun drawPrompt() {
-    println("${CYAN}App: Welcome to the CLI!$RESET")
-    println("${CYAN}App: Type 'help' for a list of commands$RESET")
+    println("${CYAN}App: Welcome to the CLI!$WHITE")
+    println("${CYAN}App: Type 'help' for a list of commands$WHITE")
 }
 
 /**
@@ -289,7 +288,7 @@ internal fun generateRandomGraphFile(
 fun openExternalTerminal(): Boolean {
     RawConsoleInput.resetConsoleMode()
     if (isRunningInTerminal()) {
-        println("${RED}App Error: Cannot open terminal from within a terminal session.$RESET")
+        println("${RED}App Error: Cannot open terminal from within a terminal session.$WHITE")
         return false
     }
     val javaHome = System.getProperty("java.home")
@@ -309,7 +308,7 @@ fun openExternalTerminal(): Boolean {
         builder.start()
         true
     } catch (e: Exception) {
-        println("${RED}App Error: Unable to open terminal: ${e.message}$RESET")
+        println("${RED}App Error: Unable to open terminal: ${e.message}$WHITE")
         false
     }
 }
@@ -326,4 +325,4 @@ fun Any?.joinToString(): String {
     }
 }
 
-internal fun String.colorize(color: String): String = "${color}$this${RESET}"
+internal fun String.colorize(color: String): String = "${color}$this${WHITE}"

@@ -5,7 +5,7 @@ import pt.clilib.registers.CmdRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.tools.isValidIdentifier
 import pt.clilib.tools.cmdParser
 import pt.clilib.tools.validateArgs
@@ -44,7 +44,7 @@ object FunCmd : Command {
             val newArgs = args.drop(1).joinToString(" ")
 
             if (!isValidIdentifier(args[0])) {
-                println("${RED}Error: Invalid function name '${args[0]}'.${{RESET}}")
+                println("${RED}Error: Invalid function name '${args[0]}'.${{WHITE}}")
                 return false
             }
 
@@ -79,7 +79,7 @@ object FunCmd : Command {
         when (args[0]) {
             "-d", "--delete" -> {
                 if (args.size != 2) {
-                    println("${RED}Error: Invalid number of arguments for delete command.${{RESET}}")
+                    println("${RED}Error: Invalid number of arguments for delete command.${{WHITE}}")
                     return false
                 }
                 FunRegister.unregister(args[1])
@@ -93,7 +93,7 @@ object FunCmd : Command {
                 VarCmd.commands.forEach { println("  $it") }
             }
             else -> {
-                println("${RED}Error: Unknown command '${args[0]}'.${{RESET}}")
+                println("${RED}Error: Unknown command '${args[0]}'.${{WHITE}}")
                 return false
             }
         }

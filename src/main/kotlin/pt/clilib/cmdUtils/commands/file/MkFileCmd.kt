@@ -5,7 +5,7 @@ import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.CYAN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import java.io.File
 
 object MkFileCmd : Command {
@@ -25,11 +25,11 @@ object MkFileCmd : Command {
         val fileName = args[0]
         val file = File(fileName)
         return if (file.exists()) {
-            println("${RED}App Error: File $fileName already exists.$RESET")
+            println("${RED}App Error: File $fileName already exists.$WHITE")
             false
         } else {
             file.createNewFile()
-            println("${CYAN}File $fileName created successfully!$RESET")
+            println("${CYAN}File $fileName created successfully!$WHITE")
             true
         }
     }

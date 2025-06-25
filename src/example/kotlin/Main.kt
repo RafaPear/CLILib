@@ -9,8 +9,6 @@ import pt.clilib.tools.openExternalTerminal
 import pt.clilib.tools.isRunningInTerminal
 
 fun main() {
-    openExternalTerminal()
-    if (!isRunningInTerminal()) return
     /*while (true){
         println("Press any key to continue...")
         val input = RawConsoleInput.read(true)
@@ -27,7 +25,6 @@ fun main() {
     CmdRegister.register(IfCmd)
     CmdRegister.register(WhileCmd)
     CmdRegister.register(FunCmd)
-    CmdRegister.register(BetaEditCmd)
     cli.registerDefaultCommands("--all")
 
     cli.runSingleCmd("""
@@ -48,7 +45,6 @@ fun main() {
             }
         }
     """)
-    cli.runSingleCmd("window | betaedit Scripts/exampleScript.ppc")
-    cli.runtimeCLI()
+    cli.runtimeCLI(true)
     // cli.runFromFile("Scripts/exampleScript.ppc")
 }

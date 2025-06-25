@@ -2,11 +2,10 @@ package pt.clilib.cmdUtils.commands.directory
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.datastore.Colors
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.GREEN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 
 object DelDirCmd : Command {
@@ -26,14 +25,14 @@ object DelDirCmd : Command {
         val dir = java.io.File(dirPath)
         return if (dir.exists() && dir.isDirectory) {
             if (dir.deleteRecursively()) {
-                println("${GREEN}Directory deleted successfully: $dirPath$RESET")
+                println("${GREEN}Directory deleted successfully: $dirPath$WHITE")
                 true
             } else {
-                println("${RED}Error deleting directory: $dirPath$RESET")
+                println("${RED}Error deleting directory: $dirPath$WHITE")
                 false
             }
         } else {
-            println("${YELLOW}Directory not found or is not a directory: $dirPath$RESET")
+            println("${YELLOW}Directory not found or is not a directory: $dirPath$WHITE")
             false
         }
     }

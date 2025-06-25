@@ -10,7 +10,7 @@ object CmdRegister {
     fun register(command: Command) {
         val existing = command.aliases.firstOrNull { aliasMap.containsKey(it.lowercase()) }
         if (existing != null) {
-            println("${Colors.YELLOW}Warning: Command '$existing' is already registered. Skipping registration.${Colors.RESET}")
+            println("${Colors.YELLOW}Warning: Command '$existing' is already registered. Skipping registration.${Colors.WHITE}")
             return
         }
         command.aliases.forEach { aliasMap[it.lowercase()] = command }

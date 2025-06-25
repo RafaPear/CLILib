@@ -1,5 +1,7 @@
 package pt.clilib.tools
 
+import pt.clilib.datastore.Colors.GRAY
+import pt.clilib.datastore.Colors.WHITE
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -43,7 +45,11 @@ object Environment {
     val prompt: String
         get() = root.toString() + File.separator
 
-    var formatedPrompt = prompt
+    var formatedPrompt = "${GRAY}${prompt} >> $WHITE"
+        get() = "${GRAY}${prompt} >> $WHITE"
+
+    var debug = true
+        get() = field && isRunningInTerminal()
 }
 
 

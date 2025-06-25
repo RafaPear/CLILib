@@ -1,4 +1,8 @@
-package pt.clilib.datastore
+package pt.clilib.datatypes
+
+import pt.clilib.tools.TUI
+import pt.clilib.tools.TUI.printBelow
+import pt.clilib.tools.TUI.printDebug
 
 /**
  * Buffer is a simple text buffer class that allows for basic text manipulation.
@@ -10,7 +14,7 @@ class Buffer {
      */
     private data class BufferState(
         var buffer: String = "",
-        var cursor: Int = -1,
+        var cursor: Int = 0,
         var size: Int = 0
     )
 
@@ -65,12 +69,10 @@ class Buffer {
      * main buffer so that edits are isolated.
      */
     fun switchToTempBuffer() {
-        if (!usingTempBuffer) {
-            tempBuffer.buffer = mainBuffer.buffer
-            tempBuffer.cursor = mainBuffer.cursor
-            tempBuffer.size = mainBuffer.size
-            usingTempBuffer = true
-        }
+        tempBuffer.buffer = mainBuffer.buffer
+        tempBuffer.cursor = mainBuffer.cursor
+        tempBuffer.size = mainBuffer.size
+        usingTempBuffer = true
     }
 
     /**
@@ -78,27 +80,30 @@ class Buffer {
      * on the main one.
      */
     fun switchToMainBuffer() {
-        if (usingTempBuffer) {
-            mainBuffer.buffer = tempBuffer.buffer
-            mainBuffer.cursor = tempBuffer.cursor
-            mainBuffer.size = tempBuffer.size
-            usingTempBuffer = false
-        }
+        mainBuffer.buffer = tempBuffer.buffer
+        mainBuffer.cursor = tempBuffer.cursor
+        mainBuffer.size = tempBuffer.size
+        usingTempBuffer = false
+
     }
 
     // ──────────────────────────────────────────────────────────────────────────────
     //  Editing operations
     // ──────────────────────────────────────────────────────────────────────────────
     fun add(text: String) {
+        if (text.isBlank()) return // Não adiciona texto vazio
         buffer += text
         size += text.length
         cursor = size - 1 // Cursor aponta para o último carácter inserido
+        printDebug("Cursor: $cursor, Size: $size")
     }
 
     fun add(text: Char) {
+        if (text.isWhitespace()) return // Não adiciona texto vazio
         buffer += text
         size += 1
         cursor = size - 1
+        printDebug("Cursor: $cursor, Size: $size")
     }
 
     fun insert(text: String) {
@@ -106,10 +111,12 @@ class Buffer {
             // Cursor fora de limites ⇒ append
             add(text)
         } else {
+            if (text.isBlank()) return // Não adiciona texto vazio
             buffer = buffer.substring(0, cursor + 1) + text + buffer.substring(cursor + 1)
             size += text.length
             cursor += text.length
         }
+        printDebug("Cursor: $cursor, Size: $size")
     }
 
     fun insert(text: Char) {
@@ -120,6 +127,7 @@ class Buffer {
             size += 1
             cursor += 1
         }
+        printDebug("Cursor: $cursor, Size: $size")
     }
 
     /**
@@ -127,13 +135,14 @@ class Buffer {
      * @return Texto removido ou null se a operação não for válida.
      */
     fun remove(length: Int): String? {
-        if (length <= 0 || cursor < 0 || cursor >= size) return null
+        if (length <= 0 || cursor < 0 || cursor > size) return null
 
         val end = (cursor + length).coerceAtMost(size)
         val removed = buffer.substring(cursor, end)
         buffer = buffer.removeRange(cursor, end)
         size -= removed.length
-        cursor = cursor.coerceAtMost(size - 1) // Mantém cursor dentro dos limites
+        cursor -= removed.length // Mantém cursor dentro dos limites
+        printDebug("Cursor: $cursor, Size: $size") // Move o cursor para o início da linha
         return removed
     }
 
@@ -146,6 +155,7 @@ class Buffer {
         buffer = buffer.dropLast(1)
         size -= 1
         cursor = if (size == 0) -1 else size - 1
+        printDebug("Cursor: $cursor, Size: $size")
         return removed
     }
 
@@ -154,24 +164,28 @@ class Buffer {
     // ──────────────────────────────────────────────────────────────────────────────
     fun moveCursorLeft(steps: Int = 1): Int {
         cursor = (cursor - steps).coerceAtLeast(0)
+        printDebug("Cursor: $cursor, Size: $size")
         return cursor
     }
 
     fun moveCursorRight(steps: Int = 1): Int {
-        if (size == 0) {
-            cursor = -1
+        cursor = if (size == 0) {
+            -1
         } else {
-            cursor = (cursor + steps).coerceAtMost(size - 1)
+            (cursor + steps).coerceAtMost(size - 1)
         }
+        printDebug("Cursor: $cursor, Size: $size")
         return cursor
     }
 
     fun moveCursorToStart() {
         cursor = if (size == 0) -1 else 0
+        printDebug("Cursor: $cursor, Size: $size")
     }
 
     fun moveCursorToEnd() {
         cursor = if (size == 0) -1 else size - 1
+        printDebug("Cursor: $cursor, Size: $size")
     }
 
     // ──────────────────────────────────────────────────────────────────────────────
@@ -181,6 +195,7 @@ class Buffer {
         buffer = ""
         cursor = -1
         size = 0
+        printDebug("Cursor: $cursor, Size: $size")
     }
 
     fun content(): String = buffer

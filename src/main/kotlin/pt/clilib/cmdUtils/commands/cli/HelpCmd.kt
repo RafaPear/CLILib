@@ -6,7 +6,7 @@ import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
 import pt.clilib.datastore.Colors.CYAN
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 
 /**
@@ -35,19 +35,19 @@ object HelpCmd : Command {
             entries.forEach { cmd ->
                 if (args[0].lowercase() in cmd.aliases.map { it.lowercase() }) {
                     // Print help but description is long description and formats in a better readable way
-                    println("${CYAN}${cmd.usage}$RESET - ${YELLOW}Alias: ${cmd.aliases.joinToString(", ")}$RESET")
-                    println("${YELLOW}${cmd.longDescription}$RESET")
+                    println("${CYAN}${cmd.usage}$WHITE - ${YELLOW}Alias: ${cmd.aliases.joinToString(", ")}$WHITE")
+                    println("${YELLOW}${cmd.longDescription}$WHITE")
 
                     return true
                 }
             }
-            println("${RED}App Error: Unknown command ${args[0]}$RESET")
+            println("${RED}App Error: Unknown command ${args[0]}$WHITE")
         }
         else {
-            println("${YELLOW}Arguments with [] are optional and arguments with <> are required.$RESET")
-            println("${CYAN}Available cmdUtils.commands:$RESET")
+            println("${YELLOW}Arguments with [] are optional and arguments with <> are required.$WHITE")
+            println("${CYAN}Available cmdUtils.commands:$WHITE")
             entries.forEach { cmd ->
-                println("${CYAN}${cmd.usage}$RESET - ${YELLOW}Alias: ${cmd.aliases.joinToString(", ")}$RESET - ${cmd.description}")
+                println("${CYAN}${cmd.usage}$WHITE - ${YELLOW}Alias: ${cmd.aliases.joinToString(", ")}$WHITE - ${cmd.description}")
             }
         }
         return true

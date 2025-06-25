@@ -3,7 +3,7 @@ package pt.clilib.tools
 import pt.clilib.registers.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.datastore.Colors.RED
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 
 /**
  * Supported arithmetic operations for variable commands.
@@ -26,7 +26,7 @@ internal fun performVarOperation(
     val var2 = VarRegister.get(args[1]) as? Number
 
     if (var1 == null || var2 == null) {
-        println("${RED}Error: One or both variables do not exist or are not numeric.${RESET}")
+        println("${RED}Error: One or both variables do not exist or are not numeric.${WHITE}")
         return false
     }
 
@@ -39,7 +39,7 @@ internal fun performVarOperation(
         ArithmeticOperator.MULTIPLY -> a * b
         ArithmeticOperator.DIVIDE -> {
             if (b == 0.0) {
-                println("${RED}Error: Division by zero is not allowed.${RESET}")
+                println("${RED}Error: Division by zero is not allowed.${WHITE}")
                 return false
             }
             a / b

@@ -3,7 +3,7 @@ package pt.clilib.cmdUtils.commands.cli
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.datastore.Colors.CYAN
-import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.WHITE
 import pt.clilib.datastore.Colors.YELLOW
 
 import pt.clilib.tools.validateArgs
@@ -38,7 +38,7 @@ object VersionCmd : Command {
         text: String,
         borderColor: String = CYAN,
         textColor: String = YELLOW,
-        resetColor: String = RESET
+        resetColor: String = WHITE
     ) {
         val lines = text.lines()
         val maxLength = lines.maxOf { it.length }
