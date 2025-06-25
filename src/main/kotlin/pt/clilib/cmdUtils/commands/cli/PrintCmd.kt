@@ -3,6 +3,7 @@ package pt.clilib.cmdUtils.commands.cli
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.GREEN
 
 /**
  * Imprime no terminal todos os argumentos passados ao comando.
@@ -21,7 +22,7 @@ object PrintCmd : Command {
 
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
-        println(args.joinToString(" ").colorize(AnsiColor.GREEN))
+        println(args.joinToString(" ").colorize(GREEN))
         return true
     }
 }

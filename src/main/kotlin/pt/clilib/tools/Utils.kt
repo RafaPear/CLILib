@@ -1,13 +1,18 @@
 package pt.clilib.tools
 
-import pt.clilib.VarRegister
+import org.json.JSONObject
+import pt.clilib.registers.VarRegister
+import pt.clilib.registers.CmdRegister
 import pt.clilib.cmdUtils.Command
-import pt.clilib.cmdUtils.CmdRegister
+import pt.clilib.datastore.Colors
+import pt.clilib.ext.RawConsoleInput
+import pt.clilib.datastore.Colors.CYAN
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 import java.io.File
+import java.nio.file.Paths
 import kotlin.concurrent.thread
 import kotlin.random.Random
-import org.json.JSONObject
-import java.nio.file.Paths
 
 internal fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
     val file = Environment.resolve(filePath).toFile()
@@ -222,14 +227,10 @@ fun drawPrompt() {
  * A função imprime 50 linhas em branco para limpar o ecrã e, em seguida, chama a função tools.drawPrompt() para exibir o prompt novamente.
  */
 fun clearAndRedrawPrompt() {
-    repeat(50) { println() }
+    clearPrompt()
     drawPrompt()
 }
 
-/**
- * Função que limpa o ecrã sem redesenhar o prompt.
- * A função imprime 50 linhas em branco para limpar o ecrã.
- */
 fun clearPrompt() {
     // Clear escape sequence for terminal
     print("\u001b[H\u001b[2J")
@@ -285,7 +286,8 @@ internal fun generateRandomGraphFile(
     }
 }
 /** Opens a new terminal window running the current application. */
-internal fun openExternalTerminal(): Boolean {
+fun openExternalTerminal(): Boolean {
+    RawConsoleInput.resetConsoleMode()
     if (isRunningInTerminal()) {
         println("${RED}App Error: Cannot open terminal from within a terminal session.$RESET")
         return false
@@ -314,8 +316,6 @@ internal fun openExternalTerminal(): Boolean {
 
 fun isRunningInTerminal(): Boolean = System.console() != null
 
-
-
 fun Any?.joinToString(): String {
     return when (this) {
         is List<*> -> joinToString("\n")
@@ -325,3 +325,5 @@ fun Any?.joinToString(): String {
         else -> toString()
     }
 }
+
+internal fun String.colorize(color: String): String = "${color}$this${RESET}"

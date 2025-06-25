@@ -1,14 +1,22 @@
 package pt.clilib
 
-import pt.clilib.cmdUtils.CmdRegister
+import pt.clilib.registers.CmdRegister
 import pt.clilib.cmdUtils.commands.cli.*
 import pt.clilib.cmdUtils.commands.file.*
 import pt.clilib.cmdUtils.commands.directory.*
 import pt.clilib.cmdUtils.commands.functions.*
 import pt.clilib.cmdUtils.commands.varOp.*
 import pt.clilib.cmdUtils.Command
+import pt.clilib.datastore.Buffer
+import pt.clilib.datastore.Colors.BLUE
 import pt.clilib.tools.*
-import java.awt.Color
+import pt.clilib.datastore.Colors.GRAY
+import pt.clilib.datastore.Colors.GREEN
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.InputHistory
+import pt.clilib.datastore.KeyBuffer
+import pt.clilib.datastore.KeyCodes
 
 class CLI() {
 
@@ -41,13 +49,14 @@ class CLI() {
             openExternalTerminal()
         }
         clearAndRedrawPrompt()
-        while (true) {
+        if (isRunningInTerminal()){
+            doTerminalInteraction()
+        } else {
             print(prompt)
-            val input = readLine()
+            val input = readln()
             cmdParser(input)
         }
     }
-
 
     /**
      * Metodo que executa um único comando.
@@ -111,6 +120,4 @@ class CLI() {
 
         CmdRegister.registerAll(load.toList())
     }
-
-    fun registerDefaultCommands() = registerDefaultCommands("")
 }

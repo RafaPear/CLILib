@@ -2,8 +2,11 @@ package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
+import pt.clilib.datastore.Colors
 import pt.clilib.tools.*
-import java.io.File
+import pt.clilib.datastore.Colors.CYAN
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 
 object MkTemplateCmd : Command {
     override val info = CommandInfo(

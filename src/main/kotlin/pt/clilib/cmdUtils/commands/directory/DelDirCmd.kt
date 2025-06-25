@@ -2,7 +2,12 @@ package pt.clilib.cmdUtils.commands.directory
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
+import pt.clilib.datastore.Colors
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.GREEN
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.YELLOW
 
 object DelDirCmd : Command {
     override val info = CommandInfo(

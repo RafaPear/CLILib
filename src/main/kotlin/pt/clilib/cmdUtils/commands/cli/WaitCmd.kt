@@ -3,6 +3,8 @@ package pt.clilib.cmdUtils.commands.cli
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 
 /**
  * Comando `WAIT`

@@ -1,6 +1,6 @@
-package pt.clilib
+package pt.clilib.registers
 
-internal const val LAST_CMD_KEY = "buffer"
+import pt.clilib.tools.LAST_CMD_KEY
 
 internal object VarRegister {
     private val functions = mutableMapOf<String, Any?>(LAST_CMD_KEY to null)
@@ -15,7 +15,7 @@ internal object VarRegister {
             throw IllegalArgumentException("Variable name cannot be blank.")
         }
         if (name == LAST_CMD_KEY) {
-            println("Warning: '$LAST_CMD_KEY' is reserved and cannot be registered via CLI")
+            println("Warning: '${LAST_CMD_KEY}' is reserved and cannot be registered via CLI")
             return
         }
         functions[name] = value
@@ -57,7 +57,7 @@ internal object VarRegister {
             throw IllegalArgumentException("Variable name cannot be blank.")
         }
         if (name == LAST_CMD_KEY) {
-            println("Warning: '$LAST_CMD_KEY' cannot be removed from the register")
+            println("Warning: '${LAST_CMD_KEY}' cannot be removed from the register")
             return
         }
         if (functions.remove(name) != null) {
@@ -81,7 +81,7 @@ internal object VarRegister {
             throw IllegalArgumentException("Variable name cannot be blank.")
         }
         if (name == LAST_CMD_KEY) {
-            println("Warning: '$LAST_CMD_KEY' cannot be modified via CLI")
+            println("Warning: '${LAST_CMD_KEY}' cannot be modified via CLI")
             return
         }
         if (functions.containsKey(name)) {

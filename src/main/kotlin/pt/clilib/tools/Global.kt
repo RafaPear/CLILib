@@ -22,7 +22,7 @@ internal val version = StatusService().getVersion()
 */
 internal const val commentCode = "//"
 
-internal const val ESC = '\u001B'
+internal const val LAST_CMD_KEY = "buffer"
 
 /**
  * Application environment settings.

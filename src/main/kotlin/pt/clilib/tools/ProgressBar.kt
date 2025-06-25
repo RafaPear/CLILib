@@ -1,5 +1,10 @@
 package pt.clilib.tools
 
+import pt.clilib.datastore.Colors.GREEN
+import pt.clilib.datastore.Colors.ORANGE
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.YELLOW
 import java.util.concurrent.atomic.AtomicInteger
 
 internal class ProgressBar(

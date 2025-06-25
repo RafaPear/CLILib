@@ -2,8 +2,16 @@ package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.tools.*
-import java.io.File
+import pt.clilib.datastore.Colors.CYAN
+import pt.clilib.datastore.Colors.GREEN
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.YELLOW
+import pt.clilib.datastore.KeyBuffer
+import pt.clilib.datastore.KeyCodes
+import pt.clilib.ext.RawConsoleInput
+import pt.clilib.tools.Environment
+import pt.clilib.tools.clearPrompt
+import pt.clilib.tools.validateArgs
 
 /**
  * Simple terminal text editor used for quick file edits.
@@ -25,11 +33,80 @@ object BetaEditCmd : Command {
         val file = Environment.resolve(args[0]).toFile()
         val lines = if (file.exists()) file.readLines().toMutableList() else mutableListOf()
         println("${CYAN}Entering beta editor. Type ':wq' to save and exit, ':q' to quit without saving.${RESET}")
-        lines.forEachIndexed { i, line -> println("${i + 1}: $line") }
+        lines.forEachIndexed { i, line -> println(line) }
+        var buffer = ""
+        var editBuffer = ""
+        var isEditing = true
+        clearPrompt()
+        KeyBuffer.clear() // Clear the key buffer before starting
+        print("bed> ")
         while (true) {
-            print("betaedit> ")
-            val input = readLine() ?: return false
-            when (input) {
+
+            val temp = KeyBuffer.consume() ?: 0
+
+            when (temp) {
+                KeyCodes.BACKSPACE -> {
+                    if (buffer.isNotEmpty()) {
+                        buffer = buffer.dropLast(1)
+                        print("\rbed> $buffer ")
+                    } else {
+                        print("\rbed> ")
+                    }
+                }
+                KeyCodes.CTRL_C -> {
+                    println("${YELLOW}Exiting without saving.${RESET}")
+                    return true
+                }
+                KeyCodes.ENTER -> {
+                    if (buffer.isNotEmpty()) {
+                        lines.add(buffer)
+                        println("${lines.size}: $buffer")
+                        buffer = ""
+                    }
+                    print("bed> ")
+                }
+                KeyCodes.ESCAPE -> {
+                    isEditing = false
+                }
+                'I'.code -> { // 'I' key to toggle editing mode
+                    isEditing = !isEditing
+                    if (isEditing) {
+                        print("\rbed> $buffer ")
+                    } else {
+                        print("\rbed> ${editBuffer} ")
+                    }
+                }
+                else -> {
+                    if (temp in 32..126) { // Printable ASCII characters
+                        if (isEditing) {
+                            editBuffer = ""
+                            buffer += temp.toChar()
+                            print("\rbed> $buffer ")
+                        }
+                        else {
+                            // Handle escape sequences or other special keys if needed
+                            when (editBuffer) {
+                                ":wq" -> {
+                                    file.parentFile?.mkdirs()
+                                    file.writeText(lines.joinToString("\n"))
+                                    println("${GREEN}File saved to ${file.absolutePath}$RESET")
+                                    return true
+                                }
+                                ":q" -> {
+                                    println("${YELLOW}Exiting without saving.${RESET}")
+                                    return true
+                                }
+                                else -> {
+                                    editBuffer += temp.toChar()
+                                    print("bed> ")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            /*when (KeyBuffer) {
                 ":wq" -> {
                     file.parentFile?.mkdirs()
                     file.writeText(lines.joinToString("\n"))
@@ -41,7 +118,7 @@ object BetaEditCmd : Command {
                     return true
                 }
                 else -> lines.add(input)
-            }
+            }*/
         }
     }
 }

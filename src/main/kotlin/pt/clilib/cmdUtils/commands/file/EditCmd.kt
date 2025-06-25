@@ -2,9 +2,9 @@ package pt.clilib.cmdUtils.commands.file
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.tools.CYAN
-import pt.clilib.tools.RED
-import pt.clilib.tools.RESET
+import pt.clilib.datastore.Colors.CYAN
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 import pt.clilib.tools.Environment
 import pt.clilib.tools.validateArgs
 

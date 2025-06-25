@@ -1,11 +1,12 @@
 package pt.clilib.cmdUtils.commands.functions
 
-import pt.clilib.VarRegister
-import pt.clilib.LAST_CMD_KEY
-import pt.clilib.cmdUtils.CmdRegister
+import pt.clilib.registers.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.YELLOW
 import pt.clilib.tools.isValidIdentifier
 
 

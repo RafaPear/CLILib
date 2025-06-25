@@ -1,9 +1,13 @@
 package pt.clilib.cmdUtils.commands.cli
 
-import pt.clilib.cmdUtils.CmdRegister
+import pt.clilib.registers.CmdRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.CYAN
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.YELLOW
 
 /**
  * Comando `HELP`

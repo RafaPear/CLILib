@@ -4,7 +4,10 @@ import pt.clilib.tools.*
 import pt.clilib.tools.Environment
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import java.io.File
+import pt.clilib.datastore.Colors.BLUE
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.YELLOW
 
 /**
  * Comando `LOADSCRIPT`

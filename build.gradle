@@ -15,6 +15,9 @@ repositories {
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     implementation("org.json:json:20231013")
+    implementation("net.java.dev.jna:jna:5.17.0")           // JNA core
+    implementation("net.java.dev.jna:jna-platform:5.17.0")  // funcionalidades extra (opcional mas recomendado)
+
 }
 
 test {
@@ -29,9 +32,17 @@ def generatedVersionDir = "${buildDir}/generated-version"
 
 sourceSets {
     main {
+        java.srcDirs += 'src/main/java'
         output.dir(generatedVersionDir, builtBy: 'generateVersionProperties')
     }
+    example {
+        kotlin.srcDir("src/example/kotlin")
+        resources.srcDir("src/example/resources")
+        compileClasspath += sourceSets.main.output + configurations.runtimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
 }
+
 
 task generateVersionProperties {
     doLast {
@@ -58,15 +69,6 @@ tasks.named('jar') {
 
 kotlin {
     jvmToolchain(21)
-}
-
-sourceSets {
-    example {
-        kotlin.srcDir("src/example/kotlin")
-        resources.srcDir("src/example/resources")
-        compileClasspath += sourceSets.main.output + configurations.runtimeClasspath
-        runtimeClasspath += output + compileClasspath
-    }
 }
 
 tasks.register("runExample", JavaExec) {

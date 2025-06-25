@@ -1,8 +1,9 @@
 package pt.clilib.tools
 
-import pt.clilib.LAST_CMD_KEY
-import pt.clilib.VarRegister
+import pt.clilib.registers.VarRegister
 import pt.clilib.cmdUtils.Command
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 
 /**
  * Supported arithmetic operations for variable commands.

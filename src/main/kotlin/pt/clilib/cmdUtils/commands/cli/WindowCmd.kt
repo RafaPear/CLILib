@@ -3,6 +3,8 @@ package pt.clilib.cmdUtils.commands.cli
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.CYAN
+import pt.clilib.datastore.Colors.RESET
 
 object WindowCmd : Command {
     override val info = CommandInfo(
@@ -11,9 +13,7 @@ object WindowCmd : Command {
         usage = "window",
         aliases = listOf("window"),
         minArgs = 0,
-        maxArgs = 0,
-        requiresFile = false,
-        fileExtension = ""
+        maxArgs = 0
     )
 
     override fun run(args: List<String>): Boolean {

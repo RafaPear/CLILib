@@ -1,7 +1,7 @@
-package pt.clilib.cmdUtils
+package pt.clilib.registers
 
-import pt.clilib.tools.RESET
-import pt.clilib.tools.YELLOW
+import pt.clilib.cmdUtils.Command
+import pt.clilib.datastore.Colors
 
 object CmdRegister {
     private val aliasMap = mutableMapOf<String, Command>()
@@ -10,7 +10,7 @@ object CmdRegister {
     fun register(command: Command) {
         val existing = command.aliases.firstOrNull { aliasMap.containsKey(it.lowercase()) }
         if (existing != null) {
-            println("${YELLOW}Warning: Command '$existing' is already registered. Skipping registration.$RESET")
+            println("${Colors.YELLOW}Warning: Command '$existing' is already registered. Skipping registration.${Colors.RESET}")
             return
         }
         command.aliases.forEach { aliasMap[it.lowercase()] = command }
@@ -36,5 +36,18 @@ object CmdRegister {
 
     fun findSimilar(prefix: String): String? =
         aliasMap.keys.firstOrNull { it.startsWith(prefix.lowercase()) }
-}
 
+    fun findAllSimilar(prefix: String): List<String> =
+        if (prefix.isNotBlank())
+            aliasMap.keys
+                .filter {
+                    it.startsWith(prefix.lowercase())
+                }
+                .sortedBy {
+                    it.length
+                }
+        else
+            emptyList()
+
+
+}

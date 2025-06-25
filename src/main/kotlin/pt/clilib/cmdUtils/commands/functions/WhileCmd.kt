@@ -2,8 +2,8 @@ package pt.clilib.cmdUtils.commands.functions
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
-import pt.clilib.tools.RED
-import pt.clilib.tools.RESET
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 import pt.clilib.tools.cmdParser
 import pt.clilib.tools.eval
 import pt.clilib.tools.replaceVars
@@ -32,13 +32,13 @@ object WhileCmd : Command {
 
             while (eval(args[0].replaceVars(true))) {
                 if(!cmdParser(newCmd)) {
-                    println("${RED}Error executing loop${RESET}")
+                    println("${RED}Error executing loop${{RESET}}")
                     return false
                 }
             }
         }
         catch (e: Exception){
-            println("${RED}Error: ${e.message}${RESET}")
+            println("${RED}Error: ${e.message}${{RESET}}")
             return false
         }
         return true

@@ -1,9 +1,12 @@
 package pt.clilib.cmdUtils.commands.functions
 
-import pt.clilib.VarRegister
+import pt.clilib.registers.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.GREEN
+import pt.clilib.datastore.Colors.RESET
+import pt.clilib.datastore.Colors.YELLOW
 import kotlin.time.measureTime
 
 /**

@@ -1,9 +1,11 @@
 package pt.clilib.cmdUtils.commands.varOp
 
-import pt.clilib.VarRegister
+import pt.clilib.registers.VarRegister
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 
 object ExprVarCmd : Command {
     override val info = CommandInfo(

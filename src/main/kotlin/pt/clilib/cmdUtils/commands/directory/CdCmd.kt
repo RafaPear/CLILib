@@ -2,7 +2,10 @@ package pt.clilib.cmdUtils.commands.directory
 
 import pt.clilib.cmdUtils.Command
 import pt.clilib.cmdUtils.CommandInfo
+import pt.clilib.datastore.Colors
 import pt.clilib.tools.*
+import pt.clilib.datastore.Colors.RED
+import pt.clilib.datastore.Colors.RESET
 
 /**
  * Muda o diretório atual para outro especificado ou para o diretório anterior com "..".
