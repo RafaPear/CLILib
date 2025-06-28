@@ -1,5 +1,7 @@
 # 🧩 CLILib
 
+[![](https://jitpack.io/v/RafaPear/CLILib.svg)](https://jitpack.io/#RafaPear/CLILib)
+
 CLILib is a Kotlin library for building extensible command line interfaces. It allows you to define commands, variables and scripts in a simple and composable way.
 
 ## 🚀 Features
