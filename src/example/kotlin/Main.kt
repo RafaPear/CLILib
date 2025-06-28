@@ -1,12 +1,9 @@
-import pt.clilib.CLI
-import pt.clilib.registers.CmdRegister
-import pt.clilib.cmdUtils.commands.file.BetaEditCmd
-import pt.clilib.cmdUtils.commands.functions.FunCmd
-import pt.clilib.cmdUtils.commands.functions.IfCmd
-import pt.clilib.cmdUtils.commands.functions.WhileCmd
-import pt.clilib.tools.openExternalTerminal
+import pt.rafap.clilib.CLI
+import pt.rafap.clilib.cmdUtils.commands.functions.FunCmd
+import pt.rafap.clilib.cmdUtils.commands.functions.IfCmd
+import pt.rafap.clilib.cmdUtils.commands.functions.WhileCmd
+import pt.rafap.clilib.registers.CmdRegister
 
-import pt.clilib.tools.isRunningInTerminal
 
 fun main() {
     /*while (true){

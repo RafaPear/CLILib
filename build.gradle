@@ -5,7 +5,7 @@ plugins {
     id 'org.jetbrains.dokka' version '1.9.20'
 }
 
-group = 'pt.clilib'
+group = 'pt.rafap.clilib'
 version = '1.4-Beta'
 
 repositories {
