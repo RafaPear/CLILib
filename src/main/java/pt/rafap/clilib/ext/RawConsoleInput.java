@@ -1,4 +1,4 @@
-package pt.rafap.ext;
+package pt.rafap.clilib.ext;
 
 // Copyright 2015 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
 // www.source-code.biz, www.inventec.ch/chdh

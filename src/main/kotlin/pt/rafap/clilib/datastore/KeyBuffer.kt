@@ -2,7 +2,7 @@ package pt.rafap.clilib.datastore
 
 import pt.rafap.clilib.datatypes.LinkedList
 import pt.rafap.clilib.tools.isRunningInTerminal
-import pt.rafap.ext.RawConsoleInput
+import pt.rafap.clilib.ext.RawConsoleInput
 import kotlin.concurrent.thread
 
 /**

@@ -7,7 +7,7 @@ import pt.rafap.clilib.datastore.Colors.RED
 import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.registers.CmdRegister
 import pt.rafap.clilib.registers.VarRegister
-import pt.rafap.ext.RawConsoleInput
+import pt.rafap.clilib.ext.RawConsoleInput
 import java.io.File
 import java.nio.file.Paths
 import kotlin.concurrent.thread
