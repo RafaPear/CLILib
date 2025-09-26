@@ -123,6 +123,7 @@ tasks.register("runExample", JavaExec) {
     mainClass.set("MainKt")
 }
 
+
 // 🔹 Task Dokka HTML robusta para workflow
 tasks.register("dokkaHtml") {
     group = "documentation"
