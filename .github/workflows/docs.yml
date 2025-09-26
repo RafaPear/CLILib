@@ -3,7 +3,7 @@ name: Deploy Dokka Docs
 on:
   push:
     branches:
-      - master  # branch principal
+      - master
 
 jobs:
   build:
@@ -23,10 +23,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Dokka docs
-        run: ./gradlew dokkaHtml
+        run: ./gradlew dokkaGenerateModuleHtml
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/dokka
+          publish_dir: build/dokka/html
