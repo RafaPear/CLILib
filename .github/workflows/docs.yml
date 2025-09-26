@@ -3,7 +3,10 @@ name: Deploy Dokka Docs
 on:
   push:
     branches:
-      - main  # ou a branch principal do teu projeto
+      - master
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -19,11 +22,14 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
       - name: Build Dokka docs
-        run: ./gradlew dokkaHtml
+        run: ./gradlew dokkaGenerateModuleHtml
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/dokka
+          publish_dir: build/dokka/html
