@@ -7,6 +7,17 @@ import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.tools.openExternalTerminal
 import pt.rafap.clilib.tools.validateArgs
 
+/**
+ * Opens a new terminal window with the same session.
+ *
+ * CommandInfo:
+ * - description: Open a new terminal window
+ * - longDescription: Open a new terminal window with the same session.
+ * - usage: window
+ * - aliases: window
+ * - minArgs: 0
+ * - maxArgs: 0
+ */
 object WindowCmd : Command {
     override val info = CommandInfo(
         description = "Open a new terminal window",

@@ -8,6 +8,17 @@ import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.tools.validateArgs
 import java.io.File
 
+/**
+ * Creates a directory with the specified name.
+ *
+ * CommandInfo:
+ * - description: Create a directory
+ * - longDescription: Create a directory with the specified name.
+ * - usage: mkdir <directory>
+ * - aliases: mkdir
+ * - minArgs: 1
+ * - maxArgs: 1
+ */
 object MkDirCmd : Command {
     override val info = CommandInfo(
         description = "Create a directory",

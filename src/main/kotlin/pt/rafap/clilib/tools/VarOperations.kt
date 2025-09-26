@@ -3,47 +3,45 @@ package pt.rafap.clilib.tools
 import pt.rafap.clilib.cmdUtils.Command
 import pt.rafap.clilib.datastore.Colors.RED
 import pt.rafap.clilib.datastore.Colors.WHITE
+import pt.rafap.clilib.datastore.Colors.YELLOW
+import pt.rafap.clilib.datatypes.Operator
 import pt.rafap.clilib.registers.VarRegister
-
-/**
- * Supported arithmetic operations for variable commands.
- */
-internal enum class ArithmeticOperator { ADD, SUBTRACT, MULTIPLY, DIVIDE }
 
 /**
  * Performs an arithmetic operation on two registered variables.
  * The result is stored in the last command dump and optionally
  * in a new variable if [args] contains a third parameter.
  */
-internal fun performVarOperation(
+fun performVarOperation(
     args: List<String>,
     command: Command,
-    operator: ArithmeticOperator
+    operator: Operator<Any>
 ): Boolean {
     if (!validateArgs(args, command)) return false
 
-    val var1 = VarRegister.get(args[0]) as? Number
-    val var2 = VarRegister.get(args[1]) as? Number
+    val var1 = VarRegister.get(args[0])
+    val var2 = VarRegister.get(args[1])
 
     if (var1 == null || var2 == null) {
-        println("${RED}Error: One or both variables do not exist or are not numeric.${WHITE}")
+        println("${RED}Error: One or both variables are not registered.${WHITE}")
         return false
     }
 
-    val a = var1.toDouble()
-    val b = var2.toDouble()
+    val result = try {
+        operator.invoke(var1, var2)
+    } catch (e: Exception) {
+        println("${RED}Error performing operation: ${e.message}${WHITE}")
+        return false
+    }
 
-    val result = when (operator) {
-        ArithmeticOperator.ADD -> a + b
-        ArithmeticOperator.SUBTRACT -> a - b
-        ArithmeticOperator.MULTIPLY -> a * b
-        ArithmeticOperator.DIVIDE -> {
-            if (b == 0.0) {
-                println("${RED}Error: Division by zero is not allowed.${WHITE}")
-                return false
-            }
-            a / b
-        }
+    // Check if the result is null, which can happen if the
+    // operation is not valid for the types of var1 and var2.
+    // Can also happen if the operation is not defined for the types.
+    if (result == null) {
+        println("${RED}Error: Operation resulted in null. Check the types of the variables.${WHITE}\n" +
+                "${YELLOW}Hint: Ensure that the operation ${operator::class.simpleName} is valid for the types '${var1::class.simpleName}' and '${var2::class.simpleName}'.${WHITE}"
+        )
+        return false
     }
 
     VarRegister.setLastCmdDump(result)

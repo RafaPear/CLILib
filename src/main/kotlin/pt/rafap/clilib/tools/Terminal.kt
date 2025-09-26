@@ -5,6 +5,7 @@ import pt.rafap.clilib.datastore.Colors.RED
 import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.datastore.InputHistory
 import pt.rafap.clilib.datastore.KeyCodes
+import pt.rafap.clilib.datastore.Ansi
 import pt.rafap.clilib.registers.CmdRegister
 import pt.rafap.clilib.tools.TUI.buffer
 import pt.rafap.clilib.tools.TUI.clearAll
@@ -17,10 +18,19 @@ import pt.rafap.clilib.tools.TUI.printDebug
 import pt.rafap.clilib.tools.TUI.printPrompt
 import pt.rafap.clilib.tools.TUI.updatePrompt
 
+/**
+ * Terminal interaction engine: processes real-time keyboard input,
+ * provides history navigation, autocomplete, and dispatches commands to the parser.
+ */
 object Terminal {
 
+    /** Cycle index for TAB autocomplete suggestions. */
     var tabCycle = -1
 
+    /**
+     * Starts the terminal interaction loop. Requires [isRunningInTerminal] to be true.
+     * Reads keys, updates the buffer and executes commands when the user presses ENTER.
+     */
     fun doTerminalInteraction() {
         if (!isRunningInTerminal()) {
             println("${RED}App Error: Not running in terminal.${WHITE}")
@@ -104,7 +114,7 @@ object Terminal {
         if (!buffer.isEmpty()) {
             buffer.remove(1)
             clearUpdatePrompt()
-            print("\u001B[P") // Move cursor back one position
+            print(Ansi.DELETE_CHAR_AT_CURSOR) // Delete char at cursor
         } else {
             updatePrompt()
         }

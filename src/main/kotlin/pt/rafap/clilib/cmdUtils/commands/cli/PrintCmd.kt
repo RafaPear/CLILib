@@ -3,11 +3,19 @@ package pt.rafap.clilib.cmdUtils.commands.cli
 import pt.rafap.clilib.cmdUtils.Command
 import pt.rafap.clilib.cmdUtils.CommandInfo
 import pt.rafap.clilib.datastore.Colors.GREEN
-import pt.rafap.clilib.tools.colorize
+import pt.rafap.clilib.tools.tExt.colorize
 import pt.rafap.clilib.tools.validateArgs
 
 /**
- * Imprime no terminal todos os argumentos passados ao comando.
+ * Prints formatted text to the terminal.
+ *
+ * CommandInfo:
+ * - description: Print text to terminal
+ * - longDescription: Displays plain or formatted text, honoring colors and environment variables.
+ * - usage: print <text>
+ * - aliases: print, echo
+ * - minArgs: 1
+ * - maxArgs: 99
  */
 object PrintCmd : Command {
     override val info = CommandInfo(

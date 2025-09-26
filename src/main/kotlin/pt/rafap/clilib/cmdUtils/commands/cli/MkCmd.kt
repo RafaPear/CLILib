@@ -10,6 +10,17 @@ import pt.rafap.clilib.tools.cmdParser
 import pt.rafap.clilib.tools.readJsonFile
 import pt.rafap.clilib.tools.validateArgs
 
+/**
+ * Create simple commands from JSON templates.
+ *
+ * CommandInfo:
+ * - description: Create command from JSON
+ * - longDescription: Reads a JSON file describing a simple command and registers it at runtime.
+ * - usage: mkcmd <file.json>
+ * - aliases: mkcmd
+ * - minArgs: 1
+ * - maxArgs: 1
+ */
 object MkCmd : Command {
     override val info = CommandInfo(
         description = "Create a simple command from a JSON file",
@@ -38,7 +49,7 @@ object MkCmd : Command {
             val run = json.optString("run")
 
             if (description.isEmpty() || usage.isEmpty() || aliases.isEmpty() || run.isEmpty()) {
-                println("${RED}App Error: Ficheiro JSON inválido. Verifique os campos obrigatórios.${{WHITE}}")
+                println("${RED}App Error: Invalid JSON file. Please check required fields.${WHITE}")
                 return@readJsonFile false
             }
             val customCmd = object : Command {
@@ -63,7 +74,7 @@ object MkCmd : Command {
                 }
             }
             CmdRegister.register(customCmd)
-            println("${CYAN}Comando '${aliases.first()}' criado com sucesso!${{WHITE}}")
+            println("${CYAN}Command '${aliases.firstOrNull() ?: "<unknown>"}' created successfully!${WHITE}")
             true
         }
     }

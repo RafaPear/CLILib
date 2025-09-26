@@ -6,10 +6,20 @@ import pt.rafap.clilib.datastore.Colors.CYAN
 import pt.rafap.clilib.datastore.Colors.RED
 import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.registers.VarRegister
-import pt.rafap.clilib.tools.joinToString
+import pt.rafap.clilib.tools.tExt.joinToString
 import pt.rafap.clilib.tools.validateArgs
 
-// Command that manipulates the lastCmdDump variable buffer, which is used to store the last command's output.
+/**
+ * Manage an internal temporary text buffer used by commands.
+ *
+ * CommandInfo:
+ * - description: Manage internal buffer
+ * - longDescription: Store, clear and display temporary buffer content that other commands can consume.
+ * - usage: buffer [--dump|--clear]
+ * - aliases: buffer, buf
+ * - minArgs: 0
+ * - maxArgs: 1
+ */
 object BufferCmd : Command {
     override val info = CommandInfo(
         description = "Manipulate the command buffer",

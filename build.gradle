@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'pt.rafap.clilib'
-version = '1.4-Beta'
+version = '1.5-Beta'
 
 repositories {
     mavenCentral()
@@ -14,9 +14,11 @@ repositories {
 
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    implementation('org.jetbrains.kotlin:kotlin-reflect')
     implementation("org.json:json:20231013")
     implementation("net.java.dev.jna:jna:5.17.0")           // JNA core
     implementation("net.java.dev.jna:jna-platform:5.17.0")  // funcionalidades extra (opcional mas recomendado)
+    implementation 'org.jline:jline:3.30.0'
 }
 
 test {

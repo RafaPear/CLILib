@@ -7,6 +7,17 @@ import pt.rafap.clilib.datastore.Colors.YELLOW
 import pt.rafap.clilib.tools.Environment
 import pt.rafap.clilib.tools.validateArgs
 
+/**
+ * Enables or disables debug mode.
+ *
+ * CommandInfo:
+ * - description: Control debug mode
+ * - longDescription: Enable or disable debug output to help during development.
+ * - usage: debug [on|off|toggle]
+ * - aliases: debug
+ * - minArgs: 0
+ * - maxArgs: 1
+ */
 object DebugCmd : Command {
     override val info = CommandInfo(
         description = "Debug command for testing purposes",

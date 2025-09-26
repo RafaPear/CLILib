@@ -1,8 +1,8 @@
 package pt.rafap.clilib.datastore
 
 import pt.rafap.clilib.datatypes.LinkedList
-import pt.rafap.clilib.tools.isRunningInTerminal
 import pt.rafap.clilib.ext.RawConsoleInput
+import pt.rafap.clilib.tools.isRunningInTerminal
 import kotlin.concurrent.thread
 
 /**

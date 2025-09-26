@@ -13,11 +13,19 @@ import pt.rafap.clilib.datastore.Colors.RED
 import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.registers.CmdRegister
 import pt.rafap.clilib.tools.*
-import pt.rafap.clilib.tools.Environment.prompt
+import pt.rafap.clilib.tools.Environment.formatedPrompt
 import pt.rafap.clilib.tools.Terminal.doTerminalInteraction
 
+/**
+ * Main entry point for interacting with the command-line library.
+ * Provides helpers to run the interactive loop, execute single commands,
+ * and load commands from files while managing default command registration.
+ */
 class CLI() {
 
+    /**
+     * Default command set that can be registered via [registerDefaultCommands].
+     */
     var defaultCommands = mutableListOf(
         CdCmd, ClrCmd, ExitCmd,
         LoadScriptCmd, LsCmd, MeasureCmd,
@@ -34,10 +42,12 @@ class CLI() {
     }
 
     /**
-     * Metodo que inicia o ciclo principal da interface de linha de comandos (CLI).
-     * Limpa o ecrã e redesenha o prompt, depois entra num ciclo infinito
-     * onde imprime o prompt, lê a linha de comando do utilizador e a envia para
-     * o parser de comandos que,s por sua vez, resolve o comando ou comandos para as suas ações.
+     * Starts the main command-line interface (CLI) loop.
+     * Clears the screen and draws the prompt, then enters an infinite loop where it prints the prompt,
+     * reads the user's input line and sends it to the command parser.
+     *
+     * @param useExt If true, attempts to open a compatible external terminal; otherwise runs in the
+     * current terminal (or stdin/stdout mode if not attached to a terminal).
      */
     fun runtimeCLI(useExt: Boolean = false) {
         if (useExt) {
@@ -49,7 +59,7 @@ class CLI() {
         } else if (!useExt) {
             clearAndRedrawPrompt()
             while (true) {
-                print(prompt)
+                print(formatedPrompt)
                 val input = readln()
                 cmdParser(input)
             }
@@ -57,20 +67,21 @@ class CLI() {
     }
 
     /**
-     * Metodo que executa um único comando.
-     * Limpa o ecrã e redesenha o prompt, depois envia o comando para o parser de comandos.
+     * Executes a single command.
+     * Sends the given command string to the command parser.
      *
-     * @param cmd O comando a ser executado.
+     * @param cmd The command to execute.
      */
     fun runSingleCmd(cmd: String) {
         cmdParser(cmd)
     }
 
     /**
-     * Metodo que executa um conjunto de comandos a partir de um ficheiro.
-     * Lê o ficheiro linha a linha e envia cada linha para o parser de comandos.
+     * Executes a set of commands from a file.
+     * Reads the file line by line and sends each line to the command parser,
+     * ignoring lines that start with the comment code [commentCode].
      *
-     * @param file O caminho do ficheiro a ser lido.
+     * @param file Path (relative or absolute) to the file to read.
      */
     fun runFromFile(file: String) {
         val file = Environment.resolve(file).toFile()
@@ -94,6 +105,14 @@ class CLI() {
         }
     }
 
+    /**
+     * Registers the default commands, optionally filtered by groups.
+     *
+     * Recognized options: "--all", "--cli", "--file", "--dir", "--var", "--utils".
+     * When empty, registers all default commands.
+     *
+     * @param options Space-separated options indicating which groups to load.
+     */
     fun registerDefaultCommands(options: String = "") {
         val tokens = options.split(Regex("\\s+")).filter { it.isNotBlank() }
         if (tokens.isEmpty()) {

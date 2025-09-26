@@ -6,8 +6,16 @@ import pt.rafap.clilib.tools.clearPrompt
 import pt.rafap.clilib.tools.validateArgs
 
 /**
-* Limpa o ecrã do terminal imprimindo várias linhas vazias.
-*/
+ * Clears the terminal screen.
+ *
+ * CommandInfo:
+ * - description: Clear terminal
+ * - longDescription: Clears the visible content of the terminal/console.
+ * - usage: clr
+ * - aliases: clear, cls, clr
+ * - minArgs: 0
+ * - maxArgs: 0
+ */
 object ClrCmd : Command {
     override val info = CommandInfo(
         description = "Clear the screen",

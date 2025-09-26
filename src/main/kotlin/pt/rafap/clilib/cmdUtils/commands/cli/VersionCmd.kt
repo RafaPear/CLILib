@@ -9,7 +9,15 @@ import pt.rafap.clilib.tools.validateArgs
 import pt.rafap.clilib.tools.version
 
 /**
- * Mostra a versão da aplicação e os créditos dos autores.
+ * Shows the application's version.
+ *
+ * CommandInfo:
+ * - description: Show application version
+ * - longDescription: Displays current CLI version and build information.
+ * - usage: version
+ * - aliases: version, v
+ * - minArgs: 0
+ * - maxArgs: 0
  */
 object VersionCmd : Command {
 

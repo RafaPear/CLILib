@@ -12,13 +12,13 @@ import pt.rafap.clilib.tools.commentCode
 import pt.rafap.clilib.tools.validateArgs
 
 /**
- * Comando `LOADSCRIPT`
+ * Command `LOADSCRIPT`
  *
- * Carrega e executa um ficheiro de script com uma série de comandos.
+ * Loads and executes a script file containing a series of commands.
  *
- * Uso: `loadscript <script_file>`
+ * Usage: `loadscript <script_file>`
  *
- * Aceita um argumento que é o nome do ficheiro de script a ser carregado.
+ * Accepts one argument which is the name of the script file to be loaded.
  */
 
 object LoadScriptCmd : Command {

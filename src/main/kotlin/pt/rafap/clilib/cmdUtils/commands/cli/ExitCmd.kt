@@ -7,13 +7,15 @@ import pt.rafap.clilib.tools.validateArgs
 import kotlin.system.exitProcess
 
 /**
- * Comando `EXIT`
+ * Exits the CLI application.
  *
- * Encerra a aplicação CLI.
- *
- * Uso: `EXIT`
- *
- * Não recebe argumentos.
+ * CommandInfo:
+ * - description: Exit the application
+ * - longDescription: Finalizes the CLI session and terminates the program.
+ * - usage: exit
+ * - aliases: exit, quit
+ * - minArgs: 0
+ * - maxArgs: 0
  */
 object ExitCmd : Command {
     override val info = CommandInfo(

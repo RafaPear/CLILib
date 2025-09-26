@@ -8,6 +8,17 @@ import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.tools.validateArgs
 import java.io.File
 
+/**
+ * Creates a file with the specified name.
+ *
+ * CommandInfo:
+ * - description: Create a file
+ * - longDescription: Create a file with the specified name.
+ * - usage: mkfile <file>
+ * - aliases: mkfile
+ * - minArgs: 1
+ * - maxArgs: 1
+ */
 object MkFileCmd : Command {
     override val info = CommandInfo(
         description = "Create a file",

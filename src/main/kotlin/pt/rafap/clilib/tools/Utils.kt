@@ -5,15 +5,22 @@ import pt.rafap.clilib.cmdUtils.Command
 import pt.rafap.clilib.datastore.Colors.CYAN
 import pt.rafap.clilib.datastore.Colors.RED
 import pt.rafap.clilib.datastore.Colors.WHITE
+import pt.rafap.clilib.ext.RawConsoleInput
 import pt.rafap.clilib.registers.CmdRegister
 import pt.rafap.clilib.registers.VarRegister
-import pt.rafap.clilib.ext.RawConsoleInput
-import java.io.File
+import pt.rafap.clilib.tools.tExt.compareTo
+import pt.rafap.clilib.tools.tExt.replaceArgs
+import pt.rafap.clilib.tools.tExt.replaceVars
 import java.nio.file.Paths
-import kotlin.concurrent.thread
-import kotlin.random.Random
 
-internal fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
+/**
+ * Reads a JSON file and passes the result to the [onJson] callback.
+ *
+ * @param filePath Path to the JSON file (relative to current root or absolute).
+ * @param onJson Callback that receives the parsed JSON object and returns true/false depending on success.
+ * @return true if the callback returns true and no errors occur; false otherwise.
+ */
+fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Boolean {
     val file = Environment.resolve(filePath).toFile()
     if (!file.exists()) {
         println("${RED}App Error: Ficheiro não encontrado: $filePath$WHITE")
@@ -28,7 +35,14 @@ internal fun readJsonFile(filePath: String, onJson: (JSONObject) -> Boolean): Bo
     }
 }
 
-internal fun validateArgs(args: List<String>, command: Command): Boolean {
+/**
+ * Validates the number and format of arguments for a [command].
+ *
+ * @param args List of arguments provided in the call.
+ * @param command Command definition that sets limits and requirements (e.g., required file extension).
+ * @return true if the arguments are valid; false otherwise (with an error message).
+ */
+fun validateArgs(args: List<String>, command: Command): Boolean {
     val minArgs = command.minArgs
     val maxArgs = command.maxArgs
     val requiresFile = command.requiresFile
@@ -54,17 +68,19 @@ internal fun validateArgs(args: List<String>, command: Command): Boolean {
  * A valid name starts with a letter and may contain letters, digits or
  * underscores.
  */
-internal fun isValidIdentifier(name: String): Boolean {
+fun isValidIdentifier(name: String): Boolean {
     if (name.isEmpty() || !name.first().isLetter()) return false
     return name.all { it.isLetterOrDigit() || it == '_' }
 }
 
 /**
- * Função que processa os comandos introduzidos pelo utilizador. Retorna true caso a execução tenha sido bem sucedida.
- * False caso contrário.
+ * Processes commands entered by the user.
+ * Returns true if execution succeeded; false otherwise.
  *
- * @param input A string de entrada que contém os comandos a serem processados.
- * @return true se a execução foi bem sucedida, false caso contrário.
+ * @param input The input string containing the commands to process.
+ * @param args Optional arguments used for placeholder replacement when executing scripted commands.
+ * @param supress If true, suppresses unknown command errors (useful for scripted flows).
+ * @return true if execution succeeded; false otherwise.
  * */
 fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolean = false): Boolean {
     if (input.isNullOrBlank()) return true
@@ -108,33 +124,48 @@ fun cmdParser(input: String?, args: List<String> = emptyList(), supress : Boolea
     return good
 }
 
+/**
+ * Evaluates a simple boolean expression between two operands, supporting operators
+ * ==, !=, <, <=, >, >=. Referenced variables will be resolved via [VarRegister].
+ *
+ * @param expr Expression to evaluate (e.g., "a >= 10").
+ * @return true if the expression is true; false if it is false or invalid.
+ */
 fun eval(expr: String): Boolean {
     val regex = Regex("""\s*(\S+)\s*(==|!=|<=|>=|<|>)\s*(\S+)\s*""")
     val match = regex.matchEntire(expr) ?: return false
 
-    val (aStr, op, bStr) = match.destructured
+    val (left, op, right) = match.destructured
 
-    val a = aStr.toDoubleOrNull()
-    val b = bStr.toDoubleOrNull()
+    val a = VarRegister.get(left) ?: left
+    val b = VarRegister.get(right) ?: right
 
-    if (a != null && b != null) {
-        return when (op) {
-            "==" -> a == b
-            "!=" -> a != b
-            ">"  -> a > b
-            "<"  -> a < b
-            ">=" -> a >= b
-            "<=" -> a <= b
-            else -> false
-        }
+    if (a !is Comparable<*> && b !is Comparable<*>) {
+        println("${RED}App Error: Cannot compare non-comparable values: '$a' and '$b'$WHITE")
+        return false
     }
 
-    return false
+    return when (op) {
+        "==" -> a == b
+        "!=" -> a != b
+        ">"  -> a > b
+        "<"  -> a < b
+        ">=" -> a >= b
+        "<=" -> a <= b
+        else -> false
+    }
 }
 
+/**
+ * Splits a string by '|' while ignoring separators that are inside braces '{ }'.
+ * Keeps inner content intact and trims unnecessary spaces at the edges.
+ *
+ * @param input Full input string to split.
+ * @return List of segments resulting from outside-brace splits.
+ */
 internal fun splitOutsideBraces(input: String): List<String> {
     val result = mutableListOf<String>()
-    var current = StringBuilder()
+    val current = StringBuilder()
     var insideBraces = 0
 
     val chars = input.trim().toMutableList()
@@ -159,14 +190,14 @@ internal fun splitOutsideBraces(input: String): List<String> {
                 }
             }
 
-            '|', '\n' -> {
+            '|' -> {
                 if (insideBraces == 0) {
                     val trimmed = current.toString().trim()
                     if (trimmed.isNotEmpty()) result.add(trimmed)
                     current.clear()
                 } else {
                     if (chars.firstOrNull() == '}') chars.removeAt(0)
-                    current.append(" |")
+                    current.append("|")
                 }
             }
             ' ' -> {
@@ -174,7 +205,14 @@ internal fun splitOutsideBraces(input: String): List<String> {
                     current.append(c)
                 }
             }
-            else -> current.append(c)
+            else -> {
+                if (!c.isWhitespace()) {
+                    if (current.isNotEmpty() && (current.last() == '}' || current.last() == '|')) {
+                        current.append(' ')
+                    }
+                    current.append(c)
+                }
+            }
         }
     }
 
@@ -186,105 +224,39 @@ internal fun splitOutsideBraces(input: String): List<String> {
     return result
 }
 
-
-
-
-internal fun String.replaceArgs(args: List<String>): String {
-    var nInput = this
-    var count = 0
-    for (arg in args) {
-        nInput = nInput.replace("arg[$count]", arg)
-        count++
-    }
-    return nInput
-}
-
-internal fun String.replaceVars(auto : Boolean = false): String {
-    var nInput = this
-    val vars = VarRegister.all()
-    for ((name, value) in vars) {
-        nInput = if (auto)
-            nInput.replace(name, value.toString())
-        else
-            nInput.replace("#$name", value.toString())
-    }
-    return nInput
-}
-
-
 /**
- * Função que imprime uma mensagem de boas-vindas e instruções para o utilizador.
- * A função exibe uma mensagem de boas-vindas e sugere que o utilizador digite 'help' para obter uma lista de comandos disponíveis.
+ * Prints the welcome message and the help hint in the initial prompt.
+ * Takes no parameters and returns no value.
  */
-fun drawPrompt() {
+internal fun drawPrompt() {
     println("${CYAN}App: Welcome to the CLI!$WHITE")
     println("${CYAN}App: Type 'help' for a list of commands$WHITE")
 }
 
 /**
- * Função que limpa o ecrã e redesenha o prompt.
- * A função imprime 50 linhas em branco para limpar o ecrã e, em seguida, chama a função tools.drawPrompt() para exibir o prompt novamente.
+ * Clears the screen and redraws the initial prompt.
+ * Calls [clearPrompt] and then [drawPrompt].
  */
-fun clearAndRedrawPrompt() {
+internal fun clearAndRedrawPrompt() {
     clearPrompt()
     drawPrompt()
 }
 
-fun clearPrompt() {
+/**
+ * Clears the terminal screen using ANSI escape sequences.
+ * Takes no parameters and returns no value.
+ */
+internal fun clearPrompt() {
     // Clear escape sequence for terminal
-    print("\u001b[H\u001b[2J")
+    print(pt.rafap.clilib.datastore.Ansi.CURSOR_HOME + pt.rafap.clilib.datastore.Ansi.CLEAR_SCREEN)
 }
 
 /**
- * Função que gera um arquivo de grafo aleatório com um número especificado de nós.
- * O arquivo é salvo no diretório especificado e contém as coordenadas dos nós gerados aleatoriamente.
+ * Abre uma nova janela de terminal a executar a aplicação atual.
+ * Impede a execução quando já está a correr dentro de um terminal.
  *
- * @param fileName O nome do arquivo a ser gerado.
- * @param numNodes O número de nós a serem gerados.
- * @param xRange O intervalo para as coordenadas x dos nós (padrão: -90000000 a -86000000).
- * @param yRange O intervalo para as coordenadas y dos nós (padrão: 32400000 a 32800000).
+ * @return true se o terminal for aberto com sucesso; false em caso de erro.
  */
-internal fun generateRandomGraphFile(
-    fileName: String,
-    numNodes: Int,
-    xRange: IntRange = -90000000..-86000000,
-    yRange: IntRange = 32400000..32800000
-) {
-    val file = File(fileName)
-
-    // Certificar que o diretório existe
-    file.parentFile?.mkdirs()
-
-    file.printWriter().use { out ->
-        // Header
-        out.println("c Generated test file for $fileName")
-        out.println("c")
-        out.println("c graph contains $numNodes nodes")
-        out.println("c")
-
-        // Generate random nodes in parallel
-        val ranges = listOf(
-            1..numNodes / 4,
-            numNodes / 4 + 1..numNodes / 2,
-            numNodes / 2 + 1..numNodes * 3 / 4,
-            numNodes * 3 / 4 + 1..numNodes
-        )
-
-        val threads = ranges.map { range ->
-            thread {
-                for (i in range) {
-                    val x = Random.nextInt(xRange.first, xRange.last + 1)
-                    val y = Random.nextInt(yRange.first, yRange.last + 1)
-                    out.println("v $i $x $y")
-                }
-            }
-        }
-
-        threads.forEach { it.join() }
-
-    }
-}
-/** Opens a new terminal window running the current application. */
 fun openExternalTerminal(): Boolean {
     RawConsoleInput.resetConsoleMode()
     if (isRunningInTerminal()) {
@@ -314,15 +286,3 @@ fun openExternalTerminal(): Boolean {
 }
 
 fun isRunningInTerminal(): Boolean = System.console() != null
-
-fun Any?.joinToString(): String {
-    return when (this) {
-        is List<*> -> joinToString("\n")
-        is Class<*> -> toGenericString()
-        is Array<*> -> joinToString("\n") { it.joinToString() }
-        is Map<*, *> -> entries.joinToString("\n") { "${it.key}: ${it.value}" }
-        else -> toString()
-    }
-}
-
-internal fun String.colorize(color: String): String = "${color}$this${WHITE}"

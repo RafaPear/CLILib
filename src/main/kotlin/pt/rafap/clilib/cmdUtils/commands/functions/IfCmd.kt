@@ -4,7 +4,7 @@ import pt.rafap.clilib.cmdUtils.Command
 import pt.rafap.clilib.cmdUtils.CommandInfo
 import pt.rafap.clilib.tools.cmdParser
 import pt.rafap.clilib.tools.eval
-import pt.rafap.clilib.tools.replaceVars
+import pt.rafap.clilib.tools.tExt.joinToString
 import pt.rafap.clilib.tools.validateArgs
 
 object IfCmd : Command {
@@ -20,18 +20,58 @@ object IfCmd : Command {
         )
     )
 
+    private var isIf = true
+
+    private data class IfResult(val state: Boolean, val ifResult: Boolean)
+
     override fun run(args: List<String>): Boolean {
         if (!validateArgs(args, this)) return false
+
         try {
-            val condition = args[0].replaceVars(true)
-            if (eval(condition)) {
-                val newCmd = args.drop(1).joinToString(" ").removeSurrounding("{", "}")
-                return cmdParser(newCmd)
-            }
+            return parseIf(args)
         } catch (e: Exception) {
             println("Error: ${e.message}")
             return false
         }
+    }
+
+    private fun parseIf(args: List<String>): Boolean {
+        var result = doIf(args)
+        if (result.ifResult) {
+            return result.state
+        }
+
+        if (args.contains("elseif")) {
+            val newArgs = args.dropWhile { it != "elseif" }.drop(1)
+            result = doIf(newArgs)
+            if (result.ifResult) {
+                return result.state
+            }
+        }
+
+        if (args.contains("else")) {
+            val newArgs = args.dropWhile { it != "else" }.drop(1)
+            result = doElse(newArgs)
+            return result.state
+        }
+
+        isIf = true
+
         return true
+    }
+
+    private fun doIf(args: List<String>): IfResult {
+        val condition = args[0]
+
+        if (eval(condition)) {
+            val newCmd = args.drop(1).joinToString(" ").substringBefore('}').removePrefix("{")
+            return IfResult(cmdParser(newCmd), true)
+        }
+        return IfResult(state = true, ifResult = false)
+    }
+
+    private fun doElse(args: List<String>): IfResult {
+        val newCmd = args.joinToString(" ").substringBefore('}').removePrefix("{")
+        return IfResult(cmdParser(newCmd), true)
     }
 }

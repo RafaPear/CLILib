@@ -11,13 +11,15 @@ import pt.rafap.clilib.tools.validateArgs
 import kotlin.time.measureTime
 
 /**
- * Comando `MEASURE`
+ * Measure the execution time of a command.
  *
- * Mede o tempo de execução de um comando.
- *
- * Uso: `measure <command>`
- *
- * Aceita qualquer comando como argumento. Útil para testes de desempenho.
+ * CommandInfo:
+ * - description: Measure command execution time
+ * - longDescription: Executes a command and measures the elapsed time; stores the timing result for later inspection.
+ * - usage: measure <command>
+ * - aliases: measure, m, time
+ * - minArgs: 1
+ * - maxArgs: -1
  */
 object MeasureCmd : Command {
     override val info = CommandInfo(

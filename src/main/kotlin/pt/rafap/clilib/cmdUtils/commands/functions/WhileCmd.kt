@@ -6,7 +6,6 @@ import pt.rafap.clilib.datastore.Colors.RED
 import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.tools.cmdParser
 import pt.rafap.clilib.tools.eval
-import pt.rafap.clilib.tools.replaceVars
 import pt.rafap.clilib.tools.validateArgs
 
 object WhileCmd : Command {
@@ -30,15 +29,15 @@ object WhileCmd : Command {
                 .joinToString(" ")
                 .removeSurrounding("{", "}")
 
-            while (eval(args[0].replaceVars(true))) {
+            while (eval(args[0])) {
                 if(!cmdParser(newCmd)) {
-                    println("${RED}Error executing loop${{WHITE}}")
+                    println("${RED}Error executing loop${WHITE}")
                     return false
                 }
             }
         }
         catch (e: Exception){
-            println("${RED}Error: ${e.message}${{WHITE}}")
+            println("${RED}Error: ${e.message}${WHITE}")
             return false
         }
         return true

@@ -8,6 +8,17 @@ import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.datastore.Colors.YELLOW
 import pt.rafap.clilib.tools.validateArgs
 
+/**
+ * Deletes a file from the filesystem.
+ *
+ * CommandInfo:
+ * - description: Delete a file
+ * - longDescription: Deletes the specified file from the filesystem.
+ * - usage: delfile <file_path>
+ * - aliases: delfile, rmfile
+ * - minArgs: 1
+ * - maxArgs: 1
+ */
 object DelFileCmd : Command {
     override val info = CommandInfo(
         description = "Delete a file",

@@ -10,6 +10,18 @@ import pt.rafap.clilib.tools.cmdParser
 import pt.rafap.clilib.tools.isValidIdentifier
 import pt.rafap.clilib.tools.validateArgs
 
+/**
+ * Define and manage user-defined functions (macros) composed of CLI commands.
+ *
+ * CommandInfo:
+ * - description: Create or manage functions
+ * - longDescription: Define a named function (a sequence of CLI commands) that can be executed later; also supports listing and removing functions.
+ * - usage: fun <name> {commands}  | fun -l | fun -d <name>
+ * - aliases: fun, function
+ * - minArgs: 0
+ * - maxArgs: -1
+ */
+
 object FunCmd : Command {
     override val info = CommandInfo(
         description = "Create a function",
@@ -44,7 +56,7 @@ object FunCmd : Command {
             val newArgs = args.drop(1).joinToString(" ")
 
             if (!isValidIdentifier(args[0])) {
-                println("${RED}Error: Invalid function name '${args[0]}'.${{WHITE}}")
+                println("${RED}Error: Invalid function name '${args[0]}'.${WHITE}")
                 return false
             }
 
@@ -79,7 +91,7 @@ object FunCmd : Command {
         when (args[0]) {
             "-d", "--delete" -> {
                 if (args.size != 2) {
-                    println("${RED}Error: Invalid number of arguments for delete command.${{WHITE}}")
+                    println("${RED}Error: Invalid number of arguments for delete command.${WHITE}")
                     return false
                 }
                 FunRegister.unregister(args[1])
@@ -88,12 +100,14 @@ object FunCmd : Command {
                 println("Registered functions: ${FunRegister.all()}")
             }
             "-h", "--help" -> {
-                println("Usage: var <name> [args]")
+                println("Usage: fun <name> {commands}")
                 println("Commands:")
-                VarCmd.commands.forEach { println("  $it") }
+                println("  -d, --delete   Delete the function by name")
+                println("  -l, --list     List registered functions")
+                println("  -h, --help     Show this help message")
             }
             else -> {
-                println("${RED}Error: Unknown command '${args[0]}'.${{WHITE}}")
+                println("${RED}Error: Unknown command '${args[0]}'.${WHITE}")
                 return false
             }
         }

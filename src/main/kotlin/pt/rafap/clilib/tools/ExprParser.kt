@@ -1,7 +1,9 @@
 package pt.rafap.clilib.tools
 
+import pt.rafap.clilib.tools.tExt.replaceVars
+
 internal class ExprParser {
-private var pos = 0
+    private var pos = 0
     private var input = ""
 
     fun parse(expression: String): Double {
@@ -18,10 +20,12 @@ private var pos = 0
                     pos++
                     value += parseTerm()
                 }
+
                 '-' -> {
                     pos++
                     value -= parseTerm()
                 }
+
                 else -> return value
             }
         }
@@ -36,10 +40,12 @@ private var pos = 0
                     pos++
                     value *= parseFactor()
                 }
+
                 '/' -> {
                     pos++
                     value /= parseFactor()
                 }
+
                 else -> return value
             }
         }
@@ -60,10 +66,12 @@ private var pos = 0
                 pos++ // consome ')'
                 value
             }
+
             '-' -> {
                 pos++
                 -parseFactor()
             }
+
             else -> throw IllegalArgumentException("Carácter inesperado: '$ch'")
         }
     }

@@ -10,13 +10,15 @@ import pt.rafap.clilib.registers.CmdRegister
 import pt.rafap.clilib.tools.validateArgs
 
 /**
- * Comando `HELP`
+ * Displays help for available commands.
  *
- * Mostra todos os comandos disponíveis na aplicação, bem como a sua descrição e modo de uso.
- *
- * Uso: `HELP`
- *
- * Não necessita de argumentos.
+ * CommandInfo:
+ * - description: Show commands help
+ * - longDescription: Shows summary or detailed information about available commands.
+ * - usage: help [command]
+ * - aliases: help, ?
+ * - minArgs: 0
+ * - maxArgs: 1
  */
 object HelpCmd : Command {
     override val info = CommandInfo(

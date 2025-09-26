@@ -1,6 +1,6 @@
 package pt.rafap.clilib.datatypes
 
-import pt.rafap.clilib.tools.joinToString
+import pt.rafap.clilib.tools.tExt.joinToString
 
 internal class LinkedList<T> {
 

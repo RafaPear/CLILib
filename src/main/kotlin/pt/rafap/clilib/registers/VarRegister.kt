@@ -2,7 +2,7 @@ package pt.rafap.clilib.registers
 
 import pt.rafap.clilib.tools.LAST_CMD_KEY
 
-internal object VarRegister {
+object VarRegister {
     private val functions = mutableMapOf<String, Any?>(LAST_CMD_KEY to null)
     /**
      * Registers a variable with a given name and value.

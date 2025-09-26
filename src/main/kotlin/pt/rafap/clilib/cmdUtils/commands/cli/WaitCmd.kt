@@ -7,21 +7,22 @@ import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.tools.validateArgs
 
 /**
- * Comando `WAIT`
+ * Pause execution for a specified duration.
  *
- * Faz uma pausa na execução do programa por um determinado número de milissegundos.
- *
- * Uso: `wait <milliseconds>`
- *
- * Aceita um argumento que é o número de milissegundos a esperar.
+ * CommandInfo:
+ * - description: Pause execution
+ * - longDescription: Suspends the CLI for a specified amount of time (milliseconds).
+ * - usage: wait <milliseconds>
+ * - aliases: wait, sleep
+ * - minArgs: 1
+ * - maxArgs: 1
  */
-
 object WaitCmd : Command {
     override val info = CommandInfo(
-        description = "Wait for a specified time",
-        longDescription = "Wait for a specified time in milliseconds.",
+        description = "Pause execution",
+        longDescription = "Suspend CLI execution for a specified time in milliseconds.",
         usage = "wait <milliseconds>",
-        aliases = listOf("wait", "w"),
+        aliases = listOf("wait", "sleep"),
         minArgs = 1,
         maxArgs = 1
     )

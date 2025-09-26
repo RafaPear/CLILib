@@ -66,6 +66,21 @@ var a 10 | var b 5 | add a b total | print Result: $total
 ## 📚 Documentation
 Check the [project Wiki](https://github.com/RafaPear/CLILib/wiki) for details about the architecture, list of commands and extension guides.
 
+## ⚙️ Configuration (Colors and ANSI)
+You can override the default ANSI colors and control sequences via environment variables. If not set, CLILib falls back to standard ANSI codes.
+
+- Colors:
+  - CLILIB_COLOR_BLUE, CLILIB_COLOR_GREEN, CLILIB_COLOR_RED, CLILIB_COLOR_YELLOW, CLILIB_COLOR_CYAN, CLILIB_COLOR_GRAY, CLILIB_COLOR_ORANGE, CLILIB_COLOR_MAGENTA, CLILIB_COLOR_WHITE, CLILIB_COLOR_BLACK, CLILIB_COLOR_BOLD
+- ANSI sequences:
+  - CLILIB_ANSI_ESC, CLILIB_ANSI_SAVE_CURSOR, CLILIB_ANSI_RESTORE_CURSOR, CLILIB_ANSI_CURSOR_HOME, CLILIB_ANSI_HIDE_CURSOR, CLILIB_ANSI_SHOW_CURSOR, CLILIB_ANSI_CLEAR_SCREEN, CLILIB_ANSI_CLEAR_LINE_TO_END, CLILIB_ANSI_CLEAR_LINE_TO_START, CLILIB_ANSI_CLEAR_LINE, CLILIB_ANSI_DELETE_CHAR
+
+Example (Windows PowerShell):
+
+```powershell
+$env:CLILIB_COLOR_GREEN = "`e[32m"
+$env:CLILIB_ANSI_CLEAR_SCREEN = "`e[2J"
+```
+
 ## 🤝 Contributions
 Contributions are welcome! See [How to Contribute](https://github.com/RafaPear/CLILib/wiki/How-to-Contribute).
 

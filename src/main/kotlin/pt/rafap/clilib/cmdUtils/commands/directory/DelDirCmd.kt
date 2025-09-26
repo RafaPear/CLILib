@@ -8,6 +8,17 @@ import pt.rafap.clilib.datastore.Colors.WHITE
 import pt.rafap.clilib.datastore.Colors.YELLOW
 import pt.rafap.clilib.tools.validateArgs
 
+/**
+ * Deletes a directory from the filesystem.
+ *
+ * CommandInfo:
+ * - description: Delete a directory
+ * - longDescription: Deletes the specified directory from the filesystem.
+ * - usage: deldir <directory_path>
+ * - aliases: deldir, rmdir
+ * - minArgs: 1
+ * - maxArgs: 1
+ */
 object DelDirCmd : Command {
     override val info = CommandInfo(
         description = "Delete a directory",

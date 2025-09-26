@@ -8,11 +8,22 @@ import pt.rafap.clilib.registers.VarRegister
 import pt.rafap.clilib.tools.ExprParser
 import pt.rafap.clilib.tools.validateArgs
 
+/**
+ * Evaluate a mathematical expression and store the result.
+ *
+ * CommandInfo:
+ * - description: Evaluate expression
+ * - longDescription: Parses and evaluates an arithmetic expression and stores the numeric result in the last command dump variable.
+ * - usage: var expr <expression>
+ * - aliases: expr, evaluate
+ * - minArgs: 1
+ * - maxArgs: -1
+ */
 object ExprVarCmd : Command {
     override val info = CommandInfo(
-        description = "Evaluate an expression",
-        longDescription = "Evaluates a mathematical expression.",
-        usage = "expr <expression>",
+        description = "Evaluate expression",
+        longDescription = "Parses and evaluates a mathematical expression and stores the result for later use.",
+        usage = "var expr <expression>",
         aliases = listOf("expr", "evaluate"),
         minArgs = 1,
         maxArgs = -1

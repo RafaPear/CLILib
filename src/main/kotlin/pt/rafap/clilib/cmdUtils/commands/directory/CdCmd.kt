@@ -8,7 +8,15 @@ import pt.rafap.clilib.tools.Environment
 import pt.rafap.clilib.tools.validateArgs
 
 /**
- * Muda o diretório atual para outro especificado ou para o diretório anterior com "..".
+ * Changes the current directory to the specified relative directory, or to the parent directory with "..".
+ *
+ * CommandInfo:
+ * - description: Change directory
+ * - longDescription: Change the current directory to a specified relative directory or to the parent directory with '..'.
+ * - usage: cd <directory>
+ * - aliases: cd
+ * - minArgs: 1
+ * - maxArgs: 1
  */
 object CdCmd : Command {
     override val info = CommandInfo(
