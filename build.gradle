@@ -132,6 +132,25 @@ tasks.register("runExample", JavaExec) {
     mainClass.set("MainKt")
 }
 
+tasks.register("dokkaHtml") {
+    group = "documentation"
+    description = "Gera documentação Dokka para o projeto"
+    dependsOn tasks.named("dokkaGenerateModuleHtml")
+
+    doLast {
+        // move a saída da task dokkaGenerateModuleHtml para build/dokka/html
+        def src = tasks.named("dokkaGenerateModuleHtml").get().outputDirectory.get().asFile
+        def dest = layout.buildDirectory.dir("dokka/html").get().asFile
+        if (dest.exists()) dest.deleteDir()
+        dest.mkdirs()
+        copy {
+            from src
+            into dest
+        }
+    }
+}
+
+
 // Publicação automática no Maven Local para uso noutros projectos
 // que dependam desta biblioteca
 tasks.named("build") {
