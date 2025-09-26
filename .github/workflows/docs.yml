@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -28,13 +28,35 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x ./gradlew
 
       - name: Build Project
         run: ./gradlew build --no-daemon
 
       - name: Build Dokka docs
         run: ./gradlew dokkaHtml
+
+      - name: Debug Dokka output
+        run: |
+          echo "=== Current dir: $(pwd) ==="
+          echo "=== build tree (top) ==="
+          ls -la build || true
+          echo "=== build/dokka tree ==="
+          ls -la build/dokka || true
+          echo "=== build/dokka/html tree (contents) ==="
+          ls -la build/dokka/html || true
+          if [ -f build/dokka/html/index.html ]; then
+            echo ">>> index.html (first 30 lines):"
+            head -n 30 build/dokka/html/index.html || true
+          else
+            echo ">>> NO index.html in build/dokka/html"
+          fi
+
+      - name: Upload docs artifact (debug)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dokka-html
+          path: build/dokka/html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
