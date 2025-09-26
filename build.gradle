@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.20'
     id 'java-library'
@@ -149,6 +151,11 @@ tasks.register("dokkaHtml") {
         }
     }
 }
+
+tasks.withType(DokkaTask).configureEach {
+    outputDirectory.set(layout.buildDirectory.dir("dokka/html"))
+}
+
 
 
 // Publicação automática no Maven Local para uso noutros projectos
