@@ -3,7 +3,7 @@ name: Deploy Dokka Docs
 on:
   push:
     branches:
-      - main  # ou a branch principal do teu projeto
+      - master  # ou a branch principal do teu projeto
 
 jobs:
   build:
