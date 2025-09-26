@@ -127,21 +127,36 @@ tasks.register("runExample", JavaExec) {
 tasks.register("dokkaHtml") {
     group = "documentation"
     description = "Gera documentação Dokka para o projeto"
+
     dependsOn tasks.named("dokkaGenerateModuleHtml")
 
     doLast {
-        def src = tasks.named("dokkaGenerateModuleHtml").get().outputDirectory.get().asFile
-        def dest = layout.buildDirectory.dir("dokka/html").get().asFile
-        if (dest.exists()) dest.deleteDir()
-        dest.mkdirs()
-        copy {
-            from src
-            into dest
+        def srcDir = tasks.named("dokkaGenerateModuleHtml").get().outputDirectory.get().asFile
+        def destDir = layout.buildDirectory.dir("dokka/html").get().asFile
+
+        if (destDir.exists()) destDir.deleteDir()
+        destDir.mkdirs()
+
+        // copia o conteúdo de todas as subpastas para destDir
+        def subDirs = srcDir.listFiles()?.findAll { it.isDirectory() } ?: []
+        if (subDirs.isEmpty()) {
+            throw new GradleException("Nenhuma subpasta encontrada em ${srcDir}. Não há index.html para copiar.")
         }
-        if (!new File(dest, "index.html").exists()) {
-            throw new GradleException("index.html não encontrado em build/dokka/html. Falha intencional para debug.")
+
+        subDirs.each { moduleDir ->
+            copy {
+                from moduleDir
+                into destDir
+            }
         }
-        println("Dokka HTML gerado com sucesso em: ${dest}")
+
+        if (!new File(destDir, "index.html").exists()) {
+            println("⚠️ index.html não encontrado na raiz de ${destDir}. Conteúdo atual:")
+            destDir.eachFile { println(it.name) }
+            throw new GradleException("index.html não encontrado após copiar subpastas para ${destDir}")
+        }
+
+        println("✅ Dokka HTML gerado com sucesso em: ${destDir}")
     }
 }
 
