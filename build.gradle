@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'pt.rafap.clilib'
-version = '1.5-Beta'
+version = '1.5.4-Beta'
 
 repositories {
     mavenCentral()
@@ -64,6 +64,15 @@ tasks.register('generateVersionProperties') {
 }
 
 processResources.dependsOn tasks.named('generateVersionProperties')
+
+tasks.withType(DokkaTask.class).configureEach {
+    moduleName.set(project.name)
+    moduleVersion.set(project.version.toString())
+    failOnWarning.set(false)
+    suppressObviousFunctions.set(true)
+    suppressInheritedMembers.set(false)
+    offlineMode.set(false)
+}
 
 // adiciona javadoc gerado pela Dokka ao artefacto javadocJar
 project.afterEvaluate {
@@ -132,11 +141,11 @@ tasks.withType(DokkaTask).configureEach {
 tasks.named("build") {
     finalizedBy(tasks.named("publishToMavenLocal"))
 }
-
 publishing {
     publications {
         create("gpr", MavenPublication) {
-            from(components.java)
+            from(components["java"])
+            artifactId = "clilib" // minúsculo
         }
     }
     repositories {
@@ -144,8 +153,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/RafaPear/CLILib")
             credentials {
-                username = System.getenv("USERNAME") ?: findProperty("gpr.user")?.toString() ?: ""
-                password = System.getenv("TOKEN") ?: findProperty("gpr.key")?.toString() ?: ""
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
