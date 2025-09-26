@@ -123,59 +123,6 @@ tasks.register("runExample", JavaExec) {
     mainClass.set("MainKt")
 }
 
-// 🔹 Task Dokka HTML robusta para workflow
-tasks.register("dokkaHtml") {
-    group = "documentation"
-    description = "Gera documentação Dokka para o projeto e consolida tudo em build/dokka/html"
-
-    // Prefer the aggregated dokkaGenerate task when available, otherwise depend on any DokkaTask
-    if (tasks.findByName('dokkaGenerate') != null) {
-        dependsOn tasks.named('dokkaGenerate')
-    } else {
-        dependsOn tasks.withType(org.jetbrains.dokka.gradle.DokkaTask)
-    }
-
-    doLast {
-        def destDir = layout.buildDirectory.dir('dokka/html').get().asFile
-
-        // Cleanup destination
-        if (destDir.exists()) destDir.deleteDir()
-        destDir.mkdirs()
-
-        // Gather candidate source directories from Dokka tasks' outputDirectory properties
-        def sources = [] as List
-        tasks.withType(org.jetbrains.dokka.gradle.DokkaTask).each { t ->
-            try {
-                if (t.hasProperty('outputDirectory')) {
-                    def out = t.outputDirectory.get().asFile
-                    if (out.exists()) sources << out
-                }
-            } catch (Exception ignored) {
-                // ignore inaccessible or unset outputs
-            }
-        }
-
-        // If we didn't find any task outputs, fall back to common build/dokka locations
-        if (sources.isEmpty()) {
-            def htmlDir = layout.buildDirectory.dir('dokka/html').get().asFile
-            def dokkaDir = layout.buildDirectory.dir('dokka').get().asFile
-            if (htmlDir.exists()) sources << htmlDir
-            else if (dokkaDir.exists()) sources << dokkaDir
-        }
-
-        // Copy all files (HTML, CSS, JS, images, ui-kit, etc.) preserving directory structure
-        sources.unique().each { src ->
-            copy {
-                from src
-                into destDir
-                include '**/*'
-            }
-        }
-
-        println("✅ Dokka HTML consolidado em: ${destDir}")
-    }
-}
-
 // força saída de todas as DokkaTasks para build/dokka/html
 tasks.withType(DokkaTask).configureEach {
     outputDirectory.set(layout.buildDirectory.dir("dokka/html"))

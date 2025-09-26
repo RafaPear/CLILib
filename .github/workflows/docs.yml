@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew build --no-daemon
 
       - name: Build Dokka docs
-        run: ./gradlew dokkaHtml
+        run: ./gradlew dokkaGeneratePublicationHtml
 
       - name: Debug Dokka output
         run: |
