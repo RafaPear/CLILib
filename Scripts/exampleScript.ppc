@@ -208,13 +208,94 @@ test argumento
 clr
 
 print -------------------------------------
-print           MKCMDTEMPLATE
+print               FILES
 print -------------------------------------
-print O comando 'mkcmdtemplate' gera um ficheiro JSON de exemplo para criar comandos customizados.
-print Exemplo: mkcmdtemplate meuComando.json
-print << mkcmdtemplate meuComando.json
+print Aqui ficam comandos para gerir ficheiros:
+print 'mkfile' cria um ficheiro vazio; 'delfile' remove um ficheiro.
+print << mkfile exemplo.txt
 wfu
-mkcmdtemplate meuComando.json
+mkfile exemplo.txt
+wfu
+clr
+
+print << delfile exemplo.txt
+wfu
+delfile exemplo.txt
+wfu
+clr
+
+print 'edit' abre o ficheiro no editor padrão; existe também uma versão beta 'betaedit' que tenta usar um editor embutido.
+print << edit exemplo.txt
+wfu
+edit exemplo.txt
+wfu
+clr
+
+print << betaedit exemplo.txt
+wfu
+betaedit exemplo.txt
+wfu
+clr
+
+print -------------------------------------
+print             DIRECTORIES
+print -------------------------------------
+print Para criar e remover diretórios use 'mkdir' e 'deldir'.
+print << mkdir novaPasta
+wfu
+mkdir novaPasta
+wfu
+clr
+
+print << deldir novaPasta
+wfu
+deldir novaPasta
+wfu
+clr
+
+print -------------------------------------
+print           CONTROL / FLOW
+print -------------------------------------
+print Há comandos para estruturas de controlo em scripts:
+print - 'if' executa um bloco condicional
+print - 'while' repete enquanto a condição for verdadeira
+print - 'fun' define uma função reutilizável
+print Exemplo curto (nota: a sintaxe exacta segue a documentação do comando 'if'):
+print << if 1==1 print "é verdade"
+wfu
+if 1==1 print "é verdade"
+wfu
+clr
+
+print -------------------------------------
+print               WINDOW / BUFFER
+print -------------------------------------
+print 'window' permite controlar a janela/terminal (tamanho ou estado) onde aplicável.
+print 'buffer' mostra ou manipula o buffer de histórico.
+print << buffer -l
+wfu
+buffer -l
+wfu
+clr
+
+print -------------------------------------
+print                DEBUG
+print -------------------------------------
+print O comando 'debug' activa informação de depuração para ajudar a inspecionar o comportamento.
+print << debug on
+wfu
+debug on
+wfu
+clr
+
+print -------------------------------------
+print          MKCMDTEMPLATE ALIAS
+print -------------------------------------
+print 'mkcmdtemplate' também tem um alias 'mkcmdtpl' — ambos geram um ficheiro JSON de exemplo para criar comandos customizados.
+print << mkcmdtpl meuComando.json
+wfu
+mkcmdtpl meuComando.json
+wfu
 clr
 
 print -------------------------------------

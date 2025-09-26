@@ -2,7 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.20'
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.dokka' version '1.9.20'
+    id 'org.jetbrains.dokka' version '2.0.0'
 }
 
 group = 'pt.rafap.clilib'
@@ -10,6 +10,10 @@ version = '1.5-Beta'
 
 repositories {
     mavenCentral()
+}
+
+subprojects {
+    apply plugin: 'org.jetbrains.dokka'
 }
 
 dependencies {
@@ -31,11 +35,12 @@ java {
 }
 
 // directoria para guardar o ficheiro version.properties gerado
-def generatedVersionDir = "${buildDir}/generated-version"
+def generatedVersionDir = layout.buildDirectory.dir('generated-version').get().asFile.path
 
 sourceSets {
     main {
         java.srcDirs += 'src/main/java'
+        // builtBy references the task by name; we'll register the task below
         output.dir(generatedVersionDir, builtBy: 'generateVersionProperties')
     }
     example {
@@ -47,38 +52,71 @@ sourceSets {
 }
 
 // gera ficheiro version.properties em tempo de build
-task generateVersionProperties {
+tasks.register('generateVersionProperties') {
     doLast {
-        def propertiesFile = file "$generatedVersionDir/version.properties"
+        def propertiesFile = file("${generatedVersionDir}/version.properties")
         propertiesFile.parentFile.mkdirs()
         def properties = new Properties()
-        properties.setProperty("version", rootProject.version.toString())
+        properties.setProperty('version', rootProject.version.toString())
         propertiesFile.withWriter { properties.store(it, null) }
     }
 }
-processResources.dependsOn generateVersionProperties
+
+processResources.dependsOn tasks.named('generateVersionProperties')
 
 // adiciona javadoc gerado pela Dokka ao artefacto javadocJar
-// (o duplicatesStrategy é herdado da configuração global definida mais abaixo)
-tasks.named('javadocJar') {
-    dependsOn tasks.named('dokkaJavadoc')
-    from(tasks.named('dokkaJavadoc').get().outputDirectory)
-}
+// garante que a task dokkaJavadoc (ou outra DokkaTask disponível) é executada primeiro e inclui a sua saída
+project.afterEvaluate {
+    def dokkaTaskCandidate = tasks.findByName('dokkaJavadoc')
+    if (dokkaTaskCandidate == null) {
+        dokkaTaskCandidate = tasks.findByName('dokkaGenerate')
+    }
+    if (dokkaTaskCandidate == null) {
+        dokkaTaskCandidate = tasks.find { it.name?.startsWith('dokka') }
+    }
 
-// inclui a documentação Dokka dentro do JAR principal em docs/
-tasks.named('jar') {
-    dependsOn tasks.named('dokkaJavadoc')
-    from(tasks.named('dokkaJavadoc').get().outputDirectory) {
-        into('docs')
+    // If dokkaGenerate exists, prefer depending on it and include the common output dir build/dokka/html
+    def dokkaGenerateTask = tasks.findByName('dokkaGenerate')
+    if (dokkaGenerateTask != null) {
+        tasks.named('javadocJar') {
+            dependsOn dokkaGenerateTask
+            from(layout.buildDirectory.dir('dokka/html'))
+        }
+        tasks.named('jar') {
+            dependsOn dokkaGenerateTask
+            from(layout.buildDirectory.dir('dokka/html')) {
+                into('docs')
+            }
+        }
+    }
+
+    // Fallback: if we found a Dokka task with an outputDirectory property, include that as well
+    if (dokkaTaskCandidate != null) {
+        tasks.named('javadocJar') {
+            dependsOn dokkaTaskCandidate
+            if (dokkaTaskCandidate.hasProperty('outputDirectory')) {
+                from(dokkaTaskCandidate.outputDirectory)
+            }
+        }
+
+        // inclui a documentação Dokka dentro do JAR principal em docs/
+        tasks.named('jar') {
+            dependsOn dokkaTaskCandidate
+            if (dokkaTaskCandidate.hasProperty('outputDirectory')) {
+                from(dokkaTaskCandidate.outputDirectory) {
+                    into('docs')
+                }
+            }
+        }
+    } else {
+        logger.warn('Nenhuma task Dokka encontrada após avaliação; javadocJar/jar não irão incluir documentação Dokka.')
     }
 }
 
 // 🔑 Solução global: evita falhas por ficheiros duplicados em *todas* as tasks do tipo Jar
 // Isto resolve o problema visto em sourcesJar e quaisquer outros casos semelhantes
 // Valores possíveis: FAIL (default), EXCLUDE, INCLUDE, WARN
-import org.gradle.api.tasks.bundling.Jar
-
-tasks.withType(Jar).configureEach {
+tasks.withType(org.gradle.api.tasks.bundling.Jar).configureEach {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
