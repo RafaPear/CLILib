@@ -143,16 +143,10 @@ tasks.named("build") {
 }
 
 publishing {
-    publications {
-        create("gpr", MavenPublication) {
-            from(components["java"])
-            artifactId = "clilib" // minúsculo
-        }
-    }
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/RafaPear/CLILib")
+            url = "https://maven.pkg.github.com/RafaPear/CLILLib"
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
