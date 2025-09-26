@@ -1,36 +1,29 @@
-name: Docs
+name: Deploy Dokka Docs
 
 on:
   push:
-    branches: [ main ]
-
- ## Delete below when merged to main!
- ## Added such that one can test pages deployment on branch before merging
-  pull_request:
-    branches: [ main ] 
-
-permissions:
-  contents: write 
+    branches:
+      - main  # ou a branch principal do teu projeto
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
-      - name: Set up JDK 21
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          distribution: temurin
           java-version: 21
-          distribution: 'adopt'
 
-      - name: Build documentation
+      - name: Build Dokka docs
         run: ./gradlew dokkaHtml
 
-      - name: Publish documentation
-        uses: JamesIves/github-pages-deploy-action@releases/v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          BRANCH: gh-pages
-          FOLDER: build/dokka/html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/dokka
