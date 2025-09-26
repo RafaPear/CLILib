@@ -23,7 +23,7 @@ dependencies {
     implementation('org.jetbrains.kotlin:kotlin-reflect')
     implementation("org.json:json:20231013")
     implementation("net.java.dev.jna:jna:5.17.0")           // JNA core
-    implementation("net.java.dev.jna:jna-platform:5.17.0")  // funcionalidades extra (opcional mas recomendado)
+    implementation("net.java.dev.jna:jna-platform:5.17.0")  // funcionalidades extra
     implementation 'org.jline:jline:3.30.0'
 }
 
@@ -42,7 +42,6 @@ def generatedVersionDir = layout.buildDirectory.dir('generated-version').get().a
 sourceSets {
     main {
         java.srcDirs += 'src/main/java'
-        // builtBy references the task by name; we'll register the task below
         output.dir(generatedVersionDir, builtBy: 'generateVersionProperties')
     }
     example {
@@ -67,17 +66,11 @@ tasks.register('generateVersionProperties') {
 processResources.dependsOn tasks.named('generateVersionProperties')
 
 // adiciona javadoc gerado pela Dokka ao artefacto javadocJar
-// garante que a task dokkaJavadoc (ou outra DokkaTask disponível) é executada primeiro e inclui a sua saída
 project.afterEvaluate {
     def dokkaTaskCandidate = tasks.findByName('dokkaJavadoc')
-    if (dokkaTaskCandidate == null) {
-        dokkaTaskCandidate = tasks.findByName('dokkaGenerate')
-    }
-    if (dokkaTaskCandidate == null) {
-        dokkaTaskCandidate = tasks.find { it.name?.startsWith('dokka') }
-    }
+    if (dokkaTaskCandidate == null) dokkaTaskCandidate = tasks.findByName('dokkaGenerate')
+    if (dokkaTaskCandidate == null) dokkaTaskCandidate = tasks.find { it.name?.startsWith('dokka') }
 
-    // If dokkaGenerate exists, prefer depending on it and include the common output dir build/dokka/html
     def dokkaGenerateTask = tasks.findByName('dokkaGenerate')
     if (dokkaGenerateTask != null) {
         tasks.named('javadocJar') {
@@ -92,7 +85,6 @@ project.afterEvaluate {
         }
     }
 
-    // Fallback: if we found a Dokka task with an outputDirectory property, include that as well
     if (dokkaTaskCandidate != null) {
         tasks.named('javadocJar') {
             dependsOn dokkaTaskCandidate
@@ -101,7 +93,6 @@ project.afterEvaluate {
             }
         }
 
-        // inclui a documentação Dokka dentro do JAR principal em docs/
         tasks.named('jar') {
             dependsOn dokkaTaskCandidate
             if (dokkaTaskCandidate.hasProperty('outputDirectory')) {
@@ -111,13 +102,11 @@ project.afterEvaluate {
             }
         }
     } else {
-        logger.warn('Nenhuma task Dokka encontrada após avaliação; javadocJar/jar não irão incluir documentação Dokka.')
+        logger.warn('Nenhuma task Dokka encontrada; javadocJar/jar não irão incluir documentação Dokka.')
     }
 }
 
-// 🔑 Solução global: evita falhas por ficheiros duplicados em *todas* as tasks do tipo Jar
-// Isto resolve o problema visto em sourcesJar e quaisquer outros casos semelhantes
-// Valores possíveis: FAIL (default), EXCLUDE, INCLUDE, WARN
+// evita falhas por ficheiros duplicados em todas as tasks do tipo Jar
 tasks.withType(org.gradle.api.tasks.bundling.Jar).configureEach {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
@@ -134,13 +123,13 @@ tasks.register("runExample", JavaExec) {
     mainClass.set("MainKt")
 }
 
+// 🔹 Task Dokka HTML robusta para workflow
 tasks.register("dokkaHtml") {
     group = "documentation"
     description = "Gera documentação Dokka para o projeto"
     dependsOn tasks.named("dokkaGenerateModuleHtml")
 
     doLast {
-        // move a saída da task dokkaGenerateModuleHtml para build/dokka/html
         def src = tasks.named("dokkaGenerateModuleHtml").get().outputDirectory.get().asFile
         def dest = layout.buildDirectory.dir("dokka/html").get().asFile
         if (dest.exists()) dest.deleteDir()
@@ -149,17 +138,19 @@ tasks.register("dokkaHtml") {
             from src
             into dest
         }
+        if (!new File(dest, "index.html").exists()) {
+            throw new GradleException("index.html não encontrado em build/dokka/html. Falha intencional para debug.")
+        }
+        println("Dokka HTML gerado com sucesso em: ${dest}")
     }
 }
 
+// força saída de todas as DokkaTasks para build/dokka/html
 tasks.withType(DokkaTask).configureEach {
     outputDirectory.set(layout.buildDirectory.dir("dokka/html"))
 }
 
-
-
-// Publicação automática no Maven Local para uso noutros projectos
-// que dependam desta biblioteca
+// Publicação automática no Maven Local
 tasks.named("build") {
     finalizedBy(tasks.named("publishToMavenLocal"))
 }
