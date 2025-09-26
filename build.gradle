@@ -90,6 +90,7 @@ project.afterEvaluate {
         }
     }
 
+
     // Fallback: if we found a Dokka task with an outputDirectory property, include that as well
     if (dokkaTaskCandidate != null) {
         tasks.named('javadocJar') {
