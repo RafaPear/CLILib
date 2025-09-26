@@ -1,0 +1,16 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+pt.rafap.clilib
+pt.rafap.clilib.cmdUtils
+pt.rafap.clilib.cmdUtils.commands.cli
+pt.rafap.clilib.cmdUtils.commands.directory
+pt.rafap.clilib.cmdUtils.commands.file
+pt.rafap.clilib.cmdUtils.commands.functions
+pt.rafap.clilib.cmdUtils.commands.varOp
+pt.rafap.clilib.datastore
+pt.rafap.clilib.datatypes
+pt.rafap.clilib.ext
+pt.rafap.clilib.registers
+pt.rafap.clilib.tools
+pt.rafap.clilib.tools.tExt
