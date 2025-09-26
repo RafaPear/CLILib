@@ -38,21 +38,16 @@ jobs:
 
       - name: Debug Dokka output
         run: |
-          echo "=== Current dir: $(pwd) ==="
-          echo "=== build tree (top) ==="
-          ls -la build || true
-          echo "=== build/dokka tree ==="
-          ls -la build/dokka || true
-          echo "=== build/dokka/html tree (contents) ==="
+          echo "=== Conteúdo de build/dokka/html ==="
           ls -la build/dokka/html || true
           if [ -f build/dokka/html/index.html ]; then
-            echo ">>> index.html (first 30 lines):"
-            head -n 30 build/dokka/html/index.html || true
+            echo ">>> index.html encontrado ✅"
           else
-            echo ">>> NO index.html in build/dokka/html"
+            echo ">>> index.html NÃO encontrado ❌"
+            exit 1
           fi
 
-      - name: Upload docs artifact (debug)
+      - name: Upload docs artifact
         uses: actions/upload-artifact@v4
         with:
           name: dokka-html
