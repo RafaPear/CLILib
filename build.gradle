@@ -137,28 +137,16 @@ tasks.register("dokkaHtml") {
         if (destDir.exists()) destDir.deleteDir()
         destDir.mkdirs()
 
-        // copia o conteúdo de todas as subpastas para destDir
-        def subDirs = srcDir.listFiles()?.findAll { it.isDirectory() } ?: []
-        if (subDirs.isEmpty()) {
-            throw new GradleException("Nenhuma subpasta encontrada em ${srcDir}. Não há index.html para copiar.")
-        }
-
-        subDirs.each { moduleDir ->
-            copy {
-                from moduleDir
-                into destDir
-            }
-        }
-
-        if (!new File(destDir, "index.html").exists()) {
-            println("⚠️ index.html não encontrado na raiz de ${destDir}. Conteúdo atual:")
-            destDir.eachFile { println(it.name) }
-            throw new GradleException("index.html não encontrado após copiar subpastas para ${destDir}")
+        // copia TUDO da pasta gerada pelo Dokka para build/dokka/html, mantendo estrutura
+        copy {
+            from srcDir
+            into destDir
         }
 
         println("✅ Dokka HTML gerado com sucesso em: ${destDir}")
     }
 }
+
 
 // força saída de todas as DokkaTasks para build/dokka/html
 tasks.withType(DokkaTask).configureEach {
