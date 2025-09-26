@@ -127,7 +127,6 @@ tasks.register("runExample", JavaExec) {
 tasks.register("dokkaHtml") {
     group = "documentation"
     description = "Gera documentação Dokka para o projeto"
-
     dependsOn tasks.named("dokkaGenerateModuleHtml")
 
     doLast {
@@ -137,16 +136,20 @@ tasks.register("dokkaHtml") {
         if (destDir.exists()) destDir.deleteDir()
         destDir.mkdirs()
 
-        // copia TUDO da pasta gerada pelo Dokka para build/dokka/html, mantendo estrutura
+        // achata o conteúdo da subpasta do módulo para a raiz
+        def moduleDir = srcDir.listFiles()?.find { it.isDirectory() }
+        if (moduleDir == null) {
+            throw new GradleException("Nenhuma subpasta do módulo encontrada em ${srcDir}")
+        }
+
         copy {
-            from srcDir
+            from moduleDir
             into destDir
         }
 
         println("✅ Dokka HTML gerado com sucesso em: ${destDir}")
     }
 }
-
 
 // força saída de todas as DokkaTasks para build/dokka/html
 tasks.withType(DokkaTask).configureEach {
