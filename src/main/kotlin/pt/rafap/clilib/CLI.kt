@@ -15,6 +15,7 @@ import pt.rafap.clilib.registers.CmdRegister
 import pt.rafap.clilib.tools.*
 import pt.rafap.clilib.tools.Environment.formatedPrompt
 import pt.rafap.clilib.tools.Terminal.doTerminalInteraction
+import pt.rafap.clilib.tools.tExt.compareTo
 
 /**
  * Main entry point for interacting with the command-line library.
@@ -26,7 +27,7 @@ class CLI() {
     /**
      * Default command set that can be registered via [registerDefaultCommands].
      */
-    var defaultCommands = mutableListOf(
+    var defaultCommands = arrayOf(
         CdCmd, ClrCmd, ExitCmd,
         LoadScriptCmd, LsCmd, MeasureCmd,
         PrintCmd, VersionCmd, WaitCmd,
@@ -116,11 +117,11 @@ class CLI() {
     fun registerDefaultCommands(options: String = "") {
         val tokens = options.split(Regex("\\s+")).filter { it.isNotBlank() }
         if (tokens.isEmpty()) {
-            CmdRegister.registerAll(defaultCommands)
+            CmdRegister.registerAll(*defaultCommands)
             return
         }
 
-        val load = mutableSetOf<Command>()
+        val load = mutableListOf<Command>()
 
         if ("--all" in tokens || "-all" in tokens) {
             load.addAll(defaultCommands)
@@ -135,6 +136,6 @@ class CLI() {
 
         if (load.isEmpty()) load.addAll(defaultCommands)
 
-        CmdRegister.registerAll(load.toList())
+        CmdRegister.registerAll(*load.toTypedArray())
     }
 }

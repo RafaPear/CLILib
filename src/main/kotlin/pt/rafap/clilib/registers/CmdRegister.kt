@@ -33,11 +33,11 @@ object CmdRegister {
         commands.remove(command)
     }
 
-    fun registerAll(commands: List<Command>) {
+    fun registerAll(vararg commands: Command) {
         commands.forEach { register(it) }
     }
 
-    fun unregisterAll(commands: List<Command>) {
+    fun unregisterAll(vararg commands: Command) {
         commands.forEach { unregister(it) }
     }
 
