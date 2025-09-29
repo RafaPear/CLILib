@@ -242,9 +242,9 @@ $dokka.location:pt.rafap.clilib.registers/CmdRegister/find/#kotlin.String/Pointi
 $dokka.location:pt.rafap.clilib.registers/CmdRegister/findAllSimilar/#kotlin.String/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/find-all-similar.html
 $dokka.location:pt.rafap.clilib.registers/CmdRegister/findSimilar/#kotlin.String/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/find-similar.html
 $dokka.location:pt.rafap.clilib.registers/CmdRegister/register/#pt.rafap.clilib.cmdUtils.Command/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/register.html
-$dokka.location:pt.rafap.clilib.registers/CmdRegister/registerAll/#kotlin.collections.List[pt.rafap.clilib.cmdUtils.Command]/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/register-all.html
+$dokka.location:pt.rafap.clilib.registers/CmdRegister/registerAll/#kotlin.Array[pt.rafap.clilib.cmdUtils.Command]/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/register-all.html
 $dokka.location:pt.rafap.clilib.registers/CmdRegister/unregister/#pt.rafap.clilib.cmdUtils.Command/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/unregister.html
-$dokka.location:pt.rafap.clilib.registers/CmdRegister/unregisterAll/#kotlin.collections.List[pt.rafap.clilib.cmdUtils.Command]/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/unregister-all.html
+$dokka.location:pt.rafap.clilib.registers/CmdRegister/unregisterAll/#kotlin.Array[pt.rafap.clilib.cmdUtils.Command]/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-cmd-register/unregister-all.html
 $dokka.location:pt.rafap.clilib.registers/VarRegister///PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-var-register/index.html
 $dokka.location:pt.rafap.clilib.registers/VarRegister/all/#/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-var-register/all.html
 $dokka.location:pt.rafap.clilib.registers/VarRegister/get/#kotlin.String/PointingToDeclaration/-c-l-i-lib/pt.rafap.clilib.registers/-var-register/get.html
